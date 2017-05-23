@@ -18,6 +18,7 @@ var text_es = {
     SOLICITAR_RP:"Solicitar RP",
     QUITAR_RUBRO: "Quitar",
     VER_SEGUIMIENTO_FINANCIERO:"Ver seguimiento financiero",
+    BUSCAR: "Buscar",
   },
   TITULO: "GENERATOR-OAS",
   MENSAJE_INICIAL: "Ahora puede comenzar con el desarrollo ...",
@@ -100,6 +101,8 @@ var text_es = {
   PORCENTAJE_RESTANTE:"Porcentaje restante",
   GRAFICO_BARRAS_CONTRATO:"Grafico de barras del contrato",
   CARGO:"Cargo",
+  //SEGUIMIENTO LEGAL
+  NOVEDADES: "Novedades",
 };
 
 var text_en = {
@@ -116,7 +119,8 @@ var text_en = {
     REGISTRAR: "Register",
     SOLICITAR_RP:"RP request",
     QUITAR_RUBRO: "Delete",
-    VER_SEGUIMIENTO_FINANCIERO:"See financial monitoring"
+    VER_SEGUIMIENTO_FINANCIERO:"See financial monitoring",
+    BUSCAR: "Search",
   },
   //SOLICITUD RP
   ERROR: "Error",
@@ -194,6 +198,8 @@ var text_en = {
   PORCENTAJE_RESTANTE:"Remaining percentage",
   GRAFICO_BARRAS_CONTRATO:"Contract bar graph",
   CARGO:"Post",
+  //SEGUIMIENTO LEGAL
+  NOVEDADES: "Novedades",
 };
 
 angular.module('contractualClienteApp')

@@ -1,0 +1,71 @@
+<br>
+<div class="panel panel-default">
+    <div class="panel-body jumbotron">
+        <p>
+          <div class="centrado">
+            <center>  <h3><b>Seguimiento Legal</b></h3> </center>
+              <br><br>
+
+
+              <center><div style="float:left;margin-bottom:2%;width:105%">
+                <form style="margin-bottom:12%" name="myForm">
+                  <div class="form-group" style="float:left">
+                    <label for="numcontrato">{{'CONTRATO' | translate}}</label>
+                    <input type="text" class="form-control" id="numcontrato" ng-model="fields.numcontrato" ng-required="!(fields.numcontrato.length || fields.vigcontrato.length || fields.contratistadocumento.length || fields.valorcontrato.length)">
+                  </div>
+                  <div class="form-group" style="float:left;margin-left:10px">
+                    <label for="vigcontrato">{{'VIGENCIA_CONTRATO'| translate}}</label>
+                    <input type="text" class="form-control" id="vigcontrato" ng-model="fields.vigcontrato" ng-required="!(fields.numcontrato.length || fields.vigcontrato.length || fields.contratistadocumento.length || fields.valorcontrato.length)">
+                  </div>
+                  <div class="form-group" style="float:left;margin-left:10px">
+                    <label for="contratistadocumento">{{'DOCUMENTO_CONTRATISTA'| translate}}</label>
+                    <input type="text" class="form-control" id="contratistadocumento" ng-model="fields.contratistadocumento" ng-required="!(fields.numcontrato.length || fields.vigcontrato.length || fields.contratistadocumento.length || fields.valorcontrato.length)">
+                  </div>
+                  <div class="form-group" style="float:left;margin-left:10px">
+                    <label for="contratistadocumento">{{'VALOR'| translate}}</label>
+                    <input type="text" class="form-control" id="valorcontrato" ng-model="fields.valorcontrato" ng-required="!(fields.numcontrato.length || fields.vigcontrato.length || fields.contratistadocumento.length || fields.valorcontrato.length)">
+                  </div>
+                  <div class="form-group" style="float:left;margin-left:10px;margin-top:1.6%">
+                    <button class="btn btn-primary centrado" ng-disabled="!myForm.$valid" ng-click="solicitudRpPersonas.buscarContratos()">{{'BTN.BUSCAR'| translate}}</button>
+                  </div>
+                  <!-- <div class="alert alert-danger" style="float:left;;margin-left:10px;margin-top:1%" ng-show="!myForm.$valid">
+                    Debe ingresar por lo menos un valor para buscar
+                  </div>
+                  <div class="alert alert-warning" style="float:left;;margin-left:10px;margin-top:1%" ng-show="busquedaSinResultados && myForm.$valid">
+                    <strong>Busqueda sin resultados!</strong> ingrese otros valores y busque de nuevo
+                  </div> -->
+                  <div>
+                    <!--{{fields}}-->
+                  </div>
+                </form>
+
+                <label for="boton_novedad">Por favor seleccione la novedad:</label>
+                <div id="boton_novedad" class="btn-group">
+                  <button type="button" class="btn btn-warning dropdown-toggle"
+                          data-toggle="dropdown">
+                    Novedades <span class="caret"></span>
+                  </button>
+
+                  <ul class="dropdown-menu" role="menu">
+                    <li><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga">Crear Novedad de Adición y/o Prorroga</a></li>
+                    <li><a href="#/seguimientoycontrol/legal/acta_inicio">Crear Acta de Inicio</a></li>
+                    <li><a href="#/seguimientoycontrol/legal/acta_suspension">Crear Novedad de Suspensión</a></li>
+                    <li><a href="#/seguimientoycontrol/legal/acta_reinicio">Crear Novedad de Reinicio</a></li>
+                    <li><a href="#/seguimientoycontrol/legal/acta_cesion">Crear Novedad de Cesión</a></li>
+                  </ul>
+                </div>
+              </div></center>
+
+
+              <table style="width:100%;" align="center">
+                <tr>
+                  <td>
+                    <div ui-grid="sLegal.gridOptions" ui-grid-selection class="myGrid"></div>
+                  </td>
+                </tr>
+                <tr>
+                </tr>
+              </table>
+        </div>
+    </div>
+</div>

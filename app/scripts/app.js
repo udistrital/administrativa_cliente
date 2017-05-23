@@ -104,6 +104,36 @@ angular
         controller: 'SeguimientoycontrolFinancieroEstadisticasCtrl',
         controllerAs: 'sFestadisticas'
       })
+      .when('/seguimientoycontrol/legal', {
+        templateUrl: 'views/seguimientoycontrol/legal.html',
+        controller: 'SeguimientoycontrolLegalCtrl',
+        controllerAs: 'sLegal'
+      })
+      .when('/seguimientoycontrol/legal/acta_inicio', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_inicio.html',
+        controller: 'SeguimientoycontrolLegalActaInicioCtrl',
+        controllerAs: 'sLactaInicio'
+      })
+      .when('/seguimientoycontrol/legal/acta_suspension', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_suspension.html',
+        controller: 'SeguimientoycontrolLegalActaSuspensionCtrl',
+        controllerAs: 'sLactaSuspension'
+      })
+      .when('/seguimientoycontrol/legal/acta_reinicio', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_reinicio.html',
+        controller: 'SeguimientoycontrolLegalActaReinicioCtrl',
+        controllerAs: 'sLactaReinicio'
+      })
+      .when('/seguimientoycontrol/legal/acta_cesion', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_cesion.html',
+        controller: 'SeguimientoycontrolLegalActaCesionCtrl',
+        controllerAs: 'sLactaCesion'
+      })
+      .when('/seguimientoycontrol/legal/acta_adicion_prorroga', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_adicion_prorroga.html',
+        controller: 'SeguimientoycontrolLegalActaAdicionProrrogaCtrl',
+        controllerAs: 'sLactaAdicionProrroga'
+      })
       .otherwise({
         redirectTo: '/'
       });
