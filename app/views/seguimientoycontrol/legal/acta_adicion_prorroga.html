@@ -24,26 +24,36 @@
       </div>
 
 
-      <div class="col-md-5 paneles">
+
+
+
+    <div class=" panel panel-primary col-sm-5 paneles" >
+      <div class="panel-heading row"><center><h4><b>Información General de la Novedad</b></h4></center></div>
+
+
       <center><label class="checkbox-inline"><input type="checkbox" value="" ng-model="adicion">Adición</label>
       <label class="checkbox-inline"><input type="checkbox" value=""  ng-model="prorroga">Prórroga</label></center>
+
+      <div class="form-group col-sm-6" >
+        <label for="solicitud">Número de Solicitud</label>
+        <input type="number" class="form-control" id="solicitud" >
+      </div>
+      <div class="form-group col-sm-6" >
+        <label for="fecha_solicitud">Fecha Solicitud</label>
+        <input type="date" class="form-control" id="fecha_solicitud" value="2017-07-04" >
+      </div>
+
     </div>
+
 
       <div class=" panel panel-primary col-sm-5 paneles" ng-if="adicion" >
         <div class="panel-heading row"><center><h4><b>Información Novedad de Adición</b></h4></center></div>
 
         <div class="form-group col-sm-6" >
-          <label for="solicitud">Número de Solicitud</label>
-          <input type="number" class="form-control" id="solicitud" >
+          <label for="numero_cdp">Número CDP</label>
+          <input type="number" class="form-control" id="numero_cdp" >
         </div>
-        <div class="form-group col-sm-6" >
-          <label for="fecha_solicitud">Fecha Solicitud</label>
-          <input type="date" class="form-control" id="fecha_solicitud" value="2017-07-04" >
-        </div>
-        <div class="form-group col-sm-6" >
-          <label for="valor_adicion">Valor Adición</label>
-          <input type="number" class="form-control" id="valor_adicion" >
-        </div>
+
         <div class="form-group col-sm-6" >
           <label for="fecha_adicion">Fecha Adición</label>
           <input type="date" class="form-control" id="fecha_adicion" value="2017-07-04" >
@@ -53,19 +63,23 @@
           <label for="motivo_adicion">Motivo Adición</label>
           <textarea class="form-control" id="motivo_adicion" rows="3"></textarea>
         </div>
+
+        <div class="form-group col-sm-6" >
+          <label for="valor_adicion">Valor Adición</label>
+          <input type="number" class="form-control" id="valor_adicion" >
+        </div>
+
+        <div class="form-group col-sm-6" >
+          <label for="nuevo_valor_contrato">Nuevo Valor del Contrato</label>
+          <input type="number" class="form-control" id="nuevo_valor_contrato" disabled>
+        </div>
       </div>
 
-      <div class=" panel panel-primary col-sm-5 paneles" ng-if="prorroga">
+      <div class="row">
+      <div class="col-md-5 paneles"></div>
+      <div class=" panel panel-primary col-md-5  paneles" ng-if="prorroga">
         <div class="panel-heading row"><center><h4><b>Información Novedad de Prórroga</b></h4></center></div>
 
-        <div class="form-group col-sm-6" >
-          <label for="solicitud_prorroga">Número de Solicitud</label>
-          <input type="number" class="form-control" id="solicitud_prorroga" >
-        </div>
-        <div class="form-group col-sm-6" >
-          <label for="fecha_solicitud_prorroga">Fecha Solicitud</label>
-          <input type="date" class="form-control" id="fecha_solicitud_prorroga" value="2017-07-04" >
-        </div>
         <div class="form-group col-sm-6" >
           <label for="tiempo_prorroga">Tiempo Prórroga (En dias)</label>
           <input type="number" class="form-control" id="tiempo_prorroga" >
@@ -79,7 +93,15 @@
           <label for="motivo_prorroga">Motivo Prórroga</label>
           <textarea class="form-control" id="motivo_prorroga" rows="3"></textarea>
         </div>
+
+        <div class="form-group col-sm-6" >
+          <label for="nuevo_plazo_contrato">Nuevo Plazo del Contrato</label>
+          <input type="number" class="form-control" id="nuevo_plazo_contrato" disabled>
+        </div>
       </div>
+
+
+    </div>
 
     </div>
     <div class="panel-footer">

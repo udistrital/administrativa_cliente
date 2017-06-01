@@ -1,0 +1,51 @@
+<br>
+<div class="panel panel-default">
+<center><h3 class="titulo-centrado">Otro Sí Modificatorio</h3></center>
+    <div class="panel-body">
+      <div class=" panel panel-primary col-sm-5 paneles" >
+        <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
+        <div class="col-md-6"><b>Número de contrato</b></div>
+        <div class="col-md-6"><p>150246</p></div>
+        <div class="col-md-6"><b>Contratante</b></div>
+        <div class="col-md-6"><p>Universidad Distrital Francisco José de Caldas</p></div>
+        <div class="col-md-6"><b>Contratista</b></div>
+        <div class="col-md-6"><p>Pepe Perez</p></div>
+        <div class="col-md-6"><b>Objeto</b></div>
+        <div class="col-md-6"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel commodo mi, ut sollicitudin elit. Aliquam erat volutpat.
+          Pellentesque mollis odio sed bibendum mattis. Nunc viverra ante a eros elementum consequat.</p> </div>
+        <div class="col-md-6"><b>Valor contrato</b></div>
+        <div class="col-md-6"><p>$ 2.264.427</p></div>
+        <div class="col-md-6"><b>Ordenador del Gasto</b></div>
+        <div class="col-md-6"><p>Vicerrector Administrativo</p></div>
+      </div>
+
+      <div class=" panel panel-primary col-sm-5 paneles" >
+        <div class="panel-heading row"><center><h4><b>Modificaciones</b></h4></center></div>
+        <div ui-grid="sLotroSiModificatorio.gridOptions" ui-grid-selection class="myGrid"></div>
+
+        <div class="form-group col-md-12" ng-repeat="campo in sLotroSiModificatorio.gridOptions.data" >
+          <div  ng-if="campo.Entrada === 'input'">
+          <label>{{campo.NombreCampo}}</label>
+          <input type="{{campo.Tipo}}" class="form-control" >
+          <hr>
+        </div>
+
+          <div  ng-if="campo.Entrada === 'select'">
+            <label >{{campo.NombreCampo}}</label>
+            <select class="form-control" ></select>
+            <hr>
+          </div>
+        </div>
+
+        <div class="form-group col-md-12" ng-repeat="campo in sLotroSiModificatorio.gridOptions.data" >
+
+        </div>
+      </div>
+
+
+
+    </div>
+    <div class="panel-footer">
+      <center><button class="btn btn-primary btn-lg" ng-click="sLotroSiModificatorio.generarActa()">Crear Otro Sí Modificatorio</button></center>
+    </div>
+</div>

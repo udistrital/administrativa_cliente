@@ -134,6 +134,26 @@ angular
         controller: 'SeguimientoycontrolLegalActaAdicionProrrogaCtrl',
         controllerAs: 'sLactaAdicionProrroga'
       })
+      .when('/seguimientoycontrol/legal/acta_liquidacion', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_liquidacion.html',
+        controller: 'SeguimientoycontrolLegalActaLiquidacionCtrl',
+        controllerAs: 'sLactaLiquidacion'
+      })
+      .when('/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral', {
+        templateUrl: 'views/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral.html',
+        controller: 'SeguimientoycontrolLegalActaTerminacionLiquidacionBilateralCtrl',
+        controllerAs: 'sLactaTerminacionAnticipada'
+      })
+      .when('/seguimientoycontrol/legal/novedad_otro_si_aclaratorio', {
+        templateUrl: 'views/seguimientoycontrol/legal/novedad_otro_si_aclaratorio.html',
+        controller: 'SeguimientoycontrolLegalNovedadOtroSiAclaratorioCtrl',
+        controllerAs: 'sLotroSiAclaratorio'
+      })
+      .when('/seguimientoycontrol/legal/novedad_otro_si_modificatorio', {
+        templateUrl: 'views/seguimientoycontrol/legal/novedad_otro_si_modificatorio.html',
+        controller: 'SeguimientoycontrolLegalNovedadOtroSiModificatorioCtrl',
+        controllerAs: 'sLotroSiModificatorio'
+      })
       .otherwise({
         redirectTo: '/'
       });
