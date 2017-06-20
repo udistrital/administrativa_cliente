@@ -114,12 +114,12 @@ angular
         controller: 'SeguimientoycontrolLegalActaInicioCtrl',
         controllerAs: 'sLactaInicio'
       })
-      .when('/seguimientoycontrol/legal/acta_suspension', {
+      .when('/seguimientoycontrol/legal/acta_suspension/:contrato_id', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_suspension.html',
         controller: 'SeguimientoycontrolLegalActaSuspensionCtrl',
         controllerAs: 'sLactaSuspension'
       })
-      .when('/seguimientoycontrol/legal/acta_reinicio', {
+      .when('/seguimientoycontrol/legal/acta_reinicio/:contrato_id', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_reinicio.html',
         controller: 'SeguimientoycontrolLegalActaReinicioCtrl',
         controllerAs: 'sLactaReinicio'

@@ -3,35 +3,33 @@
 <center><h3 class="titulo-centrado">Acta de Suspensión</h3></center>
     <div class="panel-body">
       <div class=" panel panel-primary col-sm-5 paneles" >
+        <!-- <pre>{{sLactaSuspension.contrato_obj | json}}</pre> -->
         <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
         <div class="col-md-6"><b>Número de contrato</b></div>
-        <div class="col-md-6"><p>150246</p></div>
+        <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.id}}</p></div>
         <div class="col-md-6"><b>Contratante</b></div>
-        <div class="col-md-6"><p>Universidad Distrital Francisco José de Caldas</p></div>
+        <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.contratante}}</p></div>
         <div class="col-md-6"><b>Contratista</b></div>
-        <div class="col-md-6"><p>Pepe Perez</p></div>
+        <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.contratista.NomProveedor}}</p></div>
         <div class="col-md-6"><b>Objeto</b></div>
-        <div class="col-md-6"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel commodo mi, ut sollicitudin elit. Aliquam erat volutpat.
-          Pellentesque mollis odio sed bibendum mattis. Nunc viverra ante a eros elementum consequat.</p> </div>
+        <div class="col-md-6"> <p>{{sLactaSuspension.contrato_obj.objeto}}</p> </div>
         <div class="col-md-6"><b>Valor contrato</b></div>
-        <div class="col-md-6"><p>$ 2.264.427</p></div>
+        <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.valor | currency}}</p></div>
       </div>
 
-
-
-      <div class=" panel panel-primary col-sm-5 paneles" >
+      <div class=" panel panel-primary col-sm-5 paneles">
         <div class="panel-heading row"><center><h4><b>Información Novedad</b></h4></center></div>
-        <div class="form-group col-md-4" >
+        <div class="form-group col-md-5" >
           <label for="fechainicio">Fecha Inicio:</label>
-          <input type="date" class="form-control" id="fechainicio" value="2017-05-02" ng-disabled="true">
+          <input type="date" class="form-control" ng-model="f_inicio" id="fechainicio" value='{{sLactaSuspension.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' ng-disabled="true">
         </div>
-        <div class="form-group col-md-4" >
+        <div class="form-group col-md-5" >
           <label for="fechareinicio">Fecha de Reinicio:</label>
-          <input type="date" class="form-control" id="fechareinicio" value="2017-07-04" >
+          <input type="date" class="form-control" ng-model="f_reinicio" id="fechareinicio" min="{{sLactaSuspension.contrato_obj.fecha_registro | date:'yyyy-MM-dd'}}" value="{{sLactaSuspension.contrato_obj.fecha_registro | date:'yyyy-MM-dd'}}" >
         </div>
         <div class="form-group col-md-5">
-          <label for="perido">Periodo de Suspensión (En meses):</label>
-          <input type="number" class="form-control" id="periodo" value="2" ng-disabled="true">
+          <label for="perido">Periodo de Suspensión (En dias):</label>
+          <input type="number" class="form-control" id="periodo" value="{{sLactaSuspension.diff_dias}}" ng-disabled="true" min="0" placeholder="-">
         </div>
 
 

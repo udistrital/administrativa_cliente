@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalCtrl', function ($location,$scope,administrativaRequest,$window,$translate) {
+  .controller('SeguimientoycontrolLegalCtrl', function ($log,$location,$scope,administrativaRequest,$window,$translate) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -33,8 +33,12 @@ angular.module('contractualClienteApp')
       ],
       onRegisterApi : function( gridApi ) {
         self.gridApi = gridApi;
+        gridApi.selection.on.rowSelectionChanged($scope, function(row){
+          self.row_c = row.entity;
+        });
       }
     };
+
     administrativaRequest.get('contrato_general',"limit=0").then(function(response) {
       self.gridOptions.data = response.data;
     });

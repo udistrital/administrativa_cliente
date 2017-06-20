@@ -5,37 +5,39 @@
       <div class=" panel panel-primary col-md-5 paneles" >
         <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
         <div class="col-md-6"><b>Número de contrato</b></div>
-        <div class="col-md-6"><p>150246</p></div>
+        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.id}}</p></div>
         <div class="col-md-6"><b>Contratante</b></div>
-        <div class="col-md-6"><p>Universidad Distrital Francisco José de Caldas</p></div>
+        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.contratante}}</p></div>
         <div class="col-md-6"><b>Contratista</b></div>
-        <div class="col-md-6"><p>Pepe Perez</p></div>
+        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.contratista.NomProveedor}}</p></div>
         <div class="col-md-6"><b>Supervisor</b></div>
-        <div class="col-md-6"><p>Juan Rodriguez</p></div>
+        <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.contratista.supervisor != null">
+          <p>{{sLactaReinicio.contrato_obj.contratista.supervisor}}</p>
+        </div>
+        <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.contratista.supervisor == null">
+          <p>No registra</p>
+        </div>
         <div class="col-md-6"><b>Objeto</b></div>
-        <div class="col-md-6"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel commodo mi, ut sollicitudin elit. Aliquam erat volutpat.
-          Pellentesque mollis odio sed bibendum mattis. Nunc viverra ante a eros elementum consequat.</p> </div>
-        <div class="col-md-6"><b>Valor contrato</b></div>
-        <div class="col-md-6"><p>$ 2.264.427</p></div>
+        <div class="col-md-6"> <p>{{sLactaReinicio.contrato_obj.objeto}}</p></div>
+        <div class="col-md-6"><b>Valor</b></div>
+        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.valor | currency}}</p></div>
       </div>
-
-
 
       <div class=" panel panel-primary col-md-5 paneles" >
         <div class="panel-heading row"><center><h4><b>Información Novedad</b></h4></center></div>
-        <div class="form-group col-md-4" >
+        <div class="form-group col-md-5" >
           <label for="fechainicio">Fecha Inicio:</label>
-          <input type="date" class="form-control" id="fechainicio" value="2017-05-02" ng-disabled="true">
-        </div>
-
-        <div class="form-group col-md-4">
-          <label for="fechareinicio">Fecha de Reinicio:</label>
-          <input type="date" class="form-control" id="fechareinicio" value="2017-07-04" >
+          <input type="date" class="form-control" id="fechainicio" value='{{sLactaReinicio.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' ng-disabled="true">
         </div>
 
         <div class="form-group col-md-5">
-          <label for="perido">Periodo de Suspensión (En meses):</label>
-          <input type="number" class="form-control" id="periodo" value="2" ng-disabled="true">
+          <label for="fechareinicio">Fecha de Reinicio:</label>
+          <input type="date" class="form-control" id="fechareinicio" ng-model="f_reinicio"  value='{{sLactaReinicio.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' min='{{sLactaReinicio.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' >
+        </div>
+
+        <div class="form-group col-md-5">
+          <label for="perido">Periodo de Suspensión (En dias):</label>
+          <input type="number" class="form-control" id="periodo" value='{{sLactaReinicio.diff_dias}}' placeholder="-" ng-disabled="true">
         </div>
       </div>
 
