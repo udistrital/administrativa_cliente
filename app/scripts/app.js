@@ -109,7 +109,7 @@ angular
         controller: 'SeguimientoycontrolLegalCtrl',
         controllerAs: 'sLegal'
       })
-      .when('/seguimientoycontrol/legal/acta_inicio', {
+      .when('/seguimientoycontrol/legal/acta_inicio/:contrato_id', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_inicio.html',
         controller: 'SeguimientoycontrolLegalActaInicioCtrl',
         controllerAs: 'sLactaInicio'
