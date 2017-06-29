@@ -39,7 +39,8 @@ angular
     'agoraService',
     'oikosService',
     'financieraMidService',
-    'adminMidService'
+    'adminMidService',
+    'argoNosqlService'
 
   ])
     .run(function(amMoment) {
@@ -124,7 +125,7 @@ angular
         controller: 'SeguimientoycontrolLegalActaReinicioCtrl',
         controllerAs: 'sLactaReinicio'
       })
-      .when('/seguimientoycontrol/legal/acta_cesion', {
+      .when('/seguimientoycontrol/legal/acta_cesion/:contrato_id', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_cesion.html',
         controller: 'SeguimientoycontrolLegalActaCesionCtrl',
         controllerAs: 'sLactaCesion'
@@ -153,6 +154,11 @@ angular
         templateUrl: 'views/seguimientoycontrol/legal/novedad_otro_si_modificatorio.html',
         controller: 'SeguimientoycontrolLegalNovedadOtroSiModificatorioCtrl',
         controllerAs: 'sLotroSiModificatorio'
+      })
+      .when('/about', {
+        templateUrl: 'views/about.html',
+        controller: 'AboutCtrl',
+        controllerAs: 'about'
       })
       .otherwise({
         redirectTo: '/'
