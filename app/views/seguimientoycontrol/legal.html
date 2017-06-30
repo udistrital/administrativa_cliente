@@ -22,7 +22,7 @@
                     <input type="text" class="form-control" id="contratistadocumento" ng-model="fields.contratistadocumento" ng-required="!(fields.numcontrato.length || fields.vigcontrato.length || fields.contratistadocumento.length || fields.valorcontrato.length)">
                   </div>
                   <div class="form-group" style="float:left;margin-left:10px">
-                    <label for="contratistadocumento">{{'VALOR'| translate}}</label>
+                    <label for="valorcontrato">{{'VALOR'| translate}}</label>
                     <input type="text" class="form-control" id="valorcontrato" ng-model="fields.valorcontrato" ng-required="!(fields.numcontrato.length || fields.vigcontrato.length || fields.contratistadocumento.length || fields.valorcontrato.length)">
                   </div>
                   <div class="form-group" style="float:left;margin-left:10px;margin-top:1.6%">
@@ -40,23 +40,64 @@
                 </form>
 
                 <label for="boton_novedad">Por favor seleccione la novedad:</label>
-                <div id="boton_novedad" class="btn-group">
-                  <button type="button" class="btn btn-warning dropdown-toggle"
-                          data-toggle="dropdown">
-                    Novedades <span class="caret"></span>
+                <div class="btn-group" ng-if="sLegal.estado_resultado_response == 200">
+                  <button type="button" id="boton_novedad" class="btn btn-success dropdown-toggle" data-toggle="dropdown">Novedades
+                    <span class="caret"></span>
                   </button>
 
                   <ul class="dropdown-menu" role="menu">
-                    <li><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga">Crear Novedad de Adición y/o Prorroga</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/acta_inicio/{{sLegal.row_c.Id}}">Crear Acta de Inicio</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.row_c.Id}}">Crear Novedad de Suspensión</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.row_c.Id}}">Crear Novedad de Reinicio</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/acta_cesion">Crear Novedad de Cesión</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/acta_liquidacion">Crear Novedad de Liquidación</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral">Crear Novedad de Terminación Anticipada</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/novedad_otro_si_modificatorio">Crear Otro Sí Modificatorio</a></li>
-                    <li><a href="#/seguimientoycontrol/legal/novedad_otro_si_aclaratorio">Crear Otro Sí Aclaratorio</a></li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/acta_adicion_prorroga">
+                        Crear Novedad de Adición y/o Prorroga
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 9"><!--cambiar el numero de estado del contrato por el de suscrito-->
+                      <a href="#/seguimientoycontrol/legal/acta_inicio/{{sLegal.row_c.Id}}">
+                        Crear Acta de Inicio
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.row_c.Id}}">
+                        Crear Novedad de Suspensión
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 7">
+                      <a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.row_c.Id}}">
+                        Crear Novedad de Reinicio
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/acta_cesion">
+                        Crear Novedad de Cesión
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/acta_liquidacion">
+                        Crear Novedad de Liquidación
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral">
+                        Crear Novedad de Terminación Anticipada
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/novedad_otro_si_modificatorio">
+                        Crear Otro Sí Modificatorio
+                      </a>
+                    </li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1">
+                      <a href="#/seguimientoycontrol/legal/novedad_otro_si_aclaratorio">
+                        Crear Otro Sí Aclaratorio
+                      </a>
+                    </li>
                   </ul>
+                </div>
+
+                <div class="btn-group" ng-if="sLegal.estado_resultado_response == 0">
+                  <button type="button" id="boton_novedad" class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="true">Novedades
+                    <span class="caret"></span>
+                  </button>
                 </div>
               </div></center>
 

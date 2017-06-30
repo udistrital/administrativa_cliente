@@ -15,9 +15,10 @@ angular.module('contractualClienteApp')
       'Karma'
     ];
 
-
-
     var self = this;
+    self.estado_contrato_obj = {};
+    self.estado_resultado_response = 0;
+
     self.gridOptions = {
       enableFiltering : true,
       enableSorting : true,
@@ -35,6 +36,22 @@ angular.module('contractualClienteApp')
         self.gridApi = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function(row){
           self.row_c = row.entity;
+          self.estado_resultado_response = 0;
+
+          /*
+          * Obtencion de datos del estado del contrato
+          * Se captura el ultimo estado relacionado a un contrato
+          */
+          administrativaRequest.get('contrato_estado','query=numero_contrato%3A'+self.row_c.Id+'&sortby=Id&order=desc&limit=1').then(function(response) {
+            var estado = response.data[0].Estado.Id;
+            if (estado != 8) {
+              self.estado_contrato_obj.estado = estado; //guardamos el id del estado del contrato
+              self.estado_resultado_response = response.status; //guardamos el status del resultado del response
+            }else{
+              self.estado_resultado_response = 0;
+            }
+            $log.log(response.data);
+          });
         });
       }
     };
