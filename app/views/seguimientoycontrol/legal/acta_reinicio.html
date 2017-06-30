@@ -1,48 +1,60 @@
 <br>
 <div class="panel panel-default">
-<center><h3 class="titulo-centrado">Acta de Reinicio</h3></center>
-    <div class="panel-body">
-      <div class=" panel panel-primary col-md-5 paneles" >
-        <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
-        <div class="col-md-6"><b>Número de contrato</b></div>
-        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.id}}</p></div>
-        <div class="col-md-6"><b>Contratante</b></div>
-        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.contratante}}</p></div>
-        <div class="col-md-6"><b>Contratista</b></div>
-        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.contratista.NomProveedor}}</p></div>
-        <div class="col-md-6"><b>Supervisor</b></div>
-        <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.contratista.supervisor != null">
-          <p>{{sLactaReinicio.contrato_obj.contratista.supervisor}}</p>
-        </div>
-        <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.contratista.supervisor == null">
-          <p>No registra</p>
-        </div>
-        <div class="col-md-6"><b>Objeto</b></div>
-        <div class="col-md-6"> <p>{{sLactaReinicio.contrato_obj.objeto}}</p></div>
-        <div class="col-md-6"><b>Valor</b></div>
-        <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.valor | currency}}</p></div>
-      </div>
-
-      <div class=" panel panel-primary col-md-5 paneles" >
-        <div class="panel-heading row"><center><h4><b>Información Novedad</b></h4></center></div>
-        <div class="form-group col-md-5" >
-          <label for="fechainicio">Fecha Inicio:</label>
-          <input type="date" class="form-control" id="fechainicio" value='{{sLactaReinicio.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' ng-disabled="true">
-        </div>
-
-        <div class="form-group col-md-5">
-          <label for="fechareinicio">Fecha de Reinicio:</label>
-          <input type="date" class="form-control" id="fechareinicio" ng-model="f_reinicio"  value='{{sLactaReinicio.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' min='{{sLactaReinicio.contrato_obj.fecha_registro | date:"yyyy-MM-dd"}}' >
-        </div>
-
-        <div class="form-group col-md-5">
-          <label for="perido">Periodo de Suspensión (En dias):</label>
-          <input type="number" class="form-control" id="periodo" value='{{sLactaReinicio.diff_dias}}' placeholder="-" ng-disabled="true">
+  <center><h3 class="titulo-centrado">Acta de Reinicio</h3></center>
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-md-6">
+        <div class=" panel panel-primary" >
+          <div class="panel-heading"><center><h4><b>Información</b></h4></center></div>
+          <div class="panel-body">
+            <div class="col-md-6"><b>Número de contrato</b></div>
+            <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.id}}</p></div>
+            <div class="col-md-6"><b>Contratante</b></div>
+            <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.contratante}}</p></div>
+            <div class="col-md-6"><b>Contratista</b></div>
+            <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.contratista.NomProveedor}}</p></div>
+            <div class="col-md-6"><b>Supervisor</b></div>
+            <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.contratista.supervisor != null">
+              <p>{{sLactaReinicio.contrato_obj.contratista.supervisor}}</p>
+            </div>
+            <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.contratista.supervisor == null">
+              <p>No registra</p>
+            </div>
+            <div class="col-md-6"><b>Objeto</b></div>
+            <div class="col-md-6"> <p>{{sLactaReinicio.contrato_obj.objeto}}</p></div>
+            <div class="col-md-6"><b>Valor</b></div>
+            <div class="col-md-6"><p>{{sLactaReinicio.contrato_obj.valor | currency}}</p></div>
+          </div>
         </div>
       </div>
 
+      <div class="col-md-6">
+        <div class=" panel panel-primary" >
+          <div class="panel-heading"><center><h4><b>Información Novedad</b></h4></center></div>
+          <div class="panel-body">
+            <div class="form-group col-md-6" >
+              <label for="fechainicio">Fecha Suspension:</label>
+              <md-datepicker ng-model="f_suspension" ng-disabled="true"></md-datepicker>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="fechareinicio">Fecha de Reinicio:</label>
+              <md-datepicker ng-model="f_reinicio" md-min-date="f_suspension"></md-datepicker>
+            </div>
+
+            <div class="form-group col-md-6">
+              <label for="perido">Periodo de Suspensión br (En dias):</label>
+              <input type="number" ng-model="diff_dias" class="form-control" id="periodo">
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="panel-footer">
+
+
+
+  </div>
+  <div class="panel-footer">
     <center>  <button class="btn btn-primary btn-lg" ng-click="actareinicio.generarActa()">Crear Acta de Reinicio</button> </center>
-    </div>
+  </div>
 </div>
