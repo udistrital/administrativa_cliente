@@ -27,26 +27,31 @@
           <div class=" panel panel-primary" >
             <div class="panel-heading"><center><h4><b>Información Novedad</b></h4></center></div>
             <div class="panel-body">
-              <div class="form-group col-sm-6" >
-
-                <label for="cesionario">Cesionario</label>
-                <md-autocomplete
+              <div layout-gt-sm="row">
+                <md-autocomplete flex
+                  md-floating-label="Cedula del cesionario"
                   md-search-text="sLactaCesion.texto_busqueda"
-                  md-items="item in sLactaCesion.busqueda_cesionarios(sLactaCesion.texto_busqueda)"
-                  md-item-text="item.Id">
-                  <md-item-template>
+                  md-items="item in sLactaCesion.persona_natural_grep"
+                  md-item-text="item.Id+''"
+                  md-selected-item="sLactaCesion.persona_sel"
+                  md-selected-item-change="sLactaCesion.persona_sel_change(item)"
+                  md-search-text-change="sLactaCesion.cargar_persona_natural(sLactaCesion.texto_busqueda)">
+                  <md-item-template class="md-block" flex-gt-sm>
                     <span class="item-title">{{item.Id}}</span>
                     <span class="item-metadata">
-                      {{item.PrimerNombre + item.SegundoNombre}}
+                      {{item.PrimerNombre}} {{item.PrimerApellido}}
                     </span>
                   </md-item-template>
+                  <md-not-found>
+                    No match found.
+                  </md-not-found>
                 </md-autocomplete>
+                <md-input-container flex>
+                  <label for="perido">Número de Oficio:</label>
+                  <input type="number" class="md-autocomplete" id="oficio" >
+                </md-input-container>
+              </div>
 
-              </div>
-              <div class="form-group col-sm-6" >
-                <label for="perido">Número de Oficio:</label>
-                <input type="number" class="form-control" id="oficio" >
-              </div>
               <div class="form-group col-sm-6" >
                 <label for="fechaoficio">Fecha del Oficio:</label>
                 <md-datepicker ng-model="f_oficio" md-placeholder="Ingrese fecha"></md-datepicker>
@@ -67,16 +72,21 @@
           <div class=" panel panel-primary" >
             <div class="panel-heading"><center><h4><b>Información Cesionario</b></h4></center></div>
             <div class="panel-body">
-              <div class="col-md-6"><b>Nombres</b></div>
-              <div class="col-md-6"> Lorem Ipsum</div>
-              <div class="col-md-6"><b>Apellidos</b></div>
-              <div class="col-md-6"> Dolor Sit </div>
-              <div class="col-md-6"><b>Tipo de Documento</b></div>
-              <div class="col-md-6"> cc</div>
-              <div class="col-md-6"><b>Identificación</b></div>
-              <div class="col-md-6"> 12345678 </div>
-              <div class="col-md-6"><b>Tipo de Persona</b></div>
-              <div class="col-md-6"> Natural </div>
+              <div ng-if="sLactaCesion.cesionario_obj.nombre == null">
+                Seleccionar un cesionario
+              </div>
+              <div ng-if="sLactaCesion.cesionario_obj.nombre != null">
+                <div class="col-md-6"><b>Nombres</b></div>
+                <div class="col-md-6"> {{sLactaCesion.cesionario_obj.nombre}}</div>
+                <div class="col-md-6"><b>Apellidos</b></div>
+                <div class="col-md-6"> {{sLactaCesion.cesionario_obj.apellidos}} </div>
+                <div class="col-md-6"><b>Tipo de Documento</b></div>
+                <div class="col-md-6"> {{sLactaCesion.cesionario_obj.tipo_documento}}</div>
+                <div class="col-md-6"><b>Identificación</b></div>
+                <div class="col-md-6"> {{sLactaCesion.cesionario_obj.identificacion}} </div>
+                <div class="col-md-6"><b>Tipo de Persona</b></div>
+                <div class="col-md-6"> {{sLactaCesion.cesionario_obj.tipo_persona}} </div>
+              </div>
             </div>
           </div>
         </div>

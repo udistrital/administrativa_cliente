@@ -20,6 +20,9 @@ angular.module('contractualClienteApp')
 
     self.contrato_id = $routeParams.contrato_id;
     self.contrato_obj = {};
+    self.texto_busqueda = "";
+
+    $scope.persona_sel = "";
 
     /*
     * Obtencion de datos del contrato del servicio
@@ -36,33 +39,36 @@ angular.module('contractualClienteApp')
       self.contrato_obj.ordenador_gasto = response.data[0].OrdenadorGasto;
     });
 
-    self.persona_natural_obj = {};
-
     /*
     * Obtencion de datos de las personas naturales, para los cesionarios
     */
-    agoraRequest.get('informacion_persona_natural', 'fields=Id,PrimerNombre,SegundoNombre,PrimerApellido,SegundoApellido&limit=0').then(function(response) {
-      self.persona_natural_obj = response.data;
+    agoraRequest.get('informacion_persona_natural', $.param({
+      fields: "Id,PrimerNombre,SegundoNombre,PrimerApellido,SegundoApellido",
+      limit: 0
+    })).then(function(response) {
+      self.persona_natural_items = response.data;
     });
 
     /*
-    * Search for repos... use $timeout to simulate
-    * remote dataservice call.
+    * filtro para la cargad de personas segun la entrada
     */
-    function busqueda_cesionarios(query) {
-      var results = query ? self.persona_natural_obj.filter( crear_filtro_para(query) ) : self.persona_natural_obj,
-      deferred;
-      return results;
+    self.cargar_persona_natural = function(id_persona){
+      self.persona_natural_grep = jQuery.grep(self.persona_natural_items, function(value, index) {
+        var str_value = value.Id.toString();
+        var str_id_persona = id_persona.toString();
+        if(str_value.indexOf(str_id_persona) != -1){
+          return Number(str_value);
+        }
+      });
     }
 
-    /*
-    * Funcion de creacion de filtro para un parametro de busqueda
-    */
-    function crear_filtro_para(query) {
-      var query_minuscula = angular.lowercase(query);
-      return function funcion_filtro(item) {
-        return (item.value.indexOf(query_minuscula) === 0);
-      };
+    self.persona_sel_change = function(val){
+      self.cesionario_obj = {};
+      self.cesionario_obj.nombre = val.PrimerNombre+ " " + val.SegundoNombre;
+      self.cesionario_obj.apellidos = val.PrimerApellido + " " + val.SegundoApellido ;
+      self.cesionario_obj.identificacion = val.Id;
+      self.cesionario_obj.tipo_documento = "C.C";
+      self.cesionario_obj.tipo_persona = "Natural"
     }
 
     self.generarActa = function(){
