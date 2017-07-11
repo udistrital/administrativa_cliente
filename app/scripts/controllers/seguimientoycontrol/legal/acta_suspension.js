@@ -77,7 +77,7 @@ angular.module('contractualClienteApp')
 
     var temp = '190';
 
-    var docDefinition = {
+    var objeto_acta_pdf = {
       content: [
         {
           style: ['bottom_space'],
@@ -130,13 +130,13 @@ angular.module('contractualClienteApp')
       }
     };
 
-    // swal(
-    //   'Buen trabajo!',
-    //   'Se ha generado el acta, se iniciará la descarga',
-    //   'success'
-    // );
+    swal(
+      'Buen trabajo!',
+      'Se ha generado el acta, se iniciará la descarga',
+      'success'
+    );
 
-    pdfMake.createPdf(docDefinition).open();
+    pdfMake.createPdf(objeto_acta_pdf).open();
 
   };
 });
