@@ -16,7 +16,7 @@ angular.module('contractualClienteApp')
     ];
 
     var self = this;
-    $scope.f_suspension = new Date();
+    self.f_suspension = new Date();
     $scope.f_reinicio = new Date();
     $scope.diff_dias = 0;
     self.contrato_id = $routeParams.contrato_id;

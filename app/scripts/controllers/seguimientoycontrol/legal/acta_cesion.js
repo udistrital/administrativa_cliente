@@ -50,7 +50,7 @@ angular.module('contractualClienteApp')
     });
 
     /*
-    * filtro para la cargad de personas segun la entrada
+    * filtro para la cargar de personas segun la entrada
     */
     self.cargar_persona_natural = function(id_persona){
       self.persona_natural_grep = jQuery.grep(self.persona_natural_items, function(value, index) {

@@ -28,7 +28,7 @@
             <div class="panel-heading"><center><h4><b>Información Novedad</b></h4></center></div>
             <div class="panel-body">
               <div layout-gt-sm="row">
-                <md-autocomplete flex
+                <md-autocomplete flex ng-class="autocomplete-style"
                   md-floating-label="Cedula del cesionario"
                   md-search-text="sLactaCesion.texto_busqueda"
                   md-items="item in sLactaCesion.persona_natural_grep"

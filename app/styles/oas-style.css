@@ -330,6 +330,19 @@ body {
   padding-left: 52px;
 }
 
+.md-autocomplete-suggestions-container .item-title{
+  display: block;
+  line-height: normal;
+  padding: 10px 0 2px;
+}
+
+.md-autocomplete-suggestions-container .item-metadata{
+  line-height: normal;
+  display: block;
+  color: #777;
+  font-size: 12px;
+}
+
 @media(min-width:768px) {
   .sidebar {
     z-index: 1;
