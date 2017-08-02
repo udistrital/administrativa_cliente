@@ -56,8 +56,35 @@ angular.module('contractualClienteApp')
       }
     };
 
-    administrativaRequest.get('contrato_general',"limit=0").then(function(response) {
-      self.gridOptions.data = response.data;
+    // CODIGO PARA CARGAR LAS VIGENCIAS EXISTENTES COMO OPCIONES EN EL SELECT Y MOSTRAR POR DEFECTO LA VIGENCIA DEL AÑO ACTUAL
+    administrativaRequest.get('vigencia_contrato').then(function(response) {
+      $scope.vigencias = response.data;
+      $scope.cantidadVigencias = response.data.length;
+      $scope.data = {
+        availableOptions: [],
+        selectedOption: {id: 0, vigencia: $scope.vigencias[0]} //This sets the default value of the select in the ui
+      };
+      for (var i = 0; i < $scope.cantidadVigencias; i++) {
+        $scope.data.availableOptions.push({id: i, vigencia: $scope.vigencias[i]});
+      }
+      console.log($scope.data);
+
+      // CODIGO PARA LISTAR LOS CONTRATOS CON VIGENCIA DEL AÑO SELECCIONADO AL CARGAR EL CONTROLADOR
+      $scope.buscar_contratos_por_vigencia($scope.data.selectedOption.vigencia); //opcion seleccionada del select al cargar el controlador
     });
 
+    //FUNCION QUE SE EJECUTA CUANDO SE SELECCIONA UNA OPCION DEL SELECT DE VIGENCIAS
+    $scope.buscar_contratos = function() {
+      var vigencia = $scope.data.selectedOption.vigencia;//opcion que se selecciona del select
+      // alert(vigencia);
+      $scope.buscar_contratos_por_vigencia(vigencia);
+    }
+
+    //FUNCION QUE NOS TRAE LOS DATOS DE LOS CONTRATOS POR LA VIGENCIA QUE RECIBE POR PARAMETRO
+    $scope.buscar_contratos_por_vigencia = function(anio) {
+      administrativaRequest.get('contrato_general',"query=VigenciaContrato%3A"+anio+"&limit=0").then(function(response) {
+        self.gridOptions.data = response.data;
+        console.log(response.data);
+      });
+    }
   });
