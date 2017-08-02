@@ -17,8 +17,8 @@ angular.module('contractualClienteApp')
 
     var self = this;
     self.f_suspension = new Date();
-    $scope.f_reinicio = new Date();
-    $scope.diff_dias = 0;
+    self.f_reinicio = new Date();
+    self.diff_dias = 0;
     self.contrato_id = $routeParams.contrato_id;
     self.contrato_obj = {};
 
@@ -35,25 +35,33 @@ angular.module('contractualClienteApp')
       self.contrato_obj.contratante = "Universidad Distrital Francisco José de Caldas";
       self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
       self.contrato_obj.supervisor = response.data[0].Supervisor;
-      $log.log(response.data);
+      self.contrato_obj.vigencia = response.data[0].VigenciaContrato;
     });
 
     /*
     * Funcion que observa el cambio de fechas y calcula el periodo de reinicio
     */
-    $scope.$watch('f_reinicio', function(){
-      var dt1 = $scope.f_suspension;
-      var dt2 = $scope.f_reinicio;
+    $scope.$watch('sLactaReinicio.f_reinicio', function(){
+      var dt1 = self.f_suspension;
+      var dt2 = self.f_reinicio;
       var timeDiff = 0;
 
       if(dt2 != null){
         timeDiff = Math.abs(dt2.getTime() - dt1.getTime());
       }
 
-      $scope.diff_dias = Math.ceil(timeDiff / (1000 * 3600 * 24));
+      self.diff_dias = Math.ceil(timeDiff / (1000 * 3600 * 24));
     });
 
     self.generarActa = function(){
+
+      self.reinicio_nov = {};
+      self.reinicio_nov.contrato = self.contrato_obj.id;
+      self.reinicio_nov.vigencia = self.contrato_obj.vigencia;
+      self.reinicio_nov.periodosuspension = self.diff_dias;
+      self.reinicio_nov.fechasuspension = self.f_suspension;
+      self.reinicio_nov.fechareinicio = self.f_reinicio;
+
       swal(
         'Buen trabajo!',
         'Se ha generado el acta, se iniciará la descarga',

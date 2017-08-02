@@ -59,13 +59,15 @@ angular.module('contractualClienteApp')
   * Funcion para la generacion del acta
   */
   self.generarActa = function(){
+
     self.suspension_nov = {};
+    self.suspension_nov.tiponovedad = "5976308f5aa3d86a430c8c0a"
     self.suspension_nov.contrato = self.contrato_obj.id;
-    self.suspension_nov.vigencia = self.contrato_obj.vigencia;
+    self.suspension_nov.vigencia = String(self.contrato_obj.vigencia);
     self.suspension_nov.motivo = $scope.motivo;
     self.suspension_nov.periodosuspension = $scope.diff_dias;
-    self.suspension_nov.motivo = $scope.motivo;
-    self.suspension_nov.fecharegistro = new Date();
+    self.suspension_nov.fecharegistro = self.contrato_obj.fecha_registro;
+    self.suspension_nov.fechasolicitud = new date();
     self.suspension_nov.fechasuspension = $scope.f_inicio;
     self.suspension_nov.fechareinicio = $scope.f_reinicio;
 
@@ -73,62 +75,8 @@ angular.module('contractualClienteApp')
       console.log(request);
     });
 
-    console.log(self.suspension_nov);
+    console.log(test);
 
-    var temp = '190';
-
-    var objeto_acta_pdf = {
-      content: [
-        {
-          style: ['bottom_space'],
-          table:{
-            widths:[65, '*', 120, 65],
-            body:[
-              [
-                {text: 'logo-ud', rowSpan: 3, alignment: 'center', fontSize: 10},
-                {text: 'ACTA DE SUSPENSIÓN', alignment: 'center', fontSize: 12},
-                {text: 'Código: GJ-PR- 002-FR- 010', fontSize: 9},
-                {text: 'logo-sigud', rowSpan: 3, alignment: 'center', fontSize: 10}
-              ],
-              [
-                '',
-                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},
-                {text: 'Versión: 01', fontSize: 9, margin: [0, 6]},
-                ''
-              ],
-              [
-                '',
-                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},
-                {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},
-                ''
-              ],
-            ]
-          }
-        },
-        {
-          text:[
-            {text: "Contrato: ", bold: true},
-            ' ________ ',
-            {text: "No: ", bold: true},
-            {text: self.contrato_id}
-          ]
-        },
-        {
-          text:[
-            {text: "Contratante: ", bold: true},
-            ' ________ '
-          ]
-        }
-      ],
-      styles: {
-        top_space: {
-          marginTop: 30
-        },
-        bottom_space: {
-          marginBottom: 30
-        }
-      }
-    };
 
     swal(
       'Buen trabajo!',
@@ -136,7 +84,7 @@ angular.module('contractualClienteApp')
       'success'
     );
 
-    pdfMake.createPdf(objeto_acta_pdf).open();
+    // pdfMake.createPdf(objeto_acta_pdf).open();
 
   };
 });

@@ -21,8 +21,11 @@ angular.module('contractualClienteApp')
     self.contrato_id = $routeParams.contrato_id;
     self.contrato_obj = {};
     self.texto_busqueda = "";
-
-    $scope.persona_sel = "";
+    self.persona_sel = "";
+    self.num_oficio = null;
+    self.f_oficio = new Date();
+    self.f_cesion = new Date();
+    self.observaciones = "";
 
     /*
     * Obtencion de datos del contrato del servicio
@@ -37,6 +40,8 @@ angular.module('contractualClienteApp')
       self.contrato_obj.contratante = "Universidad Distrital Francisco José de Caldas";
       self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
       self.contrato_obj.ordenador_gasto = response.data[0].OrdenadorGasto;
+      self.contrato_obj.vigencia = response.data[0].VigenciaContrato;
+
     });
 
     /*
@@ -62,6 +67,9 @@ angular.module('contractualClienteApp')
       });
     }
 
+    /*
+    * Funcion de accion al momento de seleccion de cedula del cesionario
+    */
     self.persona_sel_change = function(val){
       self.cesionario_obj = {};
       self.cesionario_obj.nombre = val.PrimerNombre+ " " + val.SegundoNombre;
@@ -72,6 +80,16 @@ angular.module('contractualClienteApp')
     }
 
     self.generarActa = function(){
+
+      self.cesion_nov = {};
+      self.cesion_nov.contrato = self.contrato_obj.id;
+      self.cesion_nov.vigencia = self.contrato_obj.vigencia;
+      self.cesion_nov.cesionariocedula = self.cesionario_obj.identificacion;
+      self.cesion_nov.numerooficio = self.num_oficio;
+      self.cesion_nov.fechaoficio = self.f_oficio;
+      self.cesion_nov.fechacesion = self.f_cesion;
+      self.cesion_nov.observaciones = self.observaciones;
+
       swal(
         'Buen trabajo!',
         'Se ha generado el acta, se iniciará la descarga',

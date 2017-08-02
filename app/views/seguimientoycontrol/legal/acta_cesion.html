@@ -48,22 +48,22 @@
                 </md-autocomplete>
                 <md-input-container flex>
                   <label for="perido">Número de Oficio:</label>
-                  <input type="number" class="md-autocomplete" id="oficio" >
+                  <input type="number" ng-model="sLactaCesion.num_oficio" class="md-autocomplete" id="oficio" >
                 </md-input-container>
               </div>
 
               <div class="form-group col-sm-6" >
                 <label for="fechaoficio">Fecha del Oficio:</label>
-                <md-datepicker ng-model="f_oficio" md-placeholder="Ingrese fecha"></md-datepicker>
+                <md-datepicker ng-model="sLactaCesion.f_oficio" md-placeholder="Ingrese fecha"></md-datepicker>
               </div>
               <div class="form-group col-sm-6" >
                 <label for="fechacesion">Fecha de Cesión:</label>
-                <md-datepicker ng-model="f_cesion" md-placeholder="Ingrese fecha"></md-datepicker>
+                <md-datepicker ng-model="sLactaCesion.f_cesion" md-placeholder="Ingrese fecha"></md-datepicker>
               </div>
 
               <div class="form-group col-md-12" >
-                <label for="consideraciones">Otras Consideraciones:</label>
-                <textarea class="form-control" id="consideraciones" rows="3"></textarea>
+                <label for="consideraciones">Otras Observaciones:</label>
+                <textarea class="form-control" ng-model="sLactaCesion.observaciones" id="observaciones" rows="3"></textarea>
               </div>
             </div>
           </div>
@@ -88,6 +88,11 @@
                 <div class="col-md-6"> {{sLactaCesion.cesionario_obj.tipo_persona}} </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div ng-if="sLactaCesion.cesion_nov != null">
+            <pre>{{sLactaCesion.cesion_nov | json}}</pre>
           </div>
         </div>
       </div>

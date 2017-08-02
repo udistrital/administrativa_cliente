@@ -12,9 +12,19 @@
             <div class="col-md-6"><b>Contratante</b></div>
             <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.contratante}}</p></div>
             <div class="col-md-6"><b>Contratista</b></div>
-            <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.contratista.NomProveedor}}</p></div>
+            <div class="col-md-6" ng-if="sLactaSuspension.contrato_obj.contratista.NomProveedor != null">
+              <p>{{sLactaSuspension.contrato_obj.contratista.NomProveedor}}</p>
+            </div>
+            <div class="col-md-6" ng-if="sLactaSuspension.contrato_obj.contratista.NomProveedor == null">
+              <p>No registra</p>
+            </div>
             <div class="col-md-6"><b>Objeto</b></div>
-            <div class="col-md-6"> <p>{{sLactaSuspension.contrato_obj.objeto}}</p> </div>
+            <div class="col-md-6" ng-if="sLactaSuspension.contrato_obj.objeto != null">
+              <p>{{sLactaSuspension.contrato_obj.objeto}}</p>
+            </div>
+            <div class="col-md-6" ng-if="sLactaSuspension.contrato_obj.objeto == null">
+              <p>No registra</p>
+            </div>
             <div class="col-md-6"><b>Valor contrato</b></div>
             <div class="col-md-6"><p>{{sLactaSuspension.contrato_obj.valor | currency}}</p></div>
           </div>
@@ -41,6 +51,11 @@
               <textarea class="form-control" id="motivo" ng-model="motivo" rows="5"></textarea>
             </div>
           </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div ng-if="sLactaSuspension.suspension_nov != null">
+          <pre>{{sLactaSuspension.suspension_nov | json}}</pre>
         </div>
       </div>
     </div>
