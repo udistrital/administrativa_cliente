@@ -1,110 +1,127 @@
 <br>
 <div class="panel panel-default">
-<center><h3 class="titulo-centrado">Acta de Adición/Prórroga</h3></center>
+  <div><center><h3 class="titulo-centrado">Acta de Adición/Prórroga</h3></center></div>
+  <form method="post">
     <div class="panel-body">
-      <div class=" panel panel-primary col-sm-5 paneles" >
-        <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
-        <div class="col-md-6"><b>Tipo de contrato</b></div>
-        <div class="col-md-6"><p>Contrato de Prestación de Servicios</p></div>
-        <div class="col-md-6"><b>Número de contrato</b></div>
-        <div class="col-md-6"><p>150246</p></div>
-        <div class="col-md-6"><b>Objeto</b></div>
-        <div class="col-md-6"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel commodo mi, ut sollicitudin elit. Aliquam erat volutpat.
-          Pellentesque mollis odio sed bibendum mattis. Nunc viverra ante a eros elementum consequat.</p> </div>
-        <div class="col-md-6"><b>Valor contrato</b></div>
-        <div class="col-md-6"><p>$ 2.264.427</p></div>
-        <div class="col-md-6"><b>Contratista</b></div>
-        <div class="col-md-6"><p>Pepe Perez</p></div>
-        <div class="col-md-6"><b>Plazo inicial(en meses)</b></div>
-        <div class="col-md-6"><p>9</p></div>
-        <div class="col-md-6"><b>Supervisor</b></div>
-        <div class="col-md-6"><p>Juan Rodriguez</p></div>
-        <div class="col-md-6"><b>Fecha de Iniciación</b></div>
-        <div class="col-md-6"><p>Febrero 15 de 2017</p></div>
-      </div>
-
-
-
-
-
-    <div class=" panel panel-primary col-sm-5 paneles" >
-      <div class="panel-heading row"><center><h4><b>Información General de la Novedad</b></h4></center></div>
-
-
-      <center><label class="checkbox-inline"><input type="checkbox" value="" ng-model="adicion">Adición</label>
-      <label class="checkbox-inline"><input type="checkbox" value=""  ng-model="prorroga">Prórroga</label></center>
-
-      <div class="form-group col-sm-6" >
-        <label for="solicitud">Número de Solicitud</label>
-        <input type="number" class="form-control" id="solicitud" >
-      </div>
-      <div class="form-group col-sm-6" >
-        <label for="fecha_solicitud">Fecha Solicitud</label>
-        <input type="date" class="form-control" id="fecha_solicitud" value="2017-07-04" >
-      </div>
-
-    </div>
-
-
-      <div class=" panel panel-primary col-sm-5 paneles" ng-if="adicion" >
-        <div class="panel-heading row"><center><h4><b>Información Novedad de Adición</b></h4></center></div>
-
-        <div class="form-group col-sm-6" >
-          <label for="numero_cdp">Número CDP</label>
-          <input type="number" class="form-control" id="numero_cdp" >
-        </div>
-
-        <div class="form-group col-sm-6" >
-          <label for="fecha_adicion">Fecha Adición</label>
-          <input type="date" class="form-control" id="fecha_adicion" value="2017-07-04" >
-        </div>
-
-        <div class="form-group col-md-6" >
-          <label for="motivo_adicion">Motivo Adición</label>
-          <textarea class="form-control" id="motivo_adicion" rows="3"></textarea>
-        </div>
-
-        <div class="form-group col-sm-6" >
-          <label for="valor_adicion">Valor Adición</label>
-          <input type="number" class="form-control" id="valor_adicion" >
-        </div>
-
-        <div class="form-group col-sm-6" >
-          <label for="nuevo_valor_contrato">Nuevo Valor del Contrato</label>
-          <input type="number" class="form-control" id="nuevo_valor_contrato" disabled>
-        </div>
-      </div>
-
       <div class="row">
-      <div class="col-md-5 paneles"></div>
-      <div class=" panel panel-primary col-md-5  paneles" ng-if="prorroga">
-        <div class="panel-heading row"><center><h4><b>Información Novedad de Prórroga</b></h4></center></div>
-
-        <div class="form-group col-sm-6" >
-          <label for="tiempo_prorroga">Tiempo Prórroga (En dias)</label>
-          <input type="number" class="form-control" id="tiempo_prorroga" >
+        <div class="col-xs-12 col-sm-12 col-md-1"></div>
+        <div class="col-xs-12 col-sm-12 col-md-5">
+          <div class="panel panel-primary">
+            <div class="panel-heading"><center><h4><b>Información</b></h4></center></div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-md-6"><b>Tipo de contrato</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.TipoContrato}}</p></div>
+                <div class="col-md-6"><b>Número de contrato</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.id}}</p></div>
+                <div class="col-md-6"><b>Objeto</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.ObjetoContrato}}</p></div>
+                <div class="col-md-6"><b>Valor contrato</b></div>
+                <div class="col-md-6"><p>$ {{sLactaAdicionProrroga.contrato_obj.ValorContrato}}</p></div>
+                <div class="col-md-6"><b>Contratista</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.Contratista}}</p></div>
+                <div class="col-md-6"><b>Plazo inicial (En meses)</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.PlazoEjecucion}}</p></div>
+                <div class="col-md-6"><b>Supervisor</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.Supervisor}}</p></div>
+                <div class="col-md-6"><b>Fecha de Iniciación</b></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.FechaRegistro | date:"dd-MM-yyyy"}}</p></div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="form-group col-sm-6" >
-          <label for="fecha_prorroga">Fecha Prórroga</label>
-          <input type="date" class="form-control" id="fecha_prorroga" value="2017-07-04" >
-        </div>
 
-        <div class="form-group col-md-6" >
-          <label for="motivo_prorroga">Motivo Prórroga</label>
-          <textarea class="form-control" id="motivo_prorroga" rows="3"></textarea>
+        <div class="col-xs-12 col-sm-12 col-md-5">
+          <!-- PANEL INFORMACION GENERAL -->
+          <div class="panel panel-primary">
+            <div class="panel-heading"><center><h4><b>Información General de la Novedad</b></h4></center></div>
+            <div class="panel-body">
+              <div class="row">
+                <div class="col-xs-12 col-md-12">
+                  <center>
+                    <label class="checkbox-inline"><input type="checkbox" ng-model="adicion" ng-click="click_check_adicion()">Adición</label>
+                    <label class="checkbox-inline"><input type="checkbox" ng-model="prorroga" ng-click="click_check_prorroga()">Prórroga</label>
+                  </center>
+                </div>
+              </div>
+              <hr>
+              <div class="row" style="border: 0px solid;">
+                <div class="col-xs-12 col-md-6">
+                  <label for="solicitud">Número de Solicitud</label>
+                  <input type="number" class="form-control" id="solicitud" ng-model="numero_solicitud" placeholder="Número de solicitud" required>
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="fecha_solicitud">Fecha Solicitud</label>
+                  <input type="date" class="form-control" id="fecha_solicitud" ng-model="FechaRegistro" min="{{sLactaAdicionProrroga.fecha_inicio | date:'yyyy-MM-dd'}}">
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- PANEL ADICION -->
+          <div class="panel panel-primary panel_adicion" style="display: none;">
+            <div class="panel-heading"><center><h4><b>Información Novedad de Adición</b></h4></center></div>
+            <div class="panel-body">
+              <div class="row" style="border: 0px solid;">
+                <div class="col-xs-12 col-md-6" >
+                  <label for="numero_cdp">Número CDP</label>
+                  <input type="number" class="form-control" id="numero_cdp" value="{{sLactaAdicionProrroga.contrato_obj.NumeroCdp}}">
+                </div>
+                <div class="col-xs-12 col-md-6" >
+                  <label for="valor-adicion">Valor Adición</label>
+                  <input type="number" class="form-control" id="valor-adicion" ng-model="valor_adicion" ng-blur="total_valor_contrato($event)" placeholder="Valor Adición">
+                </div>
+                <div class="col-xs-12 col-md-6" >
+                  <label for="fecha-adicion">Fecha Adición</label>
+                  <input type="date" class="form-control" id="fecha-adicion" ng-model="fecha_adicion" min="{{sLactaAdicionProrroga.fecha_inicio | date:'yyyy-MM-dd'}}">
+                </div>
+                <div class="col-xs-12 col-md-6">
+                  <label for="nuevo-valor-contrato">Nuevo Valor del Contrato</label><br>
+                  <input type="number" class="form-control" id="nuevo-valor-contrato" ng-model="nuevo_valor_contrato" placeholder="Nuevo valor del contrato" readonly>
+                </div>
+                <div class="col-xs-12 col-md-12" >
+                  <label for="motivo-adicion">Motivo Adición</label>
+                  <textarea class="form-control" id="motivo-adicion" ng-model="motivo_adicion" rows="3" placeholder="Ingrese aqui el motivo de la adición"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- PANEL PRORROGA -->
+          <div class="panel panel-primary panel_prorroga" style="display: none;">
+            <div class="panel-heading"><center><h4><b>Información Novedad de Prórroga</b></h4></center></div>
+            <div class="panel-body">
+              <div class="row" style="border: 0px solid;">
+                <div class="col-xs-12 col-md-6" >
+                  <label for="tiempo-prorroga">Tiempo Prórroga</label>
+                  <input type="number" class="form-control" id="tiempo-prorroga" ng-model="tiempo_prorroga" ng-blur="total_plazo_contrato($event)" placeholder="En días">
+                </div>
+                <div class="col-xs-12 col-md-6" >
+                  <label for="fecha-prorroga">Fecha Prórroga</label>
+                  <input type="date" class="form-control" id="fecha-prorroga" ng-model="fecha_prorroga" min="{{sLactaAdicionProrroga.fecha_inicio | date:'yyyy-MM-dd'}}">
+                </div>
+                <div class="fcol-xs-12 col-md-12" >
+                  <label for="nuevo-plazo-contrato">Nuevo Plazo del Contrato</label>
+                  <input type="number" class="form-control" id="nuevo-plazo-contrato" ng-model="nuevo_plazo_contrato" placeholder="Nuevo plazo del contrato (En meses)" readonly>
+                </div>
+                <div class="fcol-xs-12 col-md-12" >
+                  <label for="motivo-prorroga">Motivo Prórroga</label>
+                  <textarea class="form-control" id="motivo-prorroga" ng-model="motivo_prorroga" rows="3" placeholder="Ingrese aqui el motivo de la Prórroga"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="col-xs-12 col-sm-12 col-md-1"></div>
+      </div>
+    </div>
 
-        <div class="form-group col-sm-6" >
-          <label for="nuevo_plazo_contrato">Nuevo Plazo del Contrato</label>
-          <input type="number" class="form-control" id="nuevo_plazo_contrato" disabled>
+    <div class="panel-footer">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12" style="text-align: center;">
+          <button type="submit" class="btn btn-primary btn-lg" ng-click="sLactaAdicionProrroga.generarActa()">
+            <span class="glyphicon glyphicon-file"></span> Crear Acta de Adición/Prórroga
+          </button>
         </div>
       </div>
-
-
     </div>
-
-    </div>
-    <div class="panel-footer">
-      <center><button class="btn btn-primary btn-lg" ng-click="sLactaAdicionProrroga.generarActa()">Crear Acta de Adición/Prórroga</button></center>
-    </div>
+  </form>
 </div>

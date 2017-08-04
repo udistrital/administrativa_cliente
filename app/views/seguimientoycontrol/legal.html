@@ -34,7 +34,7 @@
                   </button>
 
                   <ul class="dropdown-menu" role="menu">
-                    <li ng-if="sLegal.estado_contrato_obj.estado == 1"><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga">Crear Novedad de Adición y/o Prorroga</a></li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 1"><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga/{{sLegal.row_c.Id}}">Crear Novedad de Adición y/o Prorroga</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 9"><a href="#/seguimientoycontrol/legal/acta_inicio/{{sLegal.row_c.Id}}">Crear Acta de Inicio</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 1"><a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.row_c.Id}}">Crear Novedad de Suspensión</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 7"><a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.row_c.Id}}">Crear Novedad de Reinicio</a></li>

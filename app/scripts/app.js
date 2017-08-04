@@ -130,7 +130,7 @@ angular
         controller: 'SeguimientoycontrolLegalActaCesionCtrl',
         controllerAs: 'sLactaCesion'
       })
-      .when('/seguimientoycontrol/legal/acta_adicion_prorroga', {
+      .when('/seguimientoycontrol/legal/acta_adicion_prorroga/:contrato_id', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_adicion_prorroga.html',
         controller: 'SeguimientoycontrolLegalActaAdicionProrrogaCtrl',
         controllerAs: 'sLactaAdicionProrroga'

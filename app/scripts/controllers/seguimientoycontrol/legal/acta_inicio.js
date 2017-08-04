@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalActaInicioCtrl', function ($log, $scope, $routeParams, administrativaRequest) {
+  .controller('SeguimientoycontrolLegalActaInicioCtrl', function ($log, $scope, $routeParams, administrativaRequest,$translate,argoNosqlRequest)  {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -32,8 +32,12 @@ angular.module('contractualClienteApp')
       self.contrato_obj.objeto = response.data[0].ObjetoContrato;
       self.contrato_obj.plazo = response.data[0].PlazoEjecucion;
       self.contrato_obj.contratante = "Universidad Distrital Francisco José de Caldas";
-      self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
       self.contrato_obj.supervisor = response.data[0].Supervisor;
+      self.contrato_obj.VigenciaContrato = response.data[0].VigenciaContrato;
+      self.contrato_obj.FechaRegistro = response.data[0].FechaRegistro;
+      self.fecha_formateada = self.contrato_obj.FechaRegistro.substring(0, 10);
+      $scope.fecha_inicio = self.fecha_formateada;
+      $scope.fecha_fin = self.fecha_formateada;
       $log.log(response.data);
     });
 
@@ -73,12 +77,25 @@ angular.module('contractualClienteApp')
     {"TipoBien": "Bien de Consumo", "Placa":"1234556667","Descripcion":"CPU X", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""}];
 
     self.generarActa = function(){
-      swal(
-        'Buen trabajo!',
-        'Se ha generado el acta, se iniciará la descarga',
-        'success'
-      );
+      self.data_acta_inicio = {
+                                contrato: self.contrato_obj.id,
+                                fechafin: $scope.fecha_fin,
+                                fechainicio: $scope.fecha_inicio,
+                                vigencia: ""+self.contrato_obj.VigenciaContrato+""
+                              }
+      
+      alert(JSON.stringify(self.data_acta_inicio));
+      argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(request){
+        console.log(request);
+        if (request.status == 200) {
+          swal('Buen trabajo!','Registros guardados con éxito en la bd NoSQL!','success');
+        }
+      });      
+
+      // swal(
+      //   'Buen trabajo!',
+      //   'Se ha generado el acta, se iniciará la descarga',
+      //   'success'
+      // );
     };
-
-
   });
