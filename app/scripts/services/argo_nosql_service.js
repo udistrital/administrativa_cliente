@@ -15,7 +15,7 @@ angular.module('argoNosqlService', [])
       // Public API here
       return {
         get: function (tabla,params) {
-          return $http.get(path+tabla+"/?"+params);
+          return $http.get(path+tabla+"/"+params);
         },
         post: function (tabla,elemento) {
           return $http.post(path+tabla,elemento);

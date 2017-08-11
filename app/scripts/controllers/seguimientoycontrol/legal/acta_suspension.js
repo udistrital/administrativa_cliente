@@ -17,10 +17,10 @@ angular.module('contractualClienteApp')
 
   var self = this;
   self.f_registro = new Date();
-  $scope.f_inicio = new Date();
-  $scope.f_reinicio = new Date();
-  $scope.motivo = "";
-  $scope.diff_dias = 0;
+  self.f_inicio = new Date();
+  self.f_reinicio = new Date();
+  self.motivo = "";
+  self.diff_dias = 0;
 
   self.contrato_id = $routeParams.contrato_id;
   self.contrato_obj = {};
@@ -43,16 +43,16 @@ angular.module('contractualClienteApp')
   /*
   * Funcion que observa el cambio de fechas y calcula el periodo de suspension
   */
-  $scope.$watch('f_reinicio', function(){
-    var dt1 = $scope.f_inicio;
-    var dt2 = $scope.f_reinicio;
+  $scope.$watch('sLactaSuspension.f_reinicio', function(){
+    var dt1 = self.f_inicio;
+    var dt2 = self.f_reinicio;
     var timeDiff = 0;
 
     if(dt2 != null){
       timeDiff = Math.abs(dt2.getTime() - dt1.getTime());
     }
 
-    $scope.diff_dias = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    self.diff_dias = Math.ceil(timeDiff / (1000 * 3600 * 24));
   });
 
   /*
@@ -64,27 +64,37 @@ angular.module('contractualClienteApp')
     self.suspension_nov.tiponovedad = "5976308f5aa3d86a430c8c0a"
     self.suspension_nov.contrato = self.contrato_obj.id;
     self.suspension_nov.vigencia = String(self.contrato_obj.vigencia);
-    self.suspension_nov.motivo = $scope.motivo;
-    self.suspension_nov.periodosuspension = $scope.diff_dias;
+    self.suspension_nov.motivo = self.motivo;
+    self.suspension_nov.periodosuspension = self.diff_dias;
     self.suspension_nov.fecharegistro = self.contrato_obj.fecha_registro;
-    self.suspension_nov.fechasolicitud = new date();
-    self.suspension_nov.fechasuspension = $scope.f_inicio;
-    self.suspension_nov.fechareinicio = $scope.f_reinicio;
+    self.suspension_nov.fechasolicitud = new Date();
+    self.suspension_nov.fechasuspension = self.f_inicio;
+    self.suspension_nov.fechareinicio = self.f_reinicio;
+
+    self.contrato_estado = {};
+    self.contrato_estado.NumeroContrato = self.contrato_obj.id;
+    self.contrato_estado.Vigencia = self.contrato_obj.vigencia;
+    self.contrato_estado.FechaRegistro = self.contrato_obj.fecha_registro;
+    self.contrato_estado.Estado = {
+      "NombreEstado": "Suspendido",
+      "FechaRegistro": "2016-12-31T19:00:00-05:00",
+      "Id": 7
+    };
+    self.contrato_estado.Usuario = "usuario_prueba";
+
+    administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
+      console.log(request);
+    });
 
     argoNosqlRequest.post('novedad', self.suspension_nov).then(function(request){
       console.log(request);
     });
-
-    console.log(test);
-
 
     swal(
       'Buen trabajo!',
       'Se ha generado el acta, se iniciará la descarga',
       'success'
     );
-
-    // pdfMake.createPdf(objeto_acta_pdf).open();
 
   };
 });

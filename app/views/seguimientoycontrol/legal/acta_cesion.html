@@ -12,14 +12,24 @@
               <div class="col-md-6"><b>Contratante</b></div>
               <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.contratante}}</p></div>
               <div class="col-md-6"><b>Contratista</b></div>
-              <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.contratista.NomProveedor}}</p></div>
+              <div class="col-md-6" ng-if="sLactaCesion.contrato_obj.contratista_documento != null">
+                <p>
+                  {{sLactaCesion.contrato_obj.contratista_nombre}} <br>
+                  <span style="color:#555; font-size:14px;">
+                    {{sLactaCesion.contrato_obj.contratista_documento}}
+                  </span>
+                </p>
+              </div>
+              <div class="col-md-6" ng-if="sLactaCesion.contrato_obj.contratista_documento == null">
+                <p>No registra</p>
+              </div>
               <div class="col-md-6"><b>Objeto</b></div>
               <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.objeto}}</p>
               </div>
               <div class="col-md-6"><b>Valor contrato</b></div>
               <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.valor | currency}}</p></div>
               <div class="col-md-6"><b>Ordenador del Gasto</b></div>
-              <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.ordenador_gasto.ORGNOMBRE}}</p></div>
+              <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.ordenador_gasto}}</p></div>
             </div>
           </div>
         </div>
