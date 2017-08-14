@@ -81,34 +81,41 @@ angular.module('contractualClienteApp')
     }
 
     self.generarActa = function(){
-      self.motivo = {
-                    adicion: $scope.motivo_adicion,
-                    prorroga: $scope.motivo_prorroga
-                  };
-      self.json_motivo = JSON.stringify(self.motivo);
-      self.data_acta_adicion_prorroga = {
-                                          contrato: self.contrato_obj.id,
-                                          numerosolicitud: $scope.numero_solicitud,
-                                          fechasolicitud: $scope.FechaRegistro,
-                                          numerocdp: ""+self.contrato_obj.NumeroCdp+"",
-                                          valoradicion: parseInt($scope.valor_adicion),
-                                          fechaadicion: $scope.fecha_adicion,
-                                          tiempoprorroga: parseInt($scope.tiempo_prorroga),
-                                          fechaprorroga: $scope.fecha_prorroga,
-                                          vigencia: ""+self.contrato_obj.VigenciaContrato+"",
-                                          motivo: self.json_motivo
-                                        }
-      alert(JSON.stringify(self.data_acta_adicion_prorroga));
-      argoNosqlRequest.post('novedad', self.data_acta_adicion_prorroga).then(function(request){
-        console.log(request);
-        if (request.status == 200) {
-          swal('Buen trabajo!','Registros guardados con éxito en la bd NoSQL!','success');
-        }
-      });
-      // swal(
-      //   'Buen trabajo!',
-      //   'Se ha generado el acta, se iniciará la descarga',
-      //   'success'
-      // );
+      if ($scope.adicion) {
+        $scope.estado_novedad = "Adición";
+      }
+      if ($scope.prorroga) {
+        $scope.estado_novedad = "Prorroga";
+      }if ($scope.adicion == true && $scope.prorroga == true){
+        $scope.estado_novedad = "Adición y Prorroga";
+      }
+      if ($scope.estado_novedad != undefined) {
+        self.data_acta_adicion_prorroga = {
+                                            contrato: self.contrato_obj.id,
+                                            numerosolicitud: $scope.numero_solicitud,
+                                            fechasolicitud: $scope.FechaRegistro,
+                                            numerocdp: String(self.contrato_obj.NumeroCdp),
+                                            valoradicion: parseInt($scope.valor_adicion),
+                                            fechaadicion: $scope.fecha_adicion,
+                                            tiempoprorroga: parseInt($scope.tiempo_prorroga),
+                                            fechaprorroga: $scope.fecha_prorroga,
+                                            vigencia: String(self.contrato_obj.VigenciaContrato),
+                                            motivo: $scope.motivo
+                                          }
+        // alert(JSON.stringify(self.data_acta_adicion_prorroga));
+        argoNosqlRequest.post('novedad', self.data_acta_adicion_prorroga).then(function(request){
+          console.log(request);
+          if (request.status == 200) {
+            swal('Buen trabajo!',
+                 'Se registro exitosamente la novedad de "'+$scope.estado_novedad+'"<br>al contrato # '+self.contrato_obj.id+' del '+self.contrato_obj.VigenciaContrato+'.',
+                 'success');
+            $scope.estado_novedad = undefined;
+          }
+        });
+      }else{
+        swal('Advertencia',
+             'Primero debe seleccionar un tipo de novedad!',
+             'info');
+      }
     };
   });

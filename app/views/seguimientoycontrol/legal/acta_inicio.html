@@ -1,54 +1,59 @@
 <br>
 <div class="panel panel-default">
-<center><h3 class="titulo-centrado">Acta de Inicio</h3></center>
+<center><h3 class="titulo-centrado">{{'ACTA_INICIO' | translate}}</h3></center>
     <div class="panel-body">
       <div class="col-md-5 panel panel-primary paneles" >
-        <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
-        <div class="col-md-6"><b>Número de contrato</b></div>
+        <div class="panel-heading row"><center><h4><b>{{'INFORMACION' | translate}}</b></h4></center></div>
+        <div class="col-md-6"><b>{{'NUMERO_CONTRATO' | translate}}</b></div>
         <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.id}}</p></div>
-        <div class="col-md-6"><b>Objeto</b></div>
+        <div class="col-md-6"><b>{{'OBJETO' | translate}}</b></div>
         <div class="col-md-6"> <p>{{sLactaInicio.contrato_obj.objeto}}.</p> </div>
-        <div class="col-md-6"><b>Valor contrato</b></div>
+        <div class="col-md-6"><b>{{'VALOR_TOTAL_CONTRATO' | translate}}</b></div>
         <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.valor | currency}}</p></div>
-        <div class="col-md-6"><b>Contratista</b></div>
-        <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.contratista.NomProveedor}}</p></div>
-        <div class="col-md-6"><b>Plazo (en meses)</b></div>
+        <div class="col-md-6"><b>{{'DATOS_CONTRATISTA' | translate}}</b></div>
+        <div class="col-md-6" ng-if="sLactaInicio.contrato_obj.contratista.NomProveedor != null">
+          <p>{{sLactaSuspension.contrato_obj.contratista.NomProveedor}}</p>
+        </div>
+        <div class="col-md-6" ng-if="sLactaInicio.contrato_obj.contratista.NomProveedor == null">
+          <p>{{'NO_REGISTRA' | translate}}</p>
+        </div>
+        <div class="col-md-6"><b>{{'PLAZO_MESES' | translate}}</b></div>
         <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.plazo}}</p></div>
-        <div class="col-md-6"><b>Supervisor</b></div>
+        <div class="col-md-6"><b>{{'SUPERVISOR' | translate}}</b></div>
         <div class="col-md-6" ng-if="sLactaInicio.contrato_obj.contratista.supervisor != null">
           <p>{{sLactaInicio.contrato_obj.contratista.supervisor}}</p>
         </div>
         <div class="col-md-6" ng-if="sLactaInicio.contrato_obj.contratista.supervisor == null">
-          <p>No registra</p>
+          <p>{{'NO_REGISTRA' | translate}}</p>
         </div>
-        <div class="col-md-6"><b>Número de Poliza</b></div>
+        <div class="col-md-6"><b>{{'NUMERO_POLIZA' | translate}}</b></div>
         <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.numero_poliza}}</p></div>
-        <div class="col-md-6"><b>Fecha Expedición de Póliza</b></div>
+        <div class="col-md-6"><b>{{'FECHA_EXPEDICION_POLIZA' | translate}}</b></div>
         <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.fecha_expedicion | date : format : timezone}}</p></div>
-        <div class="col-md-6"><b>Fecha Aprobación de Póliza</b></div>
+        <div class="col-md-6"><b>{{'FECHA_APROBACION_POLIZA' | translate}}</b></div>
         <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.fecha_aprobacion | date : format : timezone}}</p></div>
       </div>
 
-
-
       <div class="col-md-5 panel panel-primary paneles " >
-        <div class="panel-heading row"><center><h4><b>Información Novedad</b></h4></center></div>
+        <div class="panel-heading row"><center><h4><b>{{'INFORMACION_NOVEDAD' | translate}}</b></h4></center></div>
         <div class="form-group" >
-          <label for="fechainicio">Fecha Inicio:</label>
+          <label for="fechainicio">{{'FECHA_INICIO' | translate}}:</label>
           <input type="date" class="form-control" id="fechainicio" ng-model="fecha_inicio" value='{{sLactaInicio.fecha_formateada | date:"yyyy-MM-dd"}}' ng-disabled="false">
         </div>
         <div class="form-group" >
-          <label for="fechafin">Fecha Fin:</label>
+          <label for="fechafin">{{'FECHA_FIN' | translate}}:</label>
           <input type="date" class="form-control" id="fechafin" ng-model="fecha_fin" value='' min='{{fecha_inicio | date:"yyyy-MM-dd"}}'>
         </div>
         <div class=" panel panel-warning col-sm-12" >
-          <div class="panel-heading row"><h4><b>Inventario</b></h4></div>
+          <div class="panel-heading row"><h4><b>{{'INVENTARIO' | translate}}</b></h4></div>
           <div ui-grid="sLactaInicio.gridOptions"  class="myGrid"></div>
         </div>
       </div>
 
     </div>
-    <div class="panel-footer">
-      <center><button class="btn btn-primary btn-lg" ng-click="sLactaInicio.generarActa()">Crear Acta de Inicio</button></center>
+    <div class="panel-footer" style="text-align: center;">
+      <button class="btn btn-primary btn-lg" ng-click="sLactaInicio.generarActa()">
+        <span class="glyphicon glyphicon-file"></span> {{'CREAR_ACTA_INICIO' | translate}}
+      </button>
     </div>
 </div>

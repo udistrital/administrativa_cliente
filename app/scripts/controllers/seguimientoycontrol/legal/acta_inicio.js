@@ -61,12 +61,12 @@ angular.module('contractualClienteApp')
       multiSelect: false,
       enableSelectAll: false,
       columnDefs : [
-        {field: 'TipoBien',  displayName: 'Tipo de Bien',width: 150},
-        {field: 'Placa' ,  displayName: 'Placa',width: 160},
-        {field: 'Descripcion',  displayName: 'Descripción',width: 200},
-        {field: 'Sede',  displayName: 'Sede',width: 390},
-        {field: 'Dependencia',  displayName: 'Dependencia', width: 150},
-        {field: 'Estado',  displayName: 'Estado del Bien', width: 180},
+        {field: 'TipoBien',  displayName: $translate.instant('TIPO_BIEN'),width: 150},
+        {field: 'Placa' ,  displayName: $translate.instant('PLACA'),width: 150},
+        {field: 'Descripcion',  displayName: $translate.instant('DESCRIPCION'),width: 150},
+        {field: 'Sede',  displayName: $translate.instant('SEDE'),width: 150},
+        {field: 'Dependencia',  displayName: $translate.instant('DEPENDENCIA'),width: 150},
+        {field: 'Estado',  displayName: $translate.instant('ESTADO_DEL_BIEN'),width: 150},
       ],
       onRegisterApi : function( gridApi ) {
         self.gridApi = gridApi;
@@ -81,21 +81,34 @@ angular.module('contractualClienteApp')
                                 contrato: self.contrato_obj.id,
                                 fechafin: $scope.fecha_fin,
                                 fechainicio: $scope.fecha_inicio,
-                                vigencia: ""+self.contrato_obj.VigenciaContrato+""
+                                vigencia: String(self.contrato_obj.VigenciaContrato)
                               }
       
-      alert(JSON.stringify(self.data_acta_inicio));
+      // alert(JSON.stringify(self.data_acta_inicio));
+      self.contrato_estado = {
+                                NumeroContrato: self.contrato_obj.id,
+                                Vigencia: self.contrato_obj.VigenciaContrato,
+                                FechaRegistro: self.contrato_obj.FechaRegistro,
+                                Estado: {
+                                          "NombreEstado": "Ejecucion",
+                                          "FechaRegistro": "2016-12-31T19:00:00-05:00",
+                                          "Id": 1
+                                        },
+                                Usuario: "prueba"
+                              }
+      // alert(JSON.stringify(self.contrato_estado));
       argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(request){
-        console.log(request);
+        // console.log(request);
         if (request.status == 200) {
-          swal('Buen trabajo!','Registros guardados con éxito en la bd NoSQL!','success');
+          administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
+            console.log(request);
+            if (request.status == 201) {
+              swal('Buen trabajo!',
+                   'Se registro exitosamente la novedad de "Acta de inicio"<br>al contrato # '+self.contrato_obj.id+' del '+self.contrato_obj.VigenciaContrato+'.<br><br>El estado del presente contrato se actualizo a "Ejecución".',
+                   'success');
+            }
+          });
         }
-      });      
-
-      // swal(
-      //   'Buen trabajo!',
-      //   'Se ha generado el acta, se iniciará la descarga',
-      //   'success'
-      // );
+      });   
     };
   });
