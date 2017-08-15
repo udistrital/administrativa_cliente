@@ -8,7 +8,7 @@
 * Controller of the contractualClienteApp
 */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($log, $scope, $routeParams, administrativaRequest, argoNosqlRequest) {
+.controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($location, $log, $scope, $routeParams, administrativaRequest, argoNosqlRequest, agoraRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -21,9 +21,19 @@ angular.module('contractualClienteApp')
   self.f_reinicio = new Date();
   self.motivo = "";
   self.diff_dias = 0;
+  self.estado_suspendido = {};
 
   self.contrato_id = $routeParams.contrato_id;
   self.contrato_obj = {};
+
+  /*
+  * Obtencion de estado de contrato Suspendido
+  */
+  administrativaRequest.get('estado_contrato',$.param({
+    query: "NombreEstado:" + "Suspendido"
+  })).then(function(request){
+    self.estado_suspendido = request.data[0];
+  });
 
   /*
   * Obtencion de datos del contrato del servicio
@@ -38,6 +48,13 @@ angular.module('contractualClienteApp')
     self.contrato_obj.contratante = "Universidad Distrital Francisco José de Caldas";
     self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
     self.contrato_obj.vigencia = response.data[0].VigenciaContrato;
+
+    agoraRequest.get('informacion_proveedor', $.param({
+      query: "Id:" + self.contrato_obj.contratista,
+    })).then(function(response) {
+      self.contrato_obj.contratista_documento = response.data[0].NumDocumento;
+      self.contrato_obj.contratista_nombre = response.data[0].NomProveedor;
+    });
   });
 
   /*
@@ -74,12 +91,8 @@ angular.module('contractualClienteApp')
     self.contrato_estado = {};
     self.contrato_estado.NumeroContrato = self.contrato_obj.id;
     self.contrato_estado.Vigencia = self.contrato_obj.vigencia;
-    self.contrato_estado.FechaRegistro = self.contrato_obj.fecha_registro;
-    self.contrato_estado.Estado = {
-      "NombreEstado": "Suspendido",
-      "FechaRegistro": "2016-12-31T19:00:00-05:00",
-      "Id": 7
-    };
+    self.contrato_estado.FechaRegistro = new Date();
+    self.contrato_estado.Estado = self.estado_suspendido;
     self.contrato_estado.Usuario = "usuario_prueba";
 
     administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
@@ -91,10 +104,12 @@ angular.module('contractualClienteApp')
     });
 
     swal(
-      'Buen trabajo!',
-      'Se ha generado el acta, se iniciará la descarga',
+      '¡Contrato suspendido satisfactoriamente!',
+      'Se ha generado el acta, se cambio el estado del contrato a suspensión y se reporto la novedad',
       'success'
     );
+
+    $location.path('/seguimientoycontrol/legal');
 
   };
 });

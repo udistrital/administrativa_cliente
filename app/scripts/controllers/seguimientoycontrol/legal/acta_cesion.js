@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalActaCesionCtrl', function ($log, $scope, $routeParams, administrativaRequest, agoraRequest, argoNosqlRequest) {
+  .controller('SeguimientoycontrolLegalActaCesionCtrl', function ($location, $log, $scope, $routeParams, administrativaRequest, agoraRequest, argoNosqlRequest) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -123,11 +123,12 @@ angular.module('contractualClienteApp')
         });
 
         swal(
-          'Buen trabajo!',
-          'Se ha generado el acta, se iniciará la descarga',
+          '¡Cesion del contrato satisfactoria!',
+          'Seha generado el acta, se reporto la novedad y se cambio el contratista del contrato',
           'success'
         );
 
+        $location.path('/seguimientoycontrol/legal');
 
       });
 
