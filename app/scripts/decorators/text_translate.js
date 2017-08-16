@@ -159,6 +159,7 @@ var text_es = {
   CONTRATISTA:"Contratista",
   ORDENADOR_DE_GASTO:"Ordenador de gasto",
   CEDULA_CESIONARIO:"Cédula cesionario",
+  TIPO_PERSONA: "Tipo persona",
   NUMERO_OFICIO:"Número oficio",
   FECHA_OFICIO:"Fecha oficio",
   FECHA_CESION:"Fecha cesión",
@@ -171,6 +172,7 @@ var text_es = {
   PERIODO_SUSPENSION:"Periodo suspension (Días)",
   ACTA_SUSPENSION:"ACTA DE SUSPENSIÓN",
   MOTIVO_SUSPENSION:"Motivo de suspensión",
+  CAMPO_REQUERIDO:"Este campo es obligatorio"
 };
 
 var text_en = {
@@ -207,6 +209,7 @@ var text_en = {
   CONTRATO: "Contract",
   VIGENCIA_CONTRATO: "Contract validity",
   FUENTE:"Source",
+  TIPO_PERSONA: "Person type",
   SOLICITUD_PERSONAS:"Contracts for budget registers",
   VIGENCIA_ACTUAL:"Current validity",
   VIGENCIA_SELECCIONADA:"Chosen validity ",
@@ -336,6 +339,7 @@ var text_en = {
   PERIODO_SUSPENSION:"Suspension term (Days)",
   ACTA_SUSPENSION:"SUSPENSION ACT",
   MOTIVO_SUSPENSION:"Suspension reason",
+  CAMPO_REQUERIDO:"This field is required"
 };
 
 angular.module('contractualClienteApp')

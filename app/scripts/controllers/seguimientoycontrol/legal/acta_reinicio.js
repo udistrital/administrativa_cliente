@@ -22,6 +22,7 @@ angular.module('contractualClienteApp')
     self.contrato_id = $routeParams.contrato_id;
     self.contrato_obj = {};
     self.estado_ejecucion = {};
+    self.n_solicitud = null;
 
     /*
     * Obtencion de estado de contrato Reinicio
@@ -85,43 +86,51 @@ angular.module('contractualClienteApp')
     });
 
     self.generarActa = function(){
+      if($scope.formReinicio.$valid){
+        self.reinicio_nov = {};
+        self.reinicio_nov.tiponovedad = "597630a85aa3d86a430c8c37";
+        self.reinicio_nov.numerosolicitud = self.n_solicitud;
+        self.reinicio_nov.contrato = self.contrato_obj.id;
+        self.reinicio_nov.vigencia = String(self.contrato_obj.vigencia);
+        self.reinicio_nov.periodosuspension = self.diff_dias;
+        self.reinicio_nov.fechasuspension = self.f_suspension;
+        self.reinicio_nov.fechareinicio = self.f_reinicio;
+        self.reinicio_nov.fecharegistro = new Date();
+        self.reinicio_nov.fechasolicitud = new Date();
+        self.reinicio_nov.motivo = self.motivo_suspension;
+        self.reinicio_nov.observacion = "";
 
-      self.reinicio_nov = {};
-      self.reinicio_nov.tiponovedad = "597630a85aa3d86a430c8c37";
-      self.reinicio_nov.contrato = self.contrato_obj.id;
-      self.reinicio_nov.vigencia = String(self.contrato_obj.vigencia);
-      self.reinicio_nov.periodosuspension = self.diff_dias;
-      self.reinicio_nov.fechasuspension = self.f_suspension;
-      self.reinicio_nov.fechareinicio = self.f_reinicio;
-      self.reinicio_nov.fecharegistro = new Date();
-      self.reinicio_nov.fechasolicitud = new Date();
-      self.reinicio_nov.motivo = self.motivo_suspension;
-      self.reinicio_nov.numerosolicitud = 0;
-      self.reinicio_nov.observacion = "";
+        self.contrato_estado = {};
+        self.contrato_estado.NumeroContrato = self.contrato_obj.id;
+        self.contrato_estado.Vigencia = self.contrato_obj.vigencia;
+        self.contrato_estado.FechaRegistro = self.contrato_obj.fecha_registro;
+        self.contrato_estado.Estado = self.estado_ejecucion;
+        self.contrato_estado.Usuario = "up";
 
-      self.contrato_estado = {};
-      self.contrato_estado.NumeroContrato = self.contrato_obj.id;
-      self.contrato_estado.Vigencia = self.contrato_obj.vigencia;
-      self.contrato_estado.FechaRegistro = self.contrato_obj.fecha_registro;
-      self.contrato_estado.Estado = self.estado_ejecucion;
-      self.contrato_estado.Usuario = "up";
+        administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
+          console.log(request);
+        });
 
-      administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
-        console.log(request);
-      });
+        argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response){
+          console.log(response);
+        });
 
-      argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response){
-        console.log(response);
-      });
+        swal(
+          '¡Buen trabajo!',
+          'Se registro exitosamente la novedad de reinicio al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+          'success'
+        );
 
-      swal(
-        '!Contrato reiniciado satisfactoriamente¡',
-        'Se ha generado el acta, se cambio el estado del contrato a ejecución y se reporto la novedad',
-        'success'
-      );
+        $location.path('/seguimientoycontrol/legal');
 
-      $location.path('/seguimientoycontrol/legal');
+      }else{
 
+        swal(
+          'Errores en el formulario',
+          'Llenar los campos obligatorios en el formulario del acta',
+          'error'
+        );
+      }
     };
 
   });

@@ -26,6 +26,7 @@ angular.module('contractualClienteApp')
     self.f_oficio = new Date();
     self.f_cesion = new Date();
     self.observaciones = "";
+    self.n_solicitud = null;
 
     /*
     * Obtencion de datos del contrato del servicio
@@ -95,43 +96,53 @@ angular.module('contractualClienteApp')
 
     self.generarActa = function(){
 
-      agoraRequest.get('informacion_proveedor', $.param({
-        query: "NumDocumento:" + self.cesionario_obj.identificacion
-      })).then(function(response){
+      if($scope.formCesion.$valid){
+        agoraRequest.get('informacion_proveedor', $.param({
+          query: "NumDocumento:" + self.cesionario_obj.identificacion
+        })).then(function(response){
 
-        self.cesion_nov = {};
-        self.cesion_nov.tiponovedad = "597630a35aa3d86a430c8c31"
-        self.cesion_nov.contrato = self.contrato_obj.id;
-        self.cesion_nov.fecharegistro = self.contrato_obj.fecha_registro;
-        self.cesion_nov.fechasolicitud = new Date();
-        self.cesion_nov.vigencia = String(self.contrato_obj.vigencia);
-        self.cesion_nov.cesionario = response.data[0].Id;
-        self.cesion_nov.cedente = self.contrato_obj.contratista;
-        self.cesion_nov.numerooficio = self.num_oficio;
-        self.cesion_nov.fechaoficio = self.f_oficio;
-        self.cesion_nov.fechacesion = self.f_cesion;
-        self.cesion_nov.observacion = self.observaciones;
+          self.cesion_nov = {};
+          self.cesion_nov.tiponovedad = "597630a35aa3d86a430c8c31"
+          self.cesion_nov.numerosolicitud = self.n_solicitud;
+          self.cesion_nov.contrato = self.contrato_obj.id;
+          self.cesion_nov.fecharegistro = self.contrato_obj.fecha_registro;
+          self.cesion_nov.fechasolicitud = new Date();
+          self.cesion_nov.vigencia = String(self.contrato_obj.vigencia);
+          self.cesion_nov.cesionario = response.data[0].Id;
+          self.cesion_nov.cedente = self.contrato_obj.contratista;
+          self.cesion_nov.numerooficio = self.num_oficio;
+          self.cesion_nov.fechaoficio = self.f_oficio;
+          self.cesion_nov.fechacesion = self.f_cesion;
+          self.cesion_nov.observacion = self.observaciones;
 
-        self.contrato_obj.complete.Contratista = response.data[0].Id;
+          self.contrato_obj.complete.Contratista = response.data[0].Id;
 
-        argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response){
-          console.log(response);
+          argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response){
+            console.log(response);
+          });
+
+          administrativaRequest.put('contrato_general', self.contrato_obj.id, self.contrato_obj.complete ).then(function(response){
+            console.log(response);
+          });
+
+          swal(
+            '¡Buen trabajo!',
+            'Se registro exitosamente la novedad de cesion al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+            'success'
+          );
+
+          $location.path('/seguimientoycontrol/legal');
+
         });
-
-        administrativaRequest.put('contrato_general', self.contrato_obj.id, self.contrato_obj.complete ).then(function(response){
-          console.log(response);
-        });
+      }else{
 
         swal(
-          '¡Cesion del contrato satisfactoria!',
-          'Seha generado el acta, se reporto la novedad y se cambio el contratista del contrato',
-          'success'
+          'Errores en el formulario',
+          'Llenar los campos obligatorios en el formulario del acta',
+          'error'
         );
 
-        $location.path('/seguimientoycontrol/legal');
-
-      });
-
+      }
     };
 
   });

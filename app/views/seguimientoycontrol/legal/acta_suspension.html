@@ -39,22 +39,42 @@
         <div class=" panel panel-primary">
           <div class="panel-heading"><center><h4><b>{{'INFORMACION_NOVEDAD' | translate}}</b></h4></center></div>
           <div class="panel-body">
-            <div class="form-group col-md-6" >
-              <label for="fechainicio">{{'FECHA_INICIO' | translate}}</label> <br>
-              <md-datepicker ng-model="sLactaSuspension.f_inicio"> </md-datepicker>
-            </div>
-            <div class="form-group col-md-6" >
-              <label for="fechareinicio">{{'FECHA_REINICIO' | translate}}</label> <br>
+            <form name="formSuspension">
+              <div class="form-group col-md-6">
+                <p>
+                  <b>{{'NUMERO_SOLICITUD' | translate}} *:</b>
+                </p>
+                <md-input-container style="margin:0;">
+                  <input type="number" id="n_solicitud" name="n_solicitud" required ng-model="sLactaSuspension.n_solicitud" ng-disabled="false" min="0">
+                  <div ng-messages="formSuspension.n_solicitud.$error">
+                    <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div class="form-group col-md-6">
+                <p>
+                  <b>{{'PERIODO_SUSPENSION' | translate}} *:</b>
+                </p>
+                <md-input-container style="margin:0;">
+                  <input type="number" name="diff_dias" id="periodo" required ng-model="sLactaSuspension.diff_dias" ng-disabled="false" min="0">
+                  <div ng-messages="formSuspension.diff_dias.$error">
+                    <div ng-message="required">Este campo es requerido.</div>
+                  </div>
+                </md-input-container>
+              </div>
+              <div class="form-group col-md-6" >
+                <label for="fechainicio">{{'FECHA_INICIO' | translate}}:</label> <br>
+                <md-datepicker ng-model="sLactaSuspension.f_inicio"> </md-datepicker>
+              </div>
+              <div class="form-group col-md-6" >
+                <label for="fechareinicio">{{'FECHA_REINICIO' | translate}}:</label> <br>
                 <md-datepicker ng-model="sLactaSuspension.f_reinicio" md-min-date="sLactaSuspension.f_inicio"></md-datepicker>
-            </div>
-            <div class="form-group col-md-6">
-              <label for="perido">{{'PERIODO_SUSPENSION' | translate}}</label>
-              <input class="form-control" type="number" id="periodo" ng-model="sLactaSuspension.diff_dias" ng-disabled="false" min="0" placeholder="-">
-            </div>
-            <div class="form-group col-md-12" >
-              <label>{{'MOTIVO_SUSPENSION' | translate}}</label>
-              <textarea class="form-control" id="motivo" ng-model="sLactaSuspension.motivo" rows="5"></textarea>
-            </div>
+              </div>
+              <div class="form-group col-md-12" >
+                <label>{{'MOTIVO_SUSPENSION' | translate}}:</label>
+                <textarea class="form-control" style="border-radius:0;" id="motivo" ng-model="sLactaSuspension.motivo" rows="5"></textarea>
+              </div>
+            </form>
           </div>
         </div>
       </div>

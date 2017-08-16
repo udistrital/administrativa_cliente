@@ -19,6 +19,7 @@ angular
     'afOAuth2',
     'treeControl',
     'ngMaterial',
+    'ngMessages',
     'ui.grid',
     'ui.grid.edit',
     'ui.grid.rowEdit',
@@ -41,7 +42,6 @@ angular
     'financieraMidService',
     'adminMidService',
     'argoNosqlService'
-
   ])
     .run(function(amMoment) {
       amMoment.changeLocale('es');
