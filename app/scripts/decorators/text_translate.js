@@ -320,7 +320,7 @@ var text_en = {
   NUEVO_PLAZO_CONTRATO: "New Term of Agreement",
   NUEVO_PLAZO_CONTRATO_PLACEHOLDER: "New contract term (In months)",
   ACTA_CESION: "ACT OF ASSIGNMENT",
-  INFORMACION:"INFORMATIÓN",
+  INFORMACION:"INFORMATION",
   NO_REGISTRA:"Do not record information",
   VALOR_CONTRATO:"Contract value",
   CONTRATANTE:"Contracting party",

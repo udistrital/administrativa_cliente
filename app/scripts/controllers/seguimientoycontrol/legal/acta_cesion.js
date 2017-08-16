@@ -117,28 +117,32 @@ angular.module('contractualClienteApp')
 
           self.contrato_obj.complete.Contratista = response.data[0].Id;
 
-          argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response){
-            console.log(response);
+          /*
+          * Validacion de post en nosql para put en contrato general
+          */
+          argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response_nosql){
+            if(response_nosql.status == 200  || response_nosql.statusText == "OK"){
+              administrativaRequest.put('contrato_general', self.contrato_obj.id, self.contrato_obj.complete ).then(function(response){
+                if(response.status == 200 || response.statusText == "OK"){
+                  swal(
+                    '¡Buen trabajo!',
+                    'Se registro exitosamente la novedad de cesion al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+                    'success'
+                  );
+
+                  $location.path('/seguimientoycontrol/legal');
+                }
+              });
+            }
           });
 
-          administrativaRequest.put('contrato_general', self.contrato_obj.id, self.contrato_obj.complete ).then(function(response){
-            console.log(response);
-          });
-
-          swal(
-            '¡Buen trabajo!',
-            'Se registro exitosamente la novedad de cesion al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
-            'success'
-          );
-
-          $location.path('/seguimientoycontrol/legal');
 
         });
       }else{
 
         swal(
           'Errores en el formulario',
-          'Llenar los campos obligatorios en el formulario del acta',
+          'Llenar los campos obligatorios en el formulario',
           'error'
         );
 

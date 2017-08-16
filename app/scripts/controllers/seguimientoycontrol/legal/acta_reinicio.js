@@ -107,27 +107,33 @@ angular.module('contractualClienteApp')
         self.contrato_estado.Estado = self.estado_ejecucion;
         self.contrato_estado.Usuario = "up";
 
-        administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
-          console.log(request);
+        /*
+        * Validacion de put en nosql para post en contrato estado
+        */
+        argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response_nosql){
+          console.log(response_nosql);
+          if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
+            administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(response){
+              console.log(response);
+              if(response.status == 201 || response.statusText == "Created"){
+
+                swal(
+                  '¡Buen trabajo!',
+                  'Se registro exitosamente la novedad de reinicio al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+                  'success'
+                );
+
+                $location.path('/seguimientoycontrol/legal');
+              }
+            });
+          }
         });
-
-        argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response){
-          console.log(response);
-        });
-
-        swal(
-          '¡Buen trabajo!',
-          'Se registro exitosamente la novedad de reinicio al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
-          'success'
-        );
-
-        $location.path('/seguimientoycontrol/legal');
 
       }else{
 
         swal(
           'Errores en el formulario',
-          'Llenar los campos obligatorios en el formulario del acta',
+          'Llenar los campos obligatorios en el formulario',
           'error'
         );
       }

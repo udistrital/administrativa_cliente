@@ -101,27 +101,32 @@ angular.module('contractualClienteApp')
       self.contrato_estado.Estado = self.estado_suspendido;
       self.contrato_estado.Usuario = "usuario_prueba";
 
-      administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
-        console.log(request);
+      /*
+      * Validacion de post en nosql para post en contrato estado
+      */
+      argoNosqlRequest.post('novedad', self.suspension_nov).then(function(response_nosql){
+        console.log(response_nosql);
+        if(response_nosql.status == 200){
+          administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(response){
+            console.log(response);
+            if(response.status == 201 || response.statusTexst == "Ok"){
+              swal(
+                '¡Buen trabajo!',
+                'Se registro exitosamente la novedad de suspension al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+                'success'
+              );
+
+              $location.path('/seguimientoycontrol/legal');
+            }
+          });
+        }
       });
-
-      argoNosqlRequest.post('novedad', self.suspension_nov).then(function(request){
-        console.log(request);
-      });
-
-      swal(
-        '¡Buen trabajo!',
-        'Se registro exitosamente la novedad de suspension al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
-        'success'
-      );
-
-      $location.path('/seguimientoycontrol/legal');
 
     }else{
 
       swal(
         'Errores en el formulario',
-        'Llenar los campos obligatorios en el formulario del acta',
+        'Llenar los campos obligatorios en el formulario',
         'error'
       );
     }
