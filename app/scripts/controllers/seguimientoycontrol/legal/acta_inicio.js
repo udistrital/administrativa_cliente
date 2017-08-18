@@ -35,9 +35,11 @@ angular.module('contractualClienteApp')
       self.contrato_obj.supervisor = response.data[0].Supervisor;
       self.contrato_obj.VigenciaContrato = response.data[0].VigenciaContrato;
       self.contrato_obj.FechaRegistro = response.data[0].FechaRegistro;
-      self.fecha_formateada = self.contrato_obj.FechaRegistro.substring(0, 10);
-      $scope.fecha_inicio = self.fecha_formateada;
-      $scope.fecha_fin = self.fecha_formateada;
+      self.fecha_inicio = new Date();
+      self.fecha_fin = new Date();
+      // self.fecha_formateada = self.contrato_obj.FechaRegistro.substring(0, 10);
+      // $scope.fecha_inicio = self.fecha_formateada;
+      // $scope.fecha_fin = self.fecha_formateada;
       $log.log(response.data);
     });
 
@@ -61,26 +63,28 @@ angular.module('contractualClienteApp')
       multiSelect: false,
       enableSelectAll: false,
       columnDefs : [
-        {field: 'TipoBien',  displayName: $translate.instant('TIPO_BIEN'),width: 150},
+        {field: 'TipoBien',  displayName: $translate.instant('TIPO_BIEN'),width: 200},
         {field: 'Placa' ,  displayName: $translate.instant('PLACA'),width: 150},
-        {field: 'Descripcion',  displayName: $translate.instant('DESCRIPCION'),width: 150},
-        {field: 'Sede',  displayName: $translate.instant('SEDE'),width: 150},
+        {field: 'Descripcion',  displayName: $translate.instant('DESCRIPCION'),width: 168},
+        {field: 'Sede',  displayName: $translate.instant('SEDE'),width: 180},
         {field: 'Dependencia',  displayName: $translate.instant('DEPENDENCIA'),width: 150},
-        {field: 'Estado',  displayName: $translate.instant('ESTADO_DEL_BIEN'),width: 150},
+        {field: 'Estado',  displayName: $translate.instant('ESTADO_DEL_BIEN'),width: 200},
       ],
       onRegisterApi : function( gridApi ) {
         self.gridApi = gridApi;
       }
     };
     
-    self.gridOptions.data = [{"TipoBien": "Bien de Consumo", "Placa":"1234556666","Descripcion":"Teclado LED", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""},
-    {"TipoBien": "Bien de Consumo", "Placa":"1234556667","Descripcion":"CPU X", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""}];
+    self.gridOptions.data = [
+                             {"TipoBien": "Bien de Consumo", "Placa":"1234556666","Descripcion":"Teclado LED", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""},
+                             {"TipoBien": "Bien de Consumo", "Placa":"1234556667","Descripcion":"CPU X", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""}
+                            ];
 
     self.generarActa = function(){
       self.data_acta_inicio = {
                                 contrato: self.contrato_obj.id,
-                                fechafin: $scope.fecha_fin,
-                                fechainicio: $scope.fecha_inicio,
+                                fechafin: self.fecha_fin,
+                                fechainicio: self.fecha_inicio,
                                 vigencia: String(self.contrato_obj.VigenciaContrato)
                               }
       
@@ -88,10 +92,10 @@ angular.module('contractualClienteApp')
       self.contrato_estado = {
                                 NumeroContrato: self.contrato_obj.id,
                                 Vigencia: self.contrato_obj.VigenciaContrato,
-                                FechaRegistro: self.contrato_obj.FechaRegistro,
+                                FechaRegistro: new Date(),
                                 Estado: {
                                           "NombreEstado": "Ejecucion",
-                                          "FechaRegistro": "2016-12-31T19:00:00-05:00",
+                                          "FechaRegistro": new Date(),
                                           "Id": 1
                                         },
                                 Usuario: "prueba"
@@ -103,12 +107,20 @@ angular.module('contractualClienteApp')
           administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
             console.log(request);
             if (request.status == 201) {
-              swal('Buen trabajo!',
-                   'Se registro exitosamente la novedad de "Acta de inicio"<br>al contrato # '+self.contrato_obj.id+' del '+self.contrato_obj.VigenciaContrato+'.<br><br>El estado del presente contrato se actualizo a "Ejecución".',
-                   'success');
+              swal({
+                title: 'Buen trabajo!',
+                type: 'success',
+                html: 'Se registro exitosamente la novedad de "Acta de inicio"<br>al contrato # '+self.contrato_obj.id+' del '+self.contrato_obj.VigenciaContrato+'.<br><br>El estado del presente contrato se actualizo a "Ejecución".',
+                showCloseButton: false,
+                showCancelButton: false,
+                confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
+                allowOutsideClick: false
+              }).then(function () {
+                window.location.href = "#/seguimientoycontrol/legal";
+              });
             }
           });
         }
-      });   
+      });
     };
   });
