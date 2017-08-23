@@ -86,7 +86,7 @@
                     <div class="col-xs-12 col-md-6">
                       <label>{{'VALOR_ADICION' | translate}}</label>
                       <md-input-container style="margin:0;">
-                        <input type="number" id="valor_adicion" name="valor_adicion" ng-model="valor_adicion" ng-keyup="total_valor_contrato($event)" min="1" required="false">
+                        <input type="text" id="valor_adicion" name="valor_adicion" ng-model="valor_adicion" ng-keyup="total_valor_contrato($event)" min="1" required="false">
                         <div ng-messages="formadipro.valor_adicion.$error">
                           <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
                         </div>
@@ -95,7 +95,7 @@
                     <div class="col-xs-12 col-md-6">
                       <label>{{'NUEVO_VALOR_CONTRATO' | translate}}</label>
                       <md-input-container style="margin:0;">
-                        <input type="number" id="nuevo_valor_contrato" name="nuevo_valor_contrato" ng-model="nuevo_valor_contrato" readonly>
+                        <input type="text" id="nuevo_valor_contrato" name="nuevo_valor_contrato" ng-model="nuevo_valor_contrato" readonly>
                       </md-input-container>
                     </div>
                   </div>

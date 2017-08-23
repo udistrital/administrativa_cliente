@@ -49,10 +49,12 @@ angular.module('contractualClienteApp')
   // });
 
   $scope.total_valor_contrato = function(evento) {
-    var valor_adicion = evento.target.value; //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL
-    var valor_contrato = parseInt(valor_adicion) + parseInt(self.contrato_obj.ValorContrato);
-    $scope.nuevo_valor_contrato = valor_contrato;
+    // var valor_adicion = (evento.target.value).replace(/\,/g,''); //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL ELIMINANDO LAS COMAS QUE TENGA
+    var valor_adicion = (evento.target.value).replace(/[^0-9\.]/g,''); //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL ELIMINANDO OTROS CARACTERES DEJANDO SOLO NUMEROS Y EL PTO DECIMAL
+    var valor_contrato = parseFloat(valor_adicion) + parseFloat(self.contrato_obj.ValorContrato);
+    $scope.nuevo_valor_contrato = numberFormat(String(valor_contrato));
 
+    // alert(valor_adicion);
     $scope.valor_adicion_letras = numeroALetras(valor_adicion, {
       plural: 'PESOS',
       singular: 'PESO',
@@ -66,18 +68,8 @@ angular.module('contractualClienteApp')
       centPlural: 'CENTAVOS',
       centSingular: 'CENTAVO'
     });
-  }
 
-  $scope.format = function(numero){
-    var num = numero.replace(/\./g,'');
-    if(!isNaN(num)){
-      num = num.toString().split('').reverse().join('').replace(/(?=\d*\.?)(\d{3})/g,'$1.');
-      num = num.split('').reverse().join('').replace(/^[\.]/,'');
-      return num;
-    }else{
-      alert('Solo se permiten numeros');
-      return input.value.replace(/[^\d\.]*/g,'');
-    }
+    $scope.valor_adicion = numberFormat(valor_adicion);
   }
 
   $scope.total_plazo_contrato = function(evento) {
@@ -157,14 +149,14 @@ angular.module('contractualClienteApp')
                                           numerosolicitud: $scope.numero_solicitud,
                                           fechasolicitud: self.fecha_inicio,
                                           numerocdp: String(self.contrato_obj.NumeroCdp),
-                                          valoradicion: $scope.valor_adicion,
+                                          valoradicion: parseFloat($scope.valor_adicion.replace(/\,/g,'')),
                                           fechaadicion: $scope.fecha_adicion,
                                           tiempoprorroga: $scope.tiempo_prorroga,
                                           fechaprorroga: $scope.fecha_prorroga,
                                           vigencia: String(self.contrato_obj.VigenciaContrato),
                                           motivo: $scope.motivo
                                         }
-      // alert(JSON.stringify(self.data_acta_adicion_prorroga));
+      alert(JSON.stringify(self.data_acta_adicion_prorroga));
       argoNosqlRequest.post('novedad', self.data_acta_adicion_prorroga).then(function(request){
         console.log(request);
         if (request.status == 200) {
@@ -190,10 +182,8 @@ angular.module('contractualClienteApp')
   };
 
   /* =========================================================
-  * //////////////////////////////////////////////////////////
+  * FUNCION PARA CONVERTIR VALORES NUMERICOS EN LETRAS
   * ========================================================== */
-
-  // FUNCION PARA CONVERTIR VALORES NUMERICOS EN LETRAS
   var numeroALetras = (function() {
     //Código basado en https://gist.github.com/alfchee/e563340276f89b22042a
     function Unidades(num){
@@ -325,8 +315,8 @@ angular.module('contractualClienteApp')
         enteros: Math.floor(num),
         centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
         letrasCentavos: '',
-        letrasMonedaPlural: currency.plural || 'PESOS',//'PESOS', 'Dólares', 'Bolívares', 'etcs'
-        letrasMonedaSingular: currency.singular || 'PESO', //'PESO', 'Dólar', 'Bolivar', 'etc'
+        letrasMonedaPlural: currency.plural || 'PESOS',
+        letrasMonedaSingular: currency.singular || 'PESO',
         letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS',
         letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO'
       };
@@ -348,4 +338,48 @@ angular.module('contractualClienteApp')
         return Millones(data.enteros) + ' ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
     };
   })();
+
+  /* =========================================================
+  * FUNCION QUE DEVUELVE UN NUMERO SEPARANDO LOS SEPARADORES DE MILES
+  * PUEDE RECIBIR VALORES NEGATIVOS Y CON DECIMALES
+  * ========================================================== */
+  function numberFormat(numero){
+    // Variable que contendra el resultado final
+    var resultado = "";
+    var nuevoNumero = 0;
+
+    // Si el numero empieza por el valor "-" (numero negativo)
+    if(numero[0]=="-")
+    {
+      // Cogemos el numero eliminando las posibles comas que tenga, y sin
+      // el signo negativo
+      nuevoNumero=numero.replace(/\,/g,'').substring(1);
+    }else{
+      // Cogemos el numero eliminando las posibles comas que tenga
+      nuevoNumero=numero.replace(/\,/g,'');
+    }
+
+    // Si tiene decimales, se los quitamos al numero
+    if(numero.indexOf(".")>=0)
+      nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+    // Ponemos un punto cada 3 caracteres
+    for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+      resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+    // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+    // los separadores de miles
+    if(numero.indexOf(".")>=0)
+      resultado+=numero.substring(numero.indexOf("."));
+
+    if(numero[0]=="-")
+    {
+      // Devolvemos el valor añadiendo al inicio el signo negativo
+      return "-"+resultado;
+    }else{
+      return resultado;
+    }
+  }
+  // document.write(""+numberFormat("-123456789.12"));
+  // document.write(""+numberFormat("-1100000.23"));
 });
