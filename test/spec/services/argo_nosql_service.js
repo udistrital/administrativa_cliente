@@ -3,7 +3,7 @@
 describe('Service: argoNosqlService', function () {
 
   // load the service's module
-  beforeEach(module('administrativaClienteApp'));
+  beforeEach(module('contractualClienteApp'));
 
   // instantiate service
   var argoNosqlService;

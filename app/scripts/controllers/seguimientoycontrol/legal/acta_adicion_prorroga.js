@@ -203,8 +203,8 @@ angular.module('contractualClienteApp')
     }//Unidades()
 
     function Decenas(num){
-      let decena = Math.floor(num/10);
-      let unidad = num - (decena * 10);
+      var decena = Math.floor(num/10);
+      var unidad = num - (decena * 10);
 
       switch(decena)
       {
@@ -243,8 +243,8 @@ angular.module('contractualClienteApp')
     }//DecenasY()
 
     function Centenas(num) {
-      let centenas = Math.floor(num / 100);
-      let decenas = num - (centenas * 100);
+    var centenas = Math.floor(num / 100);
+    var decenas = num - (centenas * 100);
 
       switch(centenas)
       {
@@ -265,10 +265,10 @@ angular.module('contractualClienteApp')
     }//Centenas()
 
     function Seccion(num, divisor, strSingular, strPlural) {
-      let cientos = Math.floor(num / divisor)
-      let resto = num - (cientos * divisor)
+    var cientos = Math.floor(num / divisor)
+    var resto = num - (cientos * divisor)
 
-      let letras = '';
+    var letras = '';
 
       if (cientos > 0)
         if (cientos > 1)
@@ -281,12 +281,12 @@ angular.module('contractualClienteApp')
     }//Seccion()
 
     function Miles(num) {
-      let divisor = 1000;
-      let cientos = Math.floor(num / divisor)
-      let resto = num - (cientos * divisor)
+    var divisor = 1000;
+    var cientos = Math.floor(num / divisor)
+    var resto = num - (cientos * divisor)
 
-      let strMiles = Seccion(num, divisor, 'UN MIL', 'MIL');
-      let strCentenas = Centenas(resto);
+    var strMiles = Seccion(num, divisor, 'UN MIL', 'MIL');
+    var strCentenas = Centenas(resto);
 
       if(strMiles == '')
         return strCentenas;
@@ -295,12 +295,12 @@ angular.module('contractualClienteApp')
     }//Miles()
 
     function Millones(num) {
-      let divisor = 1000000;
-      let cientos = Math.floor(num / divisor)
-      let resto = num - (cientos * divisor)
+    var divisor = 1000000;
+    var cientos = Math.floor(num / divisor)
+    var resto = num - (cientos * divisor)
 
-      let strMillones = Seccion(num, divisor, 'UN MILLON', 'MILLONES');
-      let strMiles = Miles(resto);
+    var strMillones = Seccion(num, divisor, 'UN MILLON', 'MILLONES');
+    var strMiles = Miles(resto);
 
       if(strMillones == '')
         return strMiles;
@@ -310,7 +310,7 @@ angular.module('contractualClienteApp')
 
     return function NumeroALetras(num, currency) {
       currency = currency || {};
-      let data = {
+    var data = {
         numero: num,
         enteros: Math.floor(num),
         centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
