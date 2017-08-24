@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>contractualClienteApp</title>
@@ -18,115 +19,120 @@
   <!-- endbuild -->
   <!-- build:css(.tmp) styles/main.css -->
   <link rel="stylesheet" href="styles/oas-style.css">
-  <link rel="stylesheet" href="styles/sb-admin-2.css">
-  <link rel="stylesheet" href="styles/table-demo.css">
-  <link rel="stylesheet" href="styles/timeline.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.css" >
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.css">
   <!-- endbuild -->
+  <link rel="stylesheet" href="https://s3.amazonaws.com/assets-oas/sb-admin-2.css">
+  <link rel="stylesheet" href="https://s3.amazonaws.com/assets-oas/table-demo.css">
 </head>
+
 <body ng-app="contractualClienteApp">
   <div ng-include="'views/menu.html'" ng-controller="menuCtrl"></div>
-    <!--[if lte IE 8]>
+  <!--[if lte IE 8]>
     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-    <div class="container-fluid">
-      <div ng-view=""></div>
-    </div>
+  <div class="container-fluid">
+    <div ng-view=""></div>
+  </div>
   <div ng-include="'views/footer.html'" ng-controller="footerCtrl"></div>
 
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
-    <script>
-    !function(A,n,g,u,l,a,r){A.GoogleAnalyticsObject=l,A[l]=A[l]||function(){
-      (A[l].q=A[l].q||[]).push(arguments)},A[l].l=+new Date,a=n.createElement(g),
-      r=n.getElementsByTagName(g)[0],a.src=u,r.parentNode.insertBefore(a,r)
-    }(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
+  <script>
+    !function (A, n, g, u, l, a, r) {
+    A.GoogleAnalyticsObject = l, A[l] = A[l] || function () {
+      (A[l].q = A[l].q || []).push(arguments)
+    }, A[l].l = +new Date, a = n.createElement(g),
+      r = n.getElementsByTagName(g)[0], a.src = u, r.parentNode.insertBefore(a, r)
+    }(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-XXXXX-X');
     ga('send', 'pageview');
-    </script>
+  </script>
 
-    <!-- build:js(.) scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="bower_components/jquery/dist/jquery.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-    <script src="bower_components/angular-touch/angular-touch.js"></script>
-    <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
-    <script src="bower_components/angular-md5/angular-md5.js"></script>
-    <script src="bower_components/AngularJS-OAuth2/dist/angularJsOAuth2.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.js"></script>
-    <script src="bower_components/angular-messages/angular-messages.js"></script>
-    <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/angular-tree-control/angular-tree-control.js"></script>
-    <script src="bower_components/pdfmake/build/pdfmake.js"></script>
-    <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
-    <script src="bower_components/ngstorage/ngStorage.js"></script>
-    <script src="bower_components/kjur-jsrsasign/jsrsasign-all-min.js"></script>
-    <script src="bower_components/angular-websocket/dist/angular-websocket.js"></script>
-    <script src="bower_components/angular-input-masks/angular-input-masks-standalone.js"></script>
-    <script src="bower_components/moment/moment.js"></script>
-    <script src="bower_components/angular-moment/angular-moment.js"></script>
-    <script src="bower_components/angular-translate/angular-translate.js"></script>
-    <script src="bower_components/sweetalert2/dist/sweetalert2.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <!-- endbuild -->
-</body>
-  <!-- build:js({.tmp,app}) scripts/extras.js -->
-  <script src="scripts/services/token.js"></script>
-  <script src="scripts/services/notificacion.js"></script>
-  <script src="scripts/controllers/menu.js"></script>
-  <script src="scripts/controllers/footer.js"></script>
-  <script src="scripts/controllers/notificaciones.js"></script>
-  <script src="bower_components/moment/locale/es.js"></script>
-  <script src="scripts/decorators/text_translate.js"></script>
-  <script src="scripts/controllers/about.js"></script>
-  <script src="scripts/controllers/necesidad/solicitud_necesidad.js"></script>
-  <script src="scripts/services/financiera_service.js"></script>
-  <script src="scripts/directives/actividades_economicas/lista_actividades_economicas.js"></script>
-  <script src="scripts/services/administrativa_service.js"></script>
-  <script src="scripts/services/administrativa_mid_service.js"></script>
-  <script src="scripts/services/financiera_mid_service.js"></script>
-  <script src="scripts/services/core_service.js"></script>
-  <script src="scripts/directives/cdp/lista_cdp.js"></script>
-  <script src="scripts/directives/catalogos_elementos/lista_subgrupos_catalogos.js"></script>
-  <script src="scripts/directives/apropiaciones/lista_apropiaciones.js"></script>
-  <script src="scripts/directives/apropiaciones/fuentes_apropiacion.js"></script>
-  <script src="scripts/directives/marco_legal/lista_documentos_legales.js"></script>
-  <script src="scripts/controllers/necesidad/necesidades.js"></script>
-  <script src="scripts/directives/necesidad/visualizar_necesidad.js"></script>
-  <script src="scripts/controllers/rp/rp_solicitud.js"></script>
-  <script src="scripts/controllers/rp/rp_solicitud_personas.js"></script>
-  <script src="scripts/services/agora_service.js"></script>
-  <script src="scripts/services/oikos_service.js"></script>
-  <script src="scripts/directives/catalogos_elementos/ficha_tecnica_elemento.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/financiero.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/financiero/contrato.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/financiero/ordenes_pago.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/financiero/estadisticas.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_inicio.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_suspension.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_reinicio.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_cesion.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_adicion_prorroga.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_liquidacion.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/novedad_otro_si_aclaratorio.js"></script>
-  <script src="scripts/controllers/seguimientoycontrol/legal/novedad_otro_si_modificatorio.js"></script>
-  <script src="scripts/services/argo_nosql_service.js"></script>
+  <!-- build:js(.) scripts/vendor.js -->
+  <!-- bower:js -->
+  <script src="bower_components/jquery/dist/jquery.js"></script>
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+  <script src="bower_components/angular-resource/angular-resource.js"></script>
+  <script src="bower_components/angular-route/angular-route.js"></script>
+  <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+  <script src="bower_components/angular-touch/angular-touch.js"></script>
+  <script src="bower_components/angular-ui-grid/ui-grid.js"></script>
+  <script src="bower_components/angular-md5/angular-md5.js"></script>
+  <script src="bower_components/AngularJS-OAuth2/dist/angularJsOAuth2.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-messages/angular-messages.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/angular-tree-control/angular-tree-control.js"></script>
+  <script src="bower_components/pdfmake/build/pdfmake.js"></script>
+  <script src="bower_components/pdfmake/build/vfs_fonts.js"></script>
+  <script src="bower_components/ngstorage/ngStorage.js"></script>
+  <script src="bower_components/kjur-jsrsasign/jsrsasign-all-min.js"></script>
+  <script src="bower_components/angular-websocket/dist/angular-websocket.js"></script>
+  <script src="bower_components/angular-input-masks/angular-input-masks-standalone.js"></script>
+  <script src="bower_components/moment/moment.js"></script>
+  <script src="bower_components/angular-moment/angular-moment.js"></script>
+  <script src="bower_components/angular-translate/angular-translate.js"></script>
+  <script src="bower_components/sweetalert2/dist/sweetalert2.js"></script>
+  <!-- endbower -->
   <!-- endbuild -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js"> </script>
-  <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-  </html>
+
+
+  <!-- build:js({.tmp,app}) scripts/scripts.js -->
+  <script src="scripts/app.js"></script>
+  <script src="scripts/controllers/main.js"></script>
+  <!-- endbuild -->
+</body>
+<!-- build:js({.tmp,app}) scripts/extras.js -->
+<script src="scripts/services/token.js"></script>
+<script src="scripts/services/notificacion.js"></script>
+<script src="scripts/controllers/menu.js"></script>
+<script src="scripts/controllers/footer.js"></script>
+<script src="scripts/controllers/notificaciones.js"></script>
+<script src="bower_components/moment/locale/es.js"></script>
+<script src="scripts/decorators/text_translate.js"></script>
+<script src="scripts/controllers/about.js"></script>
+<script src="scripts/controllers/necesidad/solicitud_necesidad.js"></script>
+<script src="scripts/services/financiera_service.js"></script>
+<script src="scripts/directives/actividades_economicas/lista_actividades_economicas.js"></script>
+<script src="scripts/services/administrativa_service.js"></script>
+<script src="scripts/services/administrativa_mid_service.js"></script>
+<script src="scripts/services/financiera_mid_service.js"></script>
+<script src="scripts/services/core_service.js"></script>
+<script src="scripts/directives/cdp/lista_cdp.js"></script>
+<script src="scripts/directives/catalogos_elementos/lista_subgrupos_catalogos.js"></script>
+<script src="scripts/directives/apropiaciones/lista_apropiaciones.js"></script>
+<script src="scripts/directives/apropiaciones/fuentes_apropiacion.js"></script>
+<script src="scripts/directives/marco_legal/lista_documentos_legales.js"></script>
+<script src="scripts/controllers/necesidad/necesidades.js"></script>
+<script src="scripts/directives/necesidad/visualizar_necesidad.js"></script>
+<script src="scripts/controllers/rp/rp_solicitud.js"></script>
+<script src="scripts/controllers/rp/rp_solicitud_personas.js"></script>
+<script src="scripts/services/agora_service.js"></script>
+<script src="scripts/services/oikos_service.js"></script>
+<script src="scripts/directives/catalogos_elementos/ficha_tecnica_elemento.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/financiero.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/financiero/contrato.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/financiero/ordenes_pago.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/financiero/estadisticas.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_inicio.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_suspension.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_reinicio.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_cesion.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_adicion_prorroga.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_liquidacion.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/novedad_otro_si_aclaratorio.js"></script>
+<script src="scripts/controllers/seguimientoycontrol/legal/novedad_otro_si_modificatorio.js"></script>
+<script src="scripts/services/argo_nosql_service.js"></script>
+<!-- endbuild -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.19.1/vis.min.js">
+
+</script>
+<script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+
+</html>
