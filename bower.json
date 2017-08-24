@@ -21,7 +21,8 @@
     "angular-input-masks": "^2.5.0",
     "angular-moment": "^1.0.1",
     "angular-translate": "^2.15.1",
-    "sweetalert2": "^6.4.4"
+    "sweetalert2": "^6.4.4",
+    "font-awesome-animation": "^0.0.10"
   },
   "resolutions": {
     "angular": "1.6.4"
