@@ -27,18 +27,12 @@ angular.module('contractualClienteApp')
   self.contrato_id = $routeParams.contrato_id;
   self.contrato_obj = {};
 
-  /*
-  * Obtencion de estado de contrato Suspendido
-  */
   administrativaRequest.get('estado_contrato',$.param({
     query: "NombreEstado:" + "Suspendido"
   })).then(function(request){
     self.estado_suspendido = request.data[0];
   });
 
-  /*
-  * Obtencion de datos del contrato del servicio
-  */
   administrativaRequest.get('contrato_general',$.param({
     query: "Id:" + self.contrato_id
   })).then(function(response) {
@@ -58,8 +52,13 @@ angular.module('contractualClienteApp')
     });
   });
 
-  /*
+  /**
+  * @ngdoc method
+  * @name calculoTiempo
+  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaSuspensionCtrl
+  * @description
   * Funcion que observa el cambio de fechas y calcula el periodo de suspension
+  * @param {date} Fecha de reinicio
   */
   $scope.$watch('sLactaSuspension.f_reinicio', function(){
     var dt1 = self.f_inicio;
@@ -77,8 +76,13 @@ angular.module('contractualClienteApp')
     }
   });
 
-  /*
-  * Funcion para la generacion del acta
+  /**
+  * @ngdoc method
+  * @name generarActa
+  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaSuspensionCtrl
+  * @description
+  * funcion para la genracion del pdf del acta correspondiente a la novedad de suspension
+  * actualizacion de los datos del contrato y reporte de la novedad
   */
   self.generarActa = function(){
     if($scope.formSuspension.$valid){
@@ -101,9 +105,6 @@ angular.module('contractualClienteApp')
       self.contrato_estado.Estado = self.estado_suspendido;
       self.contrato_estado.Usuario = "usuario_prueba";
 
-      /*
-      * Validacion de post en nosql para post en contrato estado
-      */
       argoNosqlRequest.post('novedad', self.suspension_nov).then(function(response_nosql){
         console.log(response_nosql);
         if(response_nosql.status == 200){
@@ -130,7 +131,6 @@ angular.module('contractualClienteApp')
         'error'
       );
     }
-
 
   };
 });
