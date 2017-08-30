@@ -8,7 +8,7 @@
 * Controller of the contractualClienteApp
 */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($location, $log, $scope, $routeParams, administrativaRequest, argoNosqlRequest, agoraRequest) {
+.controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($location, $log, $scope, $routeParams, administrativaRequest, argoNosqlRequest, agoraRequest, adminMidRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -26,6 +26,8 @@ angular.module('contractualClienteApp')
 
   self.contrato_id = $routeParams.contrato_id;
   self.contrato_obj = {};
+
+  self.estados= [];
 
   administrativaRequest.get('estado_contrato',$.param({
     query: "NombreEstado:" + "Suspendido"
@@ -105,23 +107,40 @@ angular.module('contractualClienteApp')
       self.contrato_estado.Estado = self.estado_suspendido;
       self.contrato_estado.Usuario = "usuario_prueba";
 
-      argoNosqlRequest.post('novedad', self.suspension_nov).then(function(response_nosql){
-        console.log(response_nosql);
-        if(response_nosql.status == 200){
-          administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(response){
-            console.log(response);
-            if(response.status == 201 || response.statusTexst == "Ok"){
-              swal(
-                '¡Buen trabajo!',
-                'Se registro exitosamente la novedad de suspension al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
-                'success'
-              );
+              //es el estado al que pasará
+        self.estados[1] = self.estado_suspendido;
 
-              $location.path('/seguimientoycontrol/legal');
+        administrativaRequest.get('contrato_estado', 'query=numero_contrato%3A' + self.contrato_estado.NumeroContrato + '&sortby=Id&order=desc&limit=1').then(function (response) {
+          //se obtiene el estado actual del contrato
+          self.estados[0] = response.data[0].Estado;
+
+          adminMidRequest.post('validarCambioEstado', self.estados).then(function (response) {
+            self.validacion = response.data;
+
+            if (self.validacion=="true") {
+
+              argoNosqlRequest.post('novedad', self.suspension_nov).then(function (response_nosql) {
+                console.log(response_nosql);
+                if (response_nosql.status == 200) {
+                  administrativaRequest.post('contrato_estado', self.contrato_estado).then(function (response) {
+                    console.log(response);
+                    if (response.status == 201 || response.statusTexst == "Ok") {
+                      swal(
+                        '¡Buen trabajo!',
+                        'Se registro exitosamente la novedad de suspension al contrato # ' + self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+                        'success'
+                      );
+
+                      $location.path('/seguimientoycontrol/legal');
+                    }
+                  });
+                }
+              });
             }
+
           });
-        }
-      });
+
+        });
 
     }else{
 
