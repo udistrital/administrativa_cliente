@@ -275,12 +275,39 @@ angular.module('contractualClienteApp')
         },
         {
           style:['general_font'],
+          pageBreak: 'after',
           text:[
             {text:"Otras consideraciones: ", bold:true}, '\n\n' +
             self.cesion_nov.observacion + '\n\n' +
             "La presente acta se perfecciona e inicia su ejecución con la firma de las partes y la aceptación del cesionario a partir de: " +
-            self.format_date(self.cesion_nov.fechacesion) + "\n\n\n"
+            self.format_date(self.cesion_nov.fechacesion) + "\n\n\n",
           ]
+        },
+        {
+          style: ['bottom_space'],
+          table:{
+            widths:[65, '*', 120, 65],
+            body:[
+              [
+                {text: 'logo-ud', rowSpan: 3, alignment: 'center', fontSize: 10},
+                {text: 'ACTA DE CESIÓN', alignment: 'center', fontSize: 12},
+                {text: 'Código: GJ-PR- 002-FR- 010', fontSize: 9},
+                {text: 'logo-sigud', rowSpan: 3, alignment: 'center', fontSize: 10}
+              ],
+              [
+                '',
+                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},
+                {text: 'Versión: 01', fontSize: 9, margin: [0, 6]},
+                ''
+              ],
+              [
+                '',
+                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},
+                {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},
+                ''
+              ],
+            ]
+          }
         },
         {
           style:['general_font'],
