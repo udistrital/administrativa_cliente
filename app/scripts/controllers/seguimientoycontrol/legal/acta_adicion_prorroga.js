@@ -56,17 +56,17 @@ angular.module('contractualClienteApp')
 
     // alert(valor_adicion);
     $scope.valor_adicion_letras = numeroALetras(valor_adicion, {
-      plural: 'PESOS',
-      singular: 'PESO',
-      centPlural: 'CENTAVOS',
-      centSingular: 'CENTAVO'
+      plural: $translate.instant('PESOS'),
+      singular: $translate.instant('PESO'),
+      centPlural: $translate.instant('CENTAVOS'),
+      centSingular: $translate.instant('CENTAVO')
     });
 
     $scope.nuevo_valor_contrato_letras = numeroALetras(valor_contrato, {
-      plural: 'PESOS',
-      singular: 'PESO',
-      centPlural: 'CENTAVOS',
-      centSingular: 'CENTAVO'
+      plural: $translate.instant('PESOS'),
+      singular: $translate.instant('PESO'),
+      centPlural: $translate.instant('CENTAVOS'),
+      centSingular: $translate.instant('CENTAVO')
     });
 
     $scope.valor_adicion = numberFormat(valor_adicion);
@@ -156,7 +156,7 @@ angular.module('contractualClienteApp')
                                           vigencia: String(self.contrato_obj.VigenciaContrato),
                                           motivo: $scope.motivo
                                         }
-      alert(JSON.stringify(self.data_acta_adicion_prorroga));
+      // alert(JSON.stringify(self.data_acta_adicion_prorroga));
       argoNosqlRequest.post('novedad', self.data_acta_adicion_prorroga).then(function(request){
         console.log(request);
         if (request.status == 200) {
@@ -189,15 +189,15 @@ angular.module('contractualClienteApp')
     function Unidades(num){
       switch(num)
       {
-        case 1: return 'UN';
-        case 2: return 'DOS';
-        case 3: return 'TRES';
-        case 4: return 'CUATRO';
-        case 5: return 'CINCO';
-        case 6: return 'SEIS';
-        case 7: return 'SIETE';
-        case 8: return 'OCHO';
-        case 9: return 'NUEVE';
+        case 1: return $translate.instant('UN');
+        case 2: return $translate.instant('DOS');
+        case 3: return $translate.instant('TRES');
+        case 4: return $translate.instant('CUATRO');
+        case 5: return $translate.instant('CINCO');
+        case 6: return $translate.instant('SEIS');
+        case 7: return $translate.instant('SIETE');
+        case 8: return $translate.instant('OCHO');
+        case 9: return $translate.instant('NUEVE');
       }
       return '';
     }//Unidades()
@@ -211,34 +211,38 @@ angular.module('contractualClienteApp')
         case 1:
           switch(unidad)
           {
-            case 0: return 'DIEZ';
-            case 1: return 'ONCE';
-            case 2: return 'DOCE';
-            case 3: return 'TRECE';
-            case 4: return 'CATORCE';
-            case 5: return 'QUINCE';
-            default: return 'DIECI' + Unidades(unidad);
+            case 0: return $translate.instant('DIEZ');
+            case 1: return $translate.instant('ONCE');
+            case 2: return $translate.instant('DOCE');
+            case 3: return $translate.instant('TRECE');
+            case 4: return $translate.instant('CATORCE');
+            case 5: return $translate.instant('QUINCE');
+            case 6: return $translate.instant('DIECISEIS');
+            case 7: return $translate.instant('DIECISIETE');
+            case 8: return $translate.instant('DIECIOCHO');
+            case 9: return $translate.instant('DIECINUEVE');
+            default: return $translate.instant('DIECI') + Unidades(unidad);
           }
         case 2:
           switch(unidad)
           {
-            case 0: return 'VEINTE';
-            default: return 'VEINTI' + Unidades(unidad);
+            case 0: return $translate.instant('VEINTE');
+            default: return $translate.instant('VEINTI') + Unidades(unidad);
           }
-        case 3: return DecenasY('TREINTA', unidad);
-        case 4: return DecenasY('CUARENTA', unidad);
-        case 5: return DecenasY('CINCUENTA', unidad);
-        case 6: return DecenasY('SESENTA', unidad);
-        case 7: return DecenasY('SETENTA', unidad);
-        case 8: return DecenasY('OCHENTA', unidad);
-        case 9: return DecenasY('NOVENTA', unidad);
+        case 3: return DecenasY($translate.instant('TREINTA'), unidad);
+        case 4: return DecenasY($translate.instant('CUARENTA'), unidad);
+        case 5: return DecenasY($translate.instant('CINCUENTA'), unidad);
+        case 6: return DecenasY($translate.instant('SESENTA'), unidad);
+        case 7: return DecenasY($translate.instant('SETENTA'), unidad);
+        case 8: return DecenasY($translate.instant('OCHENTA'), unidad);
+        case 9: return DecenasY($translate.instant('NOVENTA'), unidad);
         case 0: return Unidades(unidad);
       }
     }//Unidades()
 
     function DecenasY(strSin, numUnidades) {
       if (numUnidades > 0)
-        return strSin + ' Y ' + Unidades(numUnidades)
+        return strSin + $translate.instant('Y') + Unidades(numUnidades)
       return strSin;
     }//DecenasY()
 
@@ -250,16 +254,16 @@ angular.module('contractualClienteApp')
       {
         case 1:
           if (decenas > 0)
-            return 'CIENTO ' + Decenas(decenas);
-          return 'CIEN';
-        case 2: return 'DOSCIENTOS ' + Decenas(decenas);
-        case 3: return 'TRESCIENTOS ' + Decenas(decenas);
-        case 4: return 'CUATROCIENTOS ' + Decenas(decenas);
-        case 5: return 'QUINIENTOS ' + Decenas(decenas);
-        case 6: return 'SEISCIENTOS ' + Decenas(decenas);
-        case 7: return 'SETECIENTOS ' + Decenas(decenas);
-        case 8: return 'OCHOCIENTOS ' + Decenas(decenas);
-        case 9: return 'NOVECIENTOS ' + Decenas(decenas);
+            return $translate.instant('CIENTO') + Decenas(decenas);
+          return $translate.instant('CIEN');
+        case 2: return $translate.instant('DOSCIENTOS') + Decenas(decenas);
+        case 3: return $translate.instant('TRESCIENTOS') + Decenas(decenas);
+        case 4: return $translate.instant('CUATROCIENTOS') + Decenas(decenas);
+        case 5: return $translate.instant('QUINIENTOS') + Decenas(decenas);
+        case 6: return $translate.instant('SEISCIENTOS') + Decenas(decenas);
+        case 7: return $translate.instant('SETECIENTOS') + Decenas(decenas);
+        case 8: return $translate.instant('OCHOCIENTOS') + Decenas(decenas);
+        case 9: return $translate.instant('NOVECIENTOS') + Decenas(decenas);
       }
       return Decenas(decenas);
     }//Centenas()
@@ -285,7 +289,7 @@ angular.module('contractualClienteApp')
     var cientos = Math.floor(num / divisor)
     var resto = num - (cientos * divisor)
 
-    var strMiles = Seccion(num, divisor, 'UN MIL', 'MIL');
+    var strMiles = Seccion(num, divisor, $translate.instant('UNMIL'), $translate.instant('MIL'));
     var strCentenas = Centenas(resto);
 
       if(strMiles == '')
@@ -299,7 +303,7 @@ angular.module('contractualClienteApp')
     var cientos = Math.floor(num / divisor)
     var resto = num - (cientos * divisor)
 
-    var strMillones = Seccion(num, divisor, 'UN MILLON', 'MILLONES');
+    var strMillones = Seccion(num, divisor, $translate.instant('UNMILLON'), $translate.instant('MILLONES'));
     var strMiles = Miles(resto);
 
       if(strMillones == '')
@@ -315,14 +319,14 @@ angular.module('contractualClienteApp')
         enteros: Math.floor(num),
         centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
         letrasCentavos: '',
-        letrasMonedaPlural: currency.plural || 'PESOS',
-        letrasMonedaSingular: currency.singular || 'PESO',
+        letrasMonedaPlural: currency.plural || $translate.instant('PESOS'),
+        letrasMonedaSingular: currency.singular || $translate.instant('PESO'),
         letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS',
         letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO'
       };
 
       if (data.centavos > 0) {
-        data.letrasCentavos = 'CON ' + (function () {
+        data.letrasCentavos = $translate.instant('CON') + (function () {
           if (data.centavos == 1)
             return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoSingular;
           else
@@ -331,7 +335,7 @@ angular.module('contractualClienteApp')
       };
 
       if(data.enteros == 0)
-        return 'CERO ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+        return $translate.instant('CERO') + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
       if (data.enteros == 1)
         return Millones(data.enteros) + ' ' + data.letrasMonedaSingular + ' ' + data.letrasCentavos;
       else
