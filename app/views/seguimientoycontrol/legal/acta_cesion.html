@@ -10,7 +10,7 @@
               <div class="col-md-6"><b>{{'NUMERO_CONTRATO' | translate}}</b></div>
               <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.id}}</p></div>
               <div class="col-md-6"><b>{{'CONTRATANTE' | translate}}</b></div>
-              <div class="col-md-6"><p>{{sLactaCesion.contrato_obj.contratante}}</p></div>
+              <div class="col-md-6"><p>{{'UNIVERSIDAD_NOMBRE' | translate}}</p></div>
               <div class="col-md-6"><b>{{'CONTRATISTA' | translate}}</b></div>
               <div class="col-md-6" ng-if="sLactaCesion.contrato_obj.contratista_documento != null">
                 <p>
@@ -52,9 +52,11 @@
                 </div>
 
                 <div class="col-md-6">
-                  <label for="perido">{{'NUMERO_OFICIO' | translate}}</label>
+                  <label style="width:100%;">
+                    {{'NUMERO_OFICIO' | translate}}
+                  </label>
                   <md-input-container style="margin:0;">
-                    <input type="number" name="num_oficio" ng-model="sLactaCesion.num_oficio" required class="md-autocomplete" id="oficio" >
+                    <input type="number" name="num_oficio" ng-model="sLactaCesion.num_oficio" required id="oficio" >
                     <div ng-messages="formCesion.num_oficio.$error">
                       <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
                     </div>
@@ -74,6 +76,7 @@
                 <div class="col-md-6 form-group">
                   <label>{{'CEDULA_CESIONARIO' | translate}}</label>
                   <md-autocomplete
+                  style="position:relative; top:-10px; max-height:45px;"
                   md-floating-label=" "
                   md-search-text="sLactaCesion.texto_busqueda"
                   md-items="item in sLactaCesion.persona_natural_grep"
@@ -82,8 +85,8 @@
                   md-selected-item-change="sLactaCesion.persona_sel_change(item)"
                   md-search-text-change="sLactaCesion.cargar_persona_natural(sLactaCesion.texto_busqueda)">
                   <md-item-template class="md-block">
-                    <span class="item-title">{{item.Id}}</span>
-                    <span class="item-metadata">
+                    <span style="display:block; line-height: normal;vertical-align: top; padding-top: 7px;">{{item.Id}}</span>
+                    <span style="display:block; color:#888; line-height:normal; font-size:12px; ">
                       {{item.PrimerNombre}} {{item.PrimerApellido}}
                     </span>
                   </md-item-template>
@@ -118,7 +121,7 @@
                 <div class="col-md-6"><b>{{'DOCUMENTO_CONTRATISTA' | translate}}</b></div>
                 <div class="col-md-6"> {{sLactaCesion.cesionario_obj.identificacion}} </div>
                 <div class="col-md-6"><b>{{'TIPO_PERSONA' | translate}}</b></div>
-                <div class="col-md-6"> {{sLactaCesion.cesionario_obj.tipo_persona}} </div>
+                <div class="col-md-6"> {{'PERSONA_NATURAL' | translate}} </div>
               </div>
             </div>
           </div>

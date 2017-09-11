@@ -37,7 +37,6 @@ angular.module('contractualClienteApp')
     self.contrato_obj.contratista = response.data[0].Contratista;
     self.contrato_obj.valor = response.data[0].ValorContrato;
     self.contrato_obj.objeto = response.data[0].ObjetoContrato;
-    self.contrato_obj.contratante = "Universidad Distrital Francisco José de Caldas";
     self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
     self.contrato_obj.supervisor = response.data[0].Supervisor;
     self.contrato_obj.vigencia = response.data[0].VigenciaContrato;

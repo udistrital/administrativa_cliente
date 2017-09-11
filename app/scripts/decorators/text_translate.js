@@ -25,6 +25,8 @@ var text_es = {
   NECESIDADES: "Necesidades",
   NECESIDAD: "Necesidad",
   SOLICITUD: "Solicitud",
+  UNIVERSIDAD_NOMBRE:"Universidad Distrital Francisco José de Caldas",
+
   //SOLICITUD RP
   ERROR: "Error",
   SALIR:"Salir",
@@ -70,6 +72,7 @@ var text_es = {
   OBJETIVO:"Objetivo",
   OBJETO:"Objeto",
   ORDENADOR:"Ordenador",
+
   //SEGUMIENTO FINANCIERO
   SEGUIMIENTO_FINANCIERO:"Seguimiento financiero del contrato",
   DATOS_CONTRATO:"Datos contrato",
@@ -101,6 +104,7 @@ var text_es = {
   PORCENTAJE_RESTANTE:"Porcentaje restante",
   GRAFICO_BARRAS_CONTRATO:"Grafico de barras del contrato",
   CARGO:"Cargo",
+
   //SEGUIMIENTO LEGAL
   NOVEDADES: "Novedades",
   SEGUIMIENTO_LEGAL: "Seguimiento Legal",
@@ -114,6 +118,7 @@ var text_es = {
   CREAR_NOVEDAD_TERMINACION_ANTICIPADA: "Crear Novedad de Terminación Anticipada",
   CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO: "Crear Otro Sí Modificatorio",
   CREAR_NOVEDAD_OTRO_SI_ACLARATORIO: "Crear Otro Sí Aclaratorio",
+
   //ACTA INICIO
   ACTA_INICIO: "ACTA DE INICIO",
   INFORMACION: "INFORMACIÓN",
@@ -200,9 +205,6 @@ var text_es = {
   CON: "CON ",
   CERO: "CERO ",
 
-
-
-
   //ACTA DE CESION
   ACTA_CESION: "ACTA DE CESIÓN",
   INFORMACION:"INFORMACIÓN",
@@ -213,6 +215,7 @@ var text_es = {
   ORDENADOR_DE_GASTO:"Ordenador de gasto",
   CEDULA_CESIONARIO:"Cédula cesionario",
   TIPO_PERSONA: "Tipo persona",
+  PERSONA_NATURAL: "Natural",
   NUMERO_OFICIO:"Número oficio",
   FECHA_OFICIO:"Fecha oficio",
   FECHA_CESION:"Fecha cesión",
@@ -249,6 +252,7 @@ var text_en = {
   ERROR: "Error",
   SALIR:"Exit",
   VOLVER_CONTRATOS: "Back to contracts",
+  UNIVERSIDAD_NOMBRE:"Universidad Distrital Francisco José de Caldas",
   NUMERO_SOLICITUD:"Request number",
   INSERCION_RP:"The budget register request was insert correctly with the following data:",
   VIGENCIA_SOLICITUD: "Request validity",
@@ -433,6 +437,7 @@ var text_en = {
   NUMERO_OFICIO:"Purpose number",
   FECHA_OFICIO:"Purpose date",
   FECHA_CESION:"Assignment date",
+  PERSONA_NATURAL: "Natural",
   OTRAS_OBSERVACIONES:"Other observations",
   INFORMACION_CESIONARIO:"ASSIGNEE INFORMATION",
   SELECCIONAR_CESIONARIO:"Select assignee",
