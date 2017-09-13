@@ -125,8 +125,8 @@ angular.module('contractualClienteApp')
                     console.log(response);
                     if (response.status == 201 || response.statusTexst == "Ok") {
                       swal(
-                        '¡Buen trabajo!',
-                        'Se registro exitosamente la novedad de suspension al contrato # ' + self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+                        $translate.instant('TITULO_BUEN_TRABAJO'),
+                        $translate.instant('DESCRIPCION_SUSPENSION') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
                         'success'
                       );
 
@@ -144,10 +144,11 @@ angular.module('contractualClienteApp')
     }else{
 
       swal(
-        'Errores en el formulario',
-        'Llenar los campos obligatorios en el formulario',
+        $translate.instant('TITULO_ERROR'),
+        $translate.instant('DESCRIPCION_ERROR'),
         'error'
       );
+
     }
 
   };

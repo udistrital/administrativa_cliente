@@ -136,6 +136,7 @@ var text_es = {
   SEDE: "SEDE",
   DEPENDENCIA: "DEPENDENCIA",
   ESTADO_DEL_BIEN: "ESTADO DEL BIEN",
+
   //ACTA DE ADICION/PRORROGA
   ACTA_ADICION_PRORROGA: "ACTA DE ADICIÓN/PRORROGA",
   TIPO_CONTRATO: "Tipo de contrato",
@@ -228,7 +229,17 @@ var text_es = {
   PERIODO_SUSPENSION:"Periodo suspension (Días)",
   ACTA_SUSPENSION:"ACTA DE SUSPENSIÓN",
   MOTIVO_SUSPENSION:"Motivo de suspensión",
-  CAMPO_REQUERIDO:"Este campo es obligatorio"
+  CAMPO_REQUERIDO:"Este campo es obligatorio",
+
+  //ALERTAS
+  TITULO_ERROR:"Errores en el formulario",
+  DESCRIPCION_ERROR:"Llenar los campos obligatorios en el formulario",
+  TITULO_BUEN_TRABAJO:"¡Buen trabajo!",
+  DESCRIPCION_CESION:"Se registro exitosamente la novedad de cesión al contrato # ",
+  DESCRIPCION_SUSPENSION:"Se registro exitosamente la novedad de suspensión al contrato # ",
+  DESCRIPCION_REINICIO:"Se registro exitosamente la novedad de reinicio al contrato # ",
+  ANIO:"año"
+
 };
 
 var text_en = {
@@ -248,6 +259,7 @@ var text_en = {
     VER_SEGUIMIENTO_FINANCIERO:"See financial monitoring",
     BUSCAR: "Search",
   },
+
   //SOLICITUD RP
   ERROR: "Error",
   SALIR:"Exit",
@@ -295,6 +307,7 @@ var text_en = {
   OBJETIVO:"Objective",
   OBJETO:"Object",
   ORDENADOR:"Authorizer",
+
   //SEGUMIENTO FINANCIERO
   SEGUIMIENTO_FINANCIERO:"Financial monitoring of the contract",
   DATOS_CONTRATO:"Contract data",
@@ -326,6 +339,7 @@ var text_en = {
   PORCENTAJE_RESTANTE:"Remaining percentage",
   GRAFICO_BARRAS_CONTRATO:"Contract bar graph",
   CARGO:"Post",
+
   //SEGUIMIENTO LEGAL
   NOVEDADES: "Novelty",
   SEGUIMIENTO_LEGAL: "Legal Tracking",
@@ -339,6 +353,7 @@ var text_en = {
   CREAR_NOVEDAD_TERMINACION_ANTICIPADA: "Create Novelty Early Termination",
   CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO: "Create Other Yes Modification",
   CREAR_NOVEDAD_OTRO_SI_ACLARATORIO: "Create Other Yes Clear",
+
   //ACTA INICIO
   ACTA_INICIO: "HOME ACT",
   INFORMACION: "INFORMATION",
@@ -356,6 +371,7 @@ var text_en = {
   SEDE: "HEADQUARTERS",
   DEPENDENCIA: "DEPENDENCE",
   ESTADO_DEL_BIEN: "STATE OF POSSESSION",
+
   //ACTA DE ADICION/PRORROGA
   ACTA_ADICION_PRORROGA: "ADDITION / EXTENSION ACT",
   TIPO_CONTRATO: "Type of contract",
@@ -447,7 +463,16 @@ var text_en = {
   PERIODO_SUSPENSION:"Suspension term (Days)",
   ACTA_SUSPENSION:"SUSPENSION ACT",
   MOTIVO_SUSPENSION:"Suspension reason",
-  CAMPO_REQUERIDO:"This field is required"
+  CAMPO_REQUERIDO:"This field is required",
+
+  //ALERTAS
+  TITULO_ERROR:"There has been mistakes in the form",
+  DESCRIPCION_ERROR:"Please fill all mandatory fields in the form",
+  TITULO_BUEN_TRABAJO:"Good Job!",
+  DESCRIPCION_CESION:"It has been succesfully registered the novelity of assignment for the contract # ",
+  DESCRIPCION_SUSPENSION:"It has been succesfully registered the novelity of suspension for the contract # ",
+  DESCRIPCION_REINICIO:"It has been succesfully registered the novelity of restart for the contract # ",
+  ANIO:"year"
 };
 
 angular.module('contractualClienteApp')

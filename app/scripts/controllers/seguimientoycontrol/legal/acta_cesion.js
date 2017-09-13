@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaCesionCtrl', function ($location, $log, $scope, $routeParams, administrativaRequest, agoraRequest, argoNosqlRequest) {
+.controller('SeguimientoycontrolLegalActaCesionCtrl', function ($translate, $location, $log, $scope, $routeParams, administrativaRequest, agoraRequest, argoNosqlRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -19,8 +19,8 @@ angular.module('contractualClienteApp')
 
   self.contrato_id = $routeParams.contrato_id;
   self.contrato_obj = {};
-  self.texto_busqueda = "";
-  self.persona_sel = "";
+  self.texto_busqueda = '';
+  self.persona_sel = '';
   self.num_oficio = null;
   self.f_oficio = new Date();
   self.f_cesion = new Date();
@@ -144,8 +144,8 @@ angular.module('contractualClienteApp')
             administrativaRequest.put('contrato_general', self.contrato_obj.id, self.contrato_obj.complete ).then(function(response){
               if(response.status == 200 || response.statusText == "OK"){
                 swal(
-                  '¡Buen trabajo!',
-                  'Se registro exitosamente la novedad de cesion al contrato # '+ self.contrato_obj.id + " del: " + self.contrato_obj.vigencia,
+                  $translate.instant('TITULO_BUEN_TRABAJO'),
+                  $translate.instant('DESCRIPCION_CESION') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
                   'success'
                 );
 
@@ -160,8 +160,8 @@ angular.module('contractualClienteApp')
     }else{
 
       swal(
-        'Errores en el formulario',
-        'Llenar los campos obligatorios en el formulario',
+        $translate.instant('TITULO_ERROR'),
+        $translate.instant('DESCRIPCION_ERROR'),
         'error'
       );
 
