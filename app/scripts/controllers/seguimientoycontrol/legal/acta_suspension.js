@@ -37,19 +37,31 @@ angular.module('contractualClienteApp')
 
   administrativaRequest.get('contrato_general',$.param({
     query: "Id:" + self.contrato_id
-  })).then(function(response) {
-    self.contrato_obj.id = response.data[0].Id;
-    self.contrato_obj.contratista = response.data[0].Contratista;
-    self.contrato_obj.valor = response.data[0].ValorContrato;
-    self.contrato_obj.objeto = response.data[0].ObjetoContrato;
-    self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
-    self.contrato_obj.vigencia = response.data[0].VigenciaContrato;
+  })).then(function(cg_response) {
+    self.contrato_obj.id = cg_response.data[0].Id;
+    self.contrato_obj.contratista = cg_response.data[0].Contratista;
+    self.contrato_obj.valor = cg_response.data[0].ValorContrato;
+    self.contrato_obj.objeto = cg_response.data[0].ObjetoContrato;
+    self.contrato_obj.fecha_registro = cg_response.data[0].FechaRegistro;
+    self.contrato_obj.vigencia = cg_response.data[0].VigenciaContrato;
+    self.contrato_obj.tipo_contrato = cg_response.data[0].TipoContrato.TipoContrato;
 
     agoraRequest.get('informacion_proveedor', $.param({
       query: "Id:" + self.contrato_obj.contratista,
-    })).then(function(response) {
-      self.contrato_obj.contratista_documento = response.data[0].NumDocumento;
-      self.contrato_obj.contratista_nombre = response.data[0].NomProveedor;
+    })).then(function(ip_response) {
+      self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+      self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+
+      agoraRequest.get('informacion_proveedor', $.param({
+        query: "Id:" + self.contrato_obj.ordenador_gasto
+      })).then(function(ipo_response) {
+        self.contrato_obj.ordenador_gasto_nombre = ipo_response.data[0].NomProveedor;
+
+        argoNosqlRequest.get('actainicio', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(ai_response){
+          self.contrato_obj.fecha_inicio = new Date(ai_response.data[0].fechainicio);
+        });
+
+      });
     });
   });
 
@@ -106,18 +118,15 @@ angular.module('contractualClienteApp')
       self.contrato_estado.Estado = self.estado_suspendido;
       self.contrato_estado.Usuario = "usuario_prueba";
 
-              //es el estado al que pasará
+        //es el estado al que pasará
         self.estados[1] = self.estado_suspendido;
 
         administrativaRequest.get('contrato_estado', 'query=numero_contrato%3A' + self.contrato_estado.NumeroContrato + '&sortby=Id&order=desc&limit=1').then(function (response) {
           //se obtiene el estado actual del contrato
           self.estados[0] = response.data[0].Estado;
-
           adminMidRequest.post('validarCambioEstado', self.estados).then(function (response) {
             self.validacion = response.data;
-
             if (self.validacion=="true") {
-
               argoNosqlRequest.post('novedad', self.suspension_nov).then(function (response_nosql) {
                 console.log(response_nosql);
                 if (response_nosql.status == 200) {
@@ -130,7 +139,7 @@ angular.module('contractualClienteApp')
                         'success'
                       );
 
-                      $location.path('/seguimientoycontrol/legal');
+                      self.formato_generacion_pdf();
                     }
                   });
                 }
@@ -152,4 +161,102 @@ angular.module('contractualClienteApp')
     }
 
   };
+
+  /**
+  * @ngdoc method
+  * @name format_date
+  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+  * @description
+  * funcion para el formateo de objetos tipo fecha a formato dd/mm/yyyy
+  * @param {date} param
+  */
+  self.format_date = function(param){
+    var date = new Date(param);
+    var dd = date.getDate();
+    var mm = date.getMonth()+1;
+    var yyyy = date.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    }
+    if(mm<10){
+        mm='0'+mm;
+    }
+    var today = dd+'/'+mm+'/'+yyyy;
+    return today;
+  };
+
+  /**
+  * @ngdoc method
+  * @name formato_generacion_pdf
+  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+  * @description
+  * funcion para la generacion del PDF del acta correspondiente, basado en json (pdfmake)
+  */
+  self.formato_generacion_pdf = function(){
+    argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
+      var docDefinition = self.formato_pdf();
+      pdfMake.createPdf(docDefinition).download('acta_suspension.pdf');
+      // var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
+      // console.log(docDefinition);
+      // var output = JSON.parse(docDefinition);
+      // pdfMake.createPdf(output).download('acta_cesion.pdf');
+      $location.path('/seguimientoycontrol/legal');
+    });
+  }
+
+  self.formato_pdf = function(){
+    return {
+      content: [
+        {
+          style: ['bottom_space'],
+          table: {
+            widths:[65, '*', 120, 65],
+            body:[
+              [
+                {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},
+                {text: 'ACTA DE SUSPENSIÓN', alignment: 'center', fontSize: 12},
+                {text: 'Código: GJ-PR-002-FR-010', fontSize: 9},
+                {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10}
+              ],
+              [ ' ',
+                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},
+                {text: 'Versión: 01', fontSize: 9, margin: [0, 6]},
+                ' '
+              ],
+              [ ' ',
+                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},
+                {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},
+                ' '
+              ],
+            ]
+          }
+        },
+        {
+          style:['general_font'],
+          text:[
+            {text:'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id, '\n',
+            {text:'Contratante: ', bold: true}, 'Universidad Distrital Francísco José de Caldas', '\n',
+            {text:'Contratista: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',
+            {text:'Objeto: ', bold: true}, self.contrato_obj.objeto, '\n',
+            {text:'Valor: ', bold: true}, self.contrato_obj.valor, '\n',
+            {text:'Fecha de inicio: ', bold: true}, self.contrato_obj.fecha_inicio, '\n',
+            {text:'Periodo de suspensión: ', bold: true}, self.suspension_nov.periodosuspension, '\n',
+            {text:'Fecha de reinicio: ', bold: true}, self.suspension_nov.fechareinicio, '\n\n'
+          ]
+        }
+      ],
+      styles: {
+        top_space: {
+          marginTop: 30
+        },
+        bottom_space: {
+          marginBottom: 30
+        },
+        general_font:{
+          fontSize: 12,
+          alignment: 'justify'
+        }
+      }
+    }
+  }
 });

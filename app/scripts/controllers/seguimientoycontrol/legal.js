@@ -42,7 +42,7 @@ angular.module('contractualClienteApp')
           * Obtencion de datos del estado del contrato
           * Se captura el ultimo estado relacionado a un contrato
           */
-          administrativaRequest.get('contrato_estado','query=numero_contrato%3A'+self.row_c.Id+'&sortby=Id&order=desc&limit=1').then(function(response) {
+          administrativaRequest.get('contrato_estado','query=numero_contrato%3A'+self.row_c.Id+'&sortby=Id&order=desc&limit=0').then(function(response) {
             var estado = response.data[0].Estado.Id;
             if (estado != 8) {
               self.estado_contrato_obj.estado = estado; //guardamos el id del estado del contrato

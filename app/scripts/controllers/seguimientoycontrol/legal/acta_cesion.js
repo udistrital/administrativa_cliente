@@ -142,6 +142,7 @@ angular.module('contractualClienteApp')
         argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response_nosql){
           if(response_nosql.status == 200  || response_nosql.statusText == "OK"){
             administrativaRequest.put('contrato_general', self.contrato_obj.id, self.contrato_obj.complete ).then(function(response){
+              console.log(response);
               if(response.status == 200 || response.statusText == "OK"){
                 swal(
                   $translate.instant('TITULO_BUEN_TRABAJO'),
@@ -197,11 +198,10 @@ angular.module('contractualClienteApp')
   * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
   * @description
   * funcion para la generacion del PDF del acta correspondiente, basado en json (pdfmake)
-  */9/8/2017
+  */
   self.formato_generacion_pdf = function(){
     argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
       var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
-      console.log(docDefinition);
       var output = JSON.parse(docDefinition);
       pdfMake.createPdf(output).download('acta_cesion.pdf');
       $location.path('/seguimientoycontrol/legal');
