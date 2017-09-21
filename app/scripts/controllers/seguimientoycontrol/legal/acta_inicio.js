@@ -106,7 +106,8 @@ angular.module('contractualClienteApp')
         if (request.status == 200) {
           administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(request){
             console.log(request);
-            if (request.status == 201) {
+            if (request.status == 200) {
+              self.formato_generacion_pdf();
               swal({
                 title: 'Buen trabajo!',
                 type: 'success',
@@ -123,4 +124,42 @@ angular.module('contractualClienteApp')
         }
       });
     };
+
+    /**
+    * @ngdoc method
+    * @name format_date
+    * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+    * @description
+    * funcion para el formateo de objetos tipo fecha a formato dd/mm/yyyy
+    * @param {date} param
+    */
+    self.format_date = function(param){
+      var date = new Date(param);
+      var dd = date.getDate();
+      var mm = date.getMonth()+1;
+      var yyyy = date.getFullYear();
+      if(dd<10){
+          dd='0'+dd;
+      }
+      if(mm<10){
+          mm='0'+mm;
+      }
+      var today = dd+'/'+mm+'/'+yyyy;
+      return today;
+    };
+
+    /**
+    * @ngdoc method
+    * @name formato_generacion_pdf
+    * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+    * @description
+    * funcion para la generacion del PDF del acta correspondiente, basado en json (pdfmake)
+    */
+    self.formato_generacion_pdf = function(){
+      argoNosqlRequest.get('plantilladocumento','59c37cb516a6ba0d76e40a36').then(function(response){
+        var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
+        var output = JSON.parse(docDefinition);
+        pdfMake.createPdf(output).download('acta_inicio.pdf');
+      });
+    }
   });
