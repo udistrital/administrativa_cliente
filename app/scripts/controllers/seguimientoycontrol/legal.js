@@ -19,6 +19,23 @@ angular.module('contractualClienteApp')
     self.estado_contrato_obj = {};
     self.estado_resultado_response = 0;
 
+    // CODIGO PARA CARGAR LAS VIGENCIAS EXISTENTES COMO OPCIONES EN EL SELECT Y MOSTRAR POR DEFECTO LA VIGENCIA DEL AÑO ACTUAL
+    administrativaRequest.get('vigencia_contrato', '').then(function(response) {
+      $scope.vigencias = response.data;
+      $scope.cantidadVigencias = response.data.length;
+      $scope.data = {
+        availableOptions: [],
+        selectedOption: {id: 0, vigencia: $scope.vigencias[0]} //This sets the default value of the select in the ui
+      };
+      for (var i = 0; i < $scope.cantidadVigencias; i++) {
+        $scope.data.availableOptions.push({id: i, vigencia: $scope.vigencias[i]});
+      }
+      console.log($scope.data);
+
+      // CODIGO PARA LISTAR LOS CONTRATOS CON VIGENCIA DEL AÑO SELECCIONADO AL CARGAR EL CONTROLADOR
+      $scope.buscar_contratos_por_vigencia($scope.data.selectedOption.vigencia); //opcion seleccionada del select al cargar el controlador
+    });
+
     self.gridOptions = {
       enableFiltering : true,
       enableSorting : true,
@@ -55,23 +72,6 @@ angular.module('contractualClienteApp')
         });
       }
     };
-
-    // CODIGO PARA CARGAR LAS VIGENCIAS EXISTENTES COMO OPCIONES EN EL SELECT Y MOSTRAR POR DEFECTO LA VIGENCIA DEL AÑO ACTUAL
-    administrativaRequest.get('vigencia_contrato').then(function(response) {
-      $scope.vigencias = response.data;
-      $scope.cantidadVigencias = response.data.length;
-      $scope.data = {
-        availableOptions: [],
-        selectedOption: {id: 0, vigencia: $scope.vigencias[0]} //This sets the default value of the select in the ui
-      };
-      for (var i = 0; i < $scope.cantidadVigencias; i++) {
-        $scope.data.availableOptions.push({id: i, vigencia: $scope.vigencias[i]});
-      }
-      console.log($scope.data);
-
-      // CODIGO PARA LISTAR LOS CONTRATOS CON VIGENCIA DEL AÑO SELECCIONADO AL CARGAR EL CONTROLADOR
-      $scope.buscar_contratos_por_vigencia($scope.data.selectedOption.vigencia); //opcion seleccionada del select al cargar el controlador
-    });
 
     //FUNCION QUE SE EJECUTA CUANDO SE SELECCIONA UNA OPCION DEL SELECT DE VIGENCIAS
     $scope.buscar_contratos = function() {
