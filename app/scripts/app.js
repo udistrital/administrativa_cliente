@@ -41,7 +41,8 @@ angular
     'oikosService',
     'financieraMidService',
     'adminMidService',
-    'argoNosqlService'
+    'argoNosqlService',
+    'administrativaWsoService'
   ])
     .run(function(amMoment) {
       amMoment.changeLocale('es');
@@ -115,17 +116,17 @@ angular
         controller: 'SeguimientoycontrolLegalActaInicioCtrl',
         controllerAs: 'sLactaInicio'
       })
-      .when('/seguimientoycontrol/legal/acta_suspension/:contrato_id', {
+      .when('/seguimientoycontrol/legal/acta_suspension/:contrato_id/:contrato_vigencia', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_suspension.html',
         controller: 'SeguimientoycontrolLegalActaSuspensionCtrl',
         controllerAs: 'sLactaSuspension'
       })
-      .when('/seguimientoycontrol/legal/acta_reinicio/:contrato_id', {
+      .when('/seguimientoycontrol/legal/acta_reinicio/:contrato_id/:contrato_vigencia', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_reinicio.html',
         controller: 'SeguimientoycontrolLegalActaReinicioCtrl',
         controllerAs: 'sLactaReinicio'
       })
-      .when('/seguimientoycontrol/legal/acta_cesion/:contrato_id', {
+      .when('/seguimientoycontrol/legal/acta_cesion/:contrato_id/:contrato_vigencia', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_cesion.html',
         controller: 'SeguimientoycontrolLegalActaCesionCtrl',
         controllerAs: 'sLactaCesion'

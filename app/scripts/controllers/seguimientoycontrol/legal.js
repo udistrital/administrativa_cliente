@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalCtrl', function ($log,$location,$scope,administrativaRequest,$window,$translate) {
+  .controller('SeguimientoycontrolLegalCtrl', function ($log,$location,$scope,administrativaRequest,$window,$translate, administrativaWsoRequest, agoraRequest) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -18,23 +18,47 @@ angular.module('contractualClienteApp')
     var self = this;
     self.estado_contrato_obj = {};
     self.estado_resultado_response = 0;
+    self.contratos = [{}];
+    self.vigencias = [];
+    self.vigencia_seleccionada = self.vigencias[0];
 
-    // CODIGO PARA CARGAR LAS VIGENCIAS EXISTENTES COMO OPCIONES EN EL SELECT Y MOSTRAR POR DEFECTO LA VIGENCIA DEL AÑO ACTUAL
+    // Obtiene las vigencias de contratos
     administrativaRequest.get('vigencia_contrato', '').then(function(response) {
-      $scope.vigencias = response.data;
-      $scope.cantidadVigencias = response.data.length;
-      $scope.data = {
-        availableOptions: [],
-        selectedOption: {id: 0, vigencia: $scope.vigencias[0]} //This sets the default value of the select in the ui
-      };
-      for (var i = 0; i < $scope.cantidadVigencias; i++) {
-        $scope.data.availableOptions.push({id: i, vigencia: $scope.vigencias[i]});
-      }
-      console.log($scope.data);
-
-      // CODIGO PARA LISTAR LOS CONTRATOS CON VIGENCIA DEL AÑO SELECCIONADO AL CARGAR EL CONTROLADOR
-      $scope.buscar_contratos_por_vigencia($scope.data.selectedOption.vigencia); //opcion seleccionada del select al cargar el controlador
+      self.vigencias = response.data;
+      //self.get_contratos_vigencia(self.vigencia_seleccionada);
     });
+
+    // Mantiene constante observacion las vigencias
+    $scope.$watch('sLegal.vigencia_seleccionada', function(){
+      self.get_contratos_vigencia(self.vigencia_seleccionada);
+    });
+    
+    // Obtiene los contratos
+    self.get_contratos_vigencia = function(vigencia){
+      console.log(vigencia)
+      administrativaWsoRequest.get('contrato','').then(function(wso_response){
+        var wso_contratos = wso_response.data.contratos.contrato;
+        self.contratos = [];
+        $.each(wso_contratos, function(idx, contrato){
+          if(contrato){
+            if(contrato.vigencia == vigencia){
+              var contrato_temp = {};
+              agoraRequest.get('informacion_proveedor', $.param({
+                query: "Id:" + contrato.contratista
+              })).then(function(ip_response){
+                if(ip_response.data != null){
+                  contrato_temp.informacion_proveedor = ip_response.data[0];
+                  contrato_temp.contrato = contrato;
+                  self.contratos.push(contrato_temp);
+                }
+              });
+            }
+          }
+        });
+        self.gridOptions.data = self.contratos;
+        console.log(self.contratos);
+      });
+    }
 
     self.gridOptions = {
       enableFiltering : true,
@@ -43,11 +67,11 @@ angular.module('contractualClienteApp')
       multiSelect: false,
       enableSelectAll: false,
       columnDefs : [
-        {field: 'Id',  displayName: $translate.instant('CONTRATO'),width: 150},
-        {field: 'VigenciaContrato' ,  displayName: $translate.instant('VIGENCIA_CONTRATO'),width: 160},
-        {field: 'Contratista.NumDocumento',  displayName: $translate.instant('DOCUMENTO_CONTRATISTA'),width: 200},
-        {field: 'Contratista.NomProveedor',  displayName: $translate.instant('NOMBRE_CONTRATISTA'),width: 390},
-        {field: 'ValorContrato',  displayName:  $translate.instant('VALOR'), cellFilter: 'currency',width: 180}
+        {field: 'contrato.numero_contrato',  displayName: $translate.instant('CONTRATO'),width: 150},
+        {field: 'contrato.vigencia' ,  displayName: $translate.instant('VIGENCIA_CONTRATO'),width: 160},
+        {field: 'informacion_proveedor.NumDocumento',  displayName: $translate.instant('DOCUMENTO_CONTRATISTA'),width: 200},
+        {field: 'informacion_proveedor.NomProveedor',  displayName: $translate.instant('NOMBRE_CONTRATISTA'),width: 390},
+        {field: 'contrato.valor_contrato',  displayName:  $translate.instant('VALOR'), cellFilter: 'currency',width: 180}
       ],
       onRegisterApi : function( gridApi ) {
         self.gridApi = gridApi;
@@ -73,18 +97,4 @@ angular.module('contractualClienteApp')
       }
     };
 
-    //FUNCION QUE SE EJECUTA CUANDO SE SELECCIONA UNA OPCION DEL SELECT DE VIGENCIAS
-    $scope.buscar_contratos = function() {
-      var vigencia = $scope.data.selectedOption.vigencia;//opcion que se selecciona del select
-      // alert(vigencia);
-      $scope.buscar_contratos_por_vigencia(vigencia);
-    }
-
-    //FUNCION QUE NOS TRAE LOS DATOS DE LOS CONTRATOS POR LA VIGENCIA QUE RECIBE POR PARAMETRO
-    $scope.buscar_contratos_por_vigencia = function(anio) {
-      administrativaRequest.get('contrato_general',"query=VigenciaContrato%3A"+anio+"&limit=0").then(function(response) {
-        self.gridOptions.data = response.data;
-        console.log(response.data);
-      });
-    }
   });

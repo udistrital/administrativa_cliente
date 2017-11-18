@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaCesionCtrl', function ($translate, $location, $log, $scope, $routeParams, administrativaRequest, agoraRequest, argoNosqlRequest) {
+.controller('SeguimientoycontrolLegalActaCesionCtrl', function ($translate, $location, $log, $scope, $routeParams, administrativaRequest, administrativaWsoRequest, agoraRequest, argoNosqlRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -38,7 +38,9 @@ angular.module('contractualClienteApp')
     self.contrato_obj.fecha_registro = cg_response.data[0].FechaRegistro;
     self.contrato_obj.ordenador_gasto = cg_response.data[0].OrdenadorGasto;
     self.contrato_obj.vigencia = cg_response.data[0].VigenciaContrato;
-    self.contrato_obj.tipo_contrato = cg_response.data[0].TipoContrato.TipoContrato;
+    administrativaWsoRequest.get('contrato', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(wso_response){
+      console.log(wso_response);
+    });
 
     agoraRequest.get('informacion_proveedor', $.param({
       query: "Id:" + self.contrato_obj.contratista
@@ -149,7 +151,6 @@ angular.module('contractualClienteApp')
                   $translate.instant('DESCRIPCION_CESION') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
                   'success'
                 );
-
                 self.formato_generacion_pdf();
               }
             });
@@ -200,7 +201,7 @@ angular.module('contractualClienteApp')
   * funcion para la generacion del PDF del acta correspondiente, basado en json (pdfmake)
   */
   self.formato_generacion_pdf = function(){
-    argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
+    argoNosqlRequest.get('plantilladocumento','59d79414867ee188e42d8a59').then(function(response){
       var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
       var output = JSON.parse(docDefinition);
       pdfMake.createPdf(output).download('acta_cesion.pdf');

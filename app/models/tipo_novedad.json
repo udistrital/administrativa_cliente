@@ -1,0 +1,42 @@
+[
+  {
+    "_id": "59d7965e867ee188e42d8c72",
+    "nombre": "suspensión",
+    "descripcion": "Tipo de novedad que se refiere a la suspensión del contrato para un tiempo establecido"
+  },
+  {
+    "_id": "59d79683867ee188e42d8c97",
+    "nombre": "cesión",
+    "descripcion": "Tipo de novedad que se refiere a la cesiÃ³n del contrato por parte del contratista (Cedente) a un cesionario"
+  },
+  {
+    "_id": "59d796ac867ee188e42d8cbf",
+    "nombre": "reinicio",
+    "descripcion": "Tipo de novedad que se refiere al reinicio que se le hace al contrato luego de ser suspendido"
+  },
+  {
+    "_id": "59d797aa867ee188e42d8db6",
+    "nombre": "liquidación",
+    "descripcion": "Tipo de novedad que se refiere a la liquidación del contrato"
+  },
+  {
+    "_id": "59d79809867ee188e42d8e0d",
+    "nombre": "terminación anticipada",
+    "descripcion": "Tipo de novedad que se refiere a la terminación y liquidación del contrato de manera bilateral antes de la finalización del plazo del mismo"
+  },
+  {
+    "_id": "59d7985e867ee188e42d8e64",
+    "nombre": "adición",
+    "descripcion": "Tipo de novedad que se refiere a la adición presupuestal que se le hace al contrato"
+  },
+  {
+    "_id": "59d79894867ee188e42d8e9b",
+    "nombre": "prórroga",
+    "descripcion": "Tipo de novedad que se refiere a la adición de tiempo para la ejecución del contrato"
+  },
+  {
+    "_id": "59d79904867ee188e42d8f02",
+    "nombre": "adición/prórroga",
+    "descripcion": "Tipo de novedad que se refiere a la adición presupuestal y de tiempo para la ejecución del contrato"
+  }
+]

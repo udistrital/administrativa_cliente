@@ -24,10 +24,10 @@ angular.module('administrativaWsoService',[])
 	return $http.get(path + tabla + params, cabecera);
       },
       post: function (tabla, elemento) {
-	return $http.post(path + tabla, elemento);
+	return $http.post(path + tabla, elemento, cabecera);
       },
-      put: function (tabla, id, elemento) {
-	return $http.put(path + table + id, elemento);
+      put: function (tabla, elemento) {
+	return $http.put(path + table , elemento);
       },
       delete: function (tabla, id) {
 	return $http.delete(path + tabla + id);
