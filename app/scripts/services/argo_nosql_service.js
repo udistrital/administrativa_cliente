@@ -11,7 +11,7 @@ angular.module('argoNosqlService', [])
   .factory('argoNosqlRequest', function ($http) {
       // Service logic
       // ...
-      var path = "http://10.20.2.122:8083/v1/";
+      var path = "http://10.20.2.123:8083/v1/";
       // Public API here
       return {
         get: function (tabla,params) {

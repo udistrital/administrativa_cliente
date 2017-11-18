@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaReinicioCtrl', function ($location, $log, $scope, $routeParams, administrativaRequest, argoNosqlRequest, agoraRequest) {
+.controller('SeguimientoycontrolLegalActaReinicioCtrl', function ($location, $log, $scope, $routeParams, $translate, administrativaWsoRequest, administrativaRequest, argoNosqlRequest, agoraRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -20,47 +20,55 @@ angular.module('contractualClienteApp')
   self.f_reinicio = new Date();
   self.diff_dias = 0;
   self.contrato_id = $routeParams.contrato_id;
+  self.contrato_vigencia = $routeParams.contrato_vigencia;
   self.contrato_obj = {};
   self.estado_ejecucion = {};
   self.n_solicitud = null;
 
-  administrativaRequest.get('estado_contrato',$.param({
-    query: "NombreEstado:" + "Ejecución"
-  })).then(function(request){
-    self.estado_ejecucion = request.data[0];
+
+  // verificacion del estado del contrato
+  administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(response){
+    self.estado_suspendido = response.data.contratoEstado;
   });
 
-  administrativaRequest.get('contrato_general',$.param({
-    query: "Id:" + self.contrato_id
-  })).then(function(response) {
-    self.contrato_obj.id = response.data[0].Id;
-    self.contrato_obj.contratista = response.data[0].Contratista;
-    self.contrato_obj.valor = response.data[0].ValorContrato;
-    self.contrato_obj.objeto = response.data[0].ObjetoContrato;
-    self.contrato_obj.fecha_registro = response.data[0].FechaRegistro;
-    self.contrato_obj.supervisor = response.data[0].Supervisor;
-    self.contrato_obj.vigencia = response.data[0].VigenciaContrato;
 
-    argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
-      for(var i = 0 ; i < response.data.length ; i++){
-        if(response.data[i].tiponovedad == "5976308f5aa3d86a430c8c0a"){
-          self.suspension_id_nov = response.data[i]._id;
-          self.f_suspension = new Date(response.data[i].fechasuspension);
-          self.f_reinicio = new Date(response.data[i].fechareinicio);
-          self.motivo_suspension = response.data[i].motivo;
-        }
-      }
+  administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
+    console.log(wso_response.data);
+    self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
+    self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
+    self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
+    self.contrato_obj.fecha_registro = wso_response.data.contrato.fecha_registro;
+    self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
+    self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
+    self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
+    self.contrato_obj.tipo_contrato = wso_response.data.contrato.tipo_contrato;
+    self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
 
-      agoraRequest.get('informacion_proveedor', $.param({
-        query: "Id:" + self.contrato_obj.contratista,
-      })).then(function(response) {
-        self.contrato_obj.contratista_documento = response.data[0].NumDocumento;
-        self.contrato_obj.contratista_nombre = response.data[0].NomProveedor;
+    agoraRequest.get('informacion_proveedor', $.param({
+      query: "Id:" + wso_response.data.contrato.contratista
+    })).then(function(ip_response) {
+      self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+      self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+
+      agoraRequest.get('informacion_persona_natural', $.param({
+        query: "Id:" + ip_response.data[0].NumDocumento
+      })).then(function(ipn_response){
+        self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
+        console.log(self.contrato_obj)
+        argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
+          console.log(response)
+          for(var i = 0 ; i < response.data.length ; i++){
+            if(response.data[i].tiponovedad == "59d7965e867ee188e42d8c72"){
+              self.suspension_id_nov = response.data[i]._id;
+              self.f_suspension = new Date(response.data[i].fechasuspension);
+              self.f_reinicio = new Date(response.data[i].fechareinicio);
+              self.motivo_suspension = response.data[i].motivo;
+            }
+          }
+        });
       });
-
     });
   });
-
 
   /**
   * @ngdoc method
@@ -93,7 +101,7 @@ angular.module('contractualClienteApp')
   self.generarActa = function(){
     if($scope.formReinicio.$valid){
       self.reinicio_nov = {};
-      self.reinicio_nov.tiponovedad = "597630a85aa3d86a430c8c37";
+      self.reinicio_nov.tiponovedad = "59d796ac867ee188e42d8cbf";
       self.reinicio_nov.numerosolicitud = self.n_solicitud;
       self.reinicio_nov.contrato = self.contrato_obj.id;
       self.reinicio_nov.vigencia = String(self.contrato_obj.vigencia);
@@ -113,11 +121,10 @@ angular.module('contractualClienteApp')
       self.contrato_estado.Usuario = "up";
 
       argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response_nosql){
-        console.log(response_nosql);
         if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
-          administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(response){
-            console.log(response);
-            if(response.status == 201 || response.statusText == "Created"){
+          //administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(response){
+            //console.log(response);
+            //if(response.status == 201 || response.statusText == "Created"){
 
               swal(
                 $translate.instant('TITULO_BUEN_TRABAJO'),
@@ -126,20 +133,20 @@ angular.module('contractualClienteApp')
               );
 
               $location.path('/seguimientoycontrol/legal');
-            }
-          });
+
+
+              //$location.path('/seguimientoycontrol/legal');
+            //}
+          //});
         }
       });
 
     }else{
-
       swal(
         $translate.instant('TITULO_ERROR'),
         $translate.instant('DESCRIPCION_ERROR'),
         'error'
       );
-      
     }
   };
-
 });

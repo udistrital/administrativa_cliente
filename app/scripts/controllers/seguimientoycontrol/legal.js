@@ -71,7 +71,7 @@ angular.module('contractualClienteApp')
       multiSelect: false,
       enableSelectAll: false,
       columnDefs : [
-        {field: 'contrato.numero_contrato',  displayName: $translate.instant('CONTRATO'),width: 150},
+        {field: 'contrato.numero_contrato_suscrito',  displayName: $translate.instant('CONTRATO'),width: 150},
         {field: 'contrato.vigencia' ,  displayName: $translate.instant('VIGENCIA_CONTRATO'),width: 160},
         {field: 'informacion_proveedor.NumDocumento',  displayName: $translate.instant('DOCUMENTO_CONTRATISTA'),width: 200},
         {field: 'informacion_proveedor.NomProveedor',  displayName: $translate.instant('NOMBRE_CONTRATISTA'),width: 390},
@@ -87,9 +87,9 @@ angular.module('contractualClienteApp')
           * Obtencion de datos del estado del contrato
           * Se captura el ultimo estado relacionado a un contrato
           */
-          administrativaWsoRequest.get('contrato_estado', '/'+self.row_c.contrato.numero_contrato+'/'+self.row_c.contrato.vigencia).then(function(response) {
+          administrativaWsoRequest.get('contrato_estado', '/'+self.row_c.contrato.numero_contrato_suscrito+'/'+self.row_c.contrato.vigencia).then(function(response) {
             var estado = response.data.contratoEstado.estado;
-            console.log(estado)
+            console.log(self.row_c.contrato.numero_contrato_suscrito, estado)
             if (estado.id != 8) {
               self.estado_contrato_obj.estado = estado.id; //guardamos el id del estado del contrato
               self.estado_resultado_response = response.status; //guardamos el status del resultado del response

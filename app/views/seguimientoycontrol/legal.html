@@ -35,9 +35,9 @@
                   <ul class="dropdown-menu" role="menu">
                     <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga/{{sLegal.row_c.Id}}">{{'CREAR_NOVEDAD_ADICION_PRORROGA' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 3"><a href="#/seguimientoycontrol/legal/acta_inicio/{{sLegal.row_c.Id}}">{{'CREAR_ACTA_INICIO' | translate}}</a></li>
-                    <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.row_c.Id}}/{{sLegal.vigencia_seleccionada}}">{{'CREAR_NOVEDAD_SUSPENSION' | translate}}</a></li>
-                    <li ng-if="sLegal.estado_contrato_obj.estado == 2"><a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.row_c.Id}}/{{sLegal.vigencia_seleccionada}}">{{'CREAR_NOVEDAD_REINICIO' | translate}}</a></li>
-                    <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_cesion/{{sLegal.row_c.Id}}/{{sLegal.vigencia_seleccionada}}">{{'CREAR_NOVEDAD_CESION' | translate}}</a></li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.row_c.contrato.numero_contrato_suscrito}}/{{sLegal.vigencia_seleccionada}}">{{'CREAR_NOVEDAD_SUSPENSION' | translate}}</a></li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 2"><a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.row_c.contrato.numero_contrato_suscrito}}/{{sLegal.vigencia_seleccionada}}">{{'CREAR_NOVEDAD_REINICIO' | translate}}</a></li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_cesion/{{sLegal.row_c.contrato.numero_contrato_suscrito}}/{{sLegal.vigencia_seleccionada}}">{{'CREAR_NOVEDAD_CESION' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_liquidacion">{{'CREAR_NOVEDAD_LIQUIDACION' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral">{{'CREAR_NOVEDAD_TERMINACION_ANTICIPADA' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/novedad_otro_si_modificatorio">{{'CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO' | translate}}</a></li>
