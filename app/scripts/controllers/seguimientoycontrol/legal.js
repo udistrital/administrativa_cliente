@@ -25,7 +25,6 @@ angular.module('contractualClienteApp')
     // Obtiene las vigencias de contratos
     administrativaRequest.get('vigencia_contrato', '').then(function(response) {
       self.vigencias = response.data;
-      //self.get_contratos_vigencia(self.vigencia_seleccionada);
     });
 
     // Mantiene constante observacion las vigencias
@@ -33,9 +32,14 @@ angular.module('contractualClienteApp')
       self.get_contratos_vigencia(self.vigencia_seleccionada);
     });
     
-    // Obtiene los contratos
+    /**
+    * @ngdoc method
+    * @name get_contratos_vigencia
+    * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegal
+    * @description
+    * funcion para obtener la totalidad de los contratos por vigencia seleccionada
+    */
     self.get_contratos_vigencia = function(vigencia){
-      console.log(vigencia)
       administrativaWsoRequest.get('contrato','').then(function(wso_response){
         var wso_contratos = wso_response.data.contratos.contrato;
         self.contratos = [];
@@ -73,7 +77,7 @@ angular.module('contractualClienteApp')
         {field: 'informacion_proveedor.NomProveedor',  displayName: $translate.instant('NOMBRE_CONTRATISTA'),width: 390},
         {field: 'contrato.valor_contrato',  displayName:  $translate.instant('VALOR'), cellFilter: 'currency',width: 180}
       ],
-      onRegisterApi : function( gridApi ) {
+      onRegisterApi : function(gridApi) {
         self.gridApi = gridApi;
         gridApi.selection.on.rowSelectionChanged($scope, function(row){
           self.row_c = row.entity;
@@ -83,15 +87,15 @@ angular.module('contractualClienteApp')
           * Obtencion de datos del estado del contrato
           * Se captura el ultimo estado relacionado a un contrato
           */
-          administrativaRequest.get('contrato_estado','query=numero_contrato%3A'+self.row_c.Id+'&sortby=Id&order=desc&limit=0').then(function(response) {
-            var estado = response.data[0].Estado.Id;
-            if (estado != 8) {
-              self.estado_contrato_obj.estado = estado; //guardamos el id del estado del contrato
+          administrativaWsoRequest.get('contrato_estado', '/'+self.row_c.contrato.numero_contrato+'/'+self.row_c.contrato.vigencia).then(function(response) {
+            var estado = response.data.contratoEstado.estado;
+            console.log(estado)
+            if (estado.id != 8) {
+              self.estado_contrato_obj.estado = estado.id; //guardamos el id del estado del contrato
               self.estado_resultado_response = response.status; //guardamos el status del resultado del response
             }else{
               self.estado_resultado_response = 0;
             }
-            $log.log(response.data);
           });
         });
       }
