@@ -42,12 +42,17 @@ angular
     'financieraMidService',
     'adminMidService',
     'argoNosqlService',
-    'administrativaWsoService'
+    'administrativaWsoService',
+    'administrativaAmazonService'
   ])
     .run(function(amMoment) {
       amMoment.changeLocale('es');
     })
-    .config(['$locationProvider','$routeProvider', function($locationProvider, $routeProvider) {
+    .config(['$locationProvider','$routeProvider','$httpProvider',function($locationProvider, $routeProvider, $httpProvider) {
+      $httpProvider.defaults.headers.common = {};
+      $httpProvider.defaults.headers.post = {};
+      $httpProvider.defaults.headers.put = {};
+      $httpProvider.defaults.headers.patch = {};
       $locationProvider.hashPrefix("");
       $routeProvider
       .when('/', {

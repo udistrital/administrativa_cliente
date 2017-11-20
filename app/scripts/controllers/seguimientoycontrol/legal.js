@@ -39,30 +39,37 @@ angular.module('contractualClienteApp')
     * @description
     * funcion para obtener la totalidad de los contratos por vigencia seleccionada
     */
-    self.get_contratos_vigencia = function(vigencia){
-      administrativaWsoRequest.get('contrato','').then(function(wso_response){
-        var wso_contratos = wso_response.data.contratos.contrato;
-        self.contratos = [];
-        $.each(wso_contratos, function(idx, contrato){
-          if(contrato){
-            if(contrato.vigencia == vigencia){
-              var contrato_temp = {};
-              agoraRequest.get('informacion_proveedor', $.param({
-                query: "Id:" + contrato.contratista
-              })).then(function(ip_response){
-                if(ip_response.data != null){
-                  contrato_temp.informacion_proveedor = ip_response.data[0];
-                  contrato_temp.contrato = contrato;
-                  self.contratos.push(contrato_temp);
-                }
-              });
-            }
-          }
-        });
-        self.gridOptions.data = self.contratos;
-        console.log(self.contratos);
-      });
-    }
+    //self.get_contratos_vigencia = function(vigencia){
+      //administrativaWsoRequest.get('contrato','').then(function(wso_response){
+        //var wso_contratos = wso_response.data.contratos.contrato;
+        //self.contratos = [];
+        //$.each(wso_contratos, function(idx, contrato){
+          //if(contrato){
+            //if(contrato.vigencia == vigencia){
+              //var contrato_temp = {};
+              //agoraRequest.get('informacion_proveedor', $.param({
+                //query: "Id:" + contrato.contratista
+              //})).then(function(ip_response){
+                //if(ip_response.data != null){
+                  //contrato_temp.informacion_proveedor = ip_response.data[0];
+                  //contrato_temp.contrato = contrato;
+                  //self.contratos.push(contrato_temp);
+                //}
+              //});
+            //}
+          //}
+        //});
+        //self.gridOptions.data = self.contratos;
+        //console.log(self.contratos);
+      //});
+    //}
+
+
+    administrativaWsoRequest.get('contrato', '/29/2017').then(function(wso_response){
+      self.contratos = [wso_response.data];
+      self.gridOptions.data = self.contratos;
+    });
+
 
     self.gridOptions = {
       enableFiltering : true,

@@ -18,13 +18,18 @@ angular.module('administrativaWsoService',[])
       }
     };
 
+    var post_header = {
+      "Content-Type": "Application/json"
+    };
+
     // Public API here
     return {
       get: function (tabla, params) {
 	return $http.get(path + tabla + params, cabecera);
       },
       post: function (tabla, elemento) {
-	return $http.post(path + tabla, elemento, cabecera);
+        console.log("ENTRA POST WSO")
+	return $http.post(path + tabla, elemento, post_header);
       },
       put: function (tabla, elemento) {
 	return $http.put(path + table , elemento);
