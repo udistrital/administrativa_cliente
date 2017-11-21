@@ -235,10 +235,13 @@ var text_es = {
   TITULO_ERROR:"Errores en el formulario",
   DESCRIPCION_ERROR:"Llenar los campos obligatorios en el formulario",
   TITULO_BUEN_TRABAJO:"¡Buen trabajo!",
+  DESCRIPCION_INICIO:"Se registro exitosamente la novedad de 'Acta de inicio'<br>al contrato # ",
+  DESCRIPCION_INICIO_1:"El estado del presente contrato se actualizo a 'Ejecución'.",
+  DESCRIPCION_INICIO_ERROR_FECHA:"La fecha fin debe ser mayor a la fecha inicio!",
   DESCRIPCION_CESION:"Se registro exitosamente la novedad de cesión al contrato # ",
   DESCRIPCION_SUSPENSION:"Se registro exitosamente la novedad de suspensión al contrato # ",
   DESCRIPCION_REINICIO:"Se registro exitosamente la novedad de reinicio al contrato # ",
-  ANIO:"año"
+  ANIO:" vigencia "
 
 };
 
@@ -469,10 +472,13 @@ var text_en = {
   TITULO_ERROR:"There has been mistakes in the form",
   DESCRIPCION_ERROR:"Please fill all mandatory fields in the form",
   TITULO_BUEN_TRABAJO:"Good Job!",
+  DESCRIPCION_INICIO:"It has been succesfully registered the novelity of 'Home Act'<br>for the contract # ",
+  DESCRIPCION_INICIO_1:"The status of this contract was updated to 'Execution'.",
+  DESCRIPCION_INICIO_ERROR_FECHA:"The end date must be greater than the start date!",
   DESCRIPCION_CESION:"It has been succesfully registered the novelity of assignment for the contract # ",
   DESCRIPCION_SUSPENSION:"It has been succesfully registered the novelity of suspension for the contract # ",
   DESCRIPCION_REINICIO:"It has been succesfully registered the novelity of restart for the contract # ",
-  ANIO:"year"
+  ANIO:" validity "
 };
 
 angular.module('contractualClienteApp')

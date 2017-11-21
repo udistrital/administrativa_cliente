@@ -116,7 +116,7 @@ angular
         controller: 'SeguimientoycontrolLegalCtrl',
         controllerAs: 'sLegal'
       })
-      .when('/seguimientoycontrol/legal/acta_inicio/:contrato_id', {
+      .when('/seguimientoycontrol/legal/acta_inicio/:contrato_id/:contrato_vigencia', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_inicio.html',
         controller: 'SeguimientoycontrolLegalActaInicioCtrl',
         controllerAs: 'sLactaInicio'
@@ -136,7 +136,7 @@ angular
         controller: 'SeguimientoycontrolLegalActaCesionCtrl',
         controllerAs: 'sLactaCesion'
       })
-      .when('/seguimientoycontrol/legal/acta_adicion_prorroga/:contrato_id', {
+      .when('/seguimientoycontrol/legal/acta_adicion_prorroga/:contrato_id/:contrato_vigencia', {
         templateUrl: 'views/seguimientoycontrol/legal/acta_adicion_prorroga.html',
         controller: 'SeguimientoycontrolLegalActaAdicionProrrogaCtrl',
         controllerAs: 'sLactaAdicionProrroga'
