@@ -63,8 +63,6 @@ angular.module('contractualClienteApp')
       });
     });
 
-
-
     /**
      * @ngdoc method
      * @name calculoTiempo

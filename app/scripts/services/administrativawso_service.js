@@ -28,8 +28,7 @@ angular.module('administrativaWsoService',[])
 	return $http.get(path + tabla + params, cabecera);
       },
       post: function (tabla, elemento) {
-        console.log("ENTRA POST WSO")
-	return $http.post(path + tabla, elemento, post_header);
+	return $http.post(path + tabla, elemento, cabecera);
       },
       put: function (tabla, elemento) {
 	return $http.put(path + table , elemento);

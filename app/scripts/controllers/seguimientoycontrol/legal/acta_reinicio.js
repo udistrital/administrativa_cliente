@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaReinicioCtrl', function ($location, $log, $scope, $routeParams, $translate, administrativaWsoRequest, administrativaRequest, argoNosqlRequest, agoraRequest) {
+.controller('SeguimientoycontrolLegalActaReinicioCtrl', function ($location, $log, $scope, $routeParams, $translate, adminMidRequest, administrativaWsoRequest, administrativaAmazonRequest, argoNosqlRequest, agoraRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -25,12 +25,19 @@ angular.module('contractualClienteApp')
   self.estado_ejecucion = {};
   self.n_solicitud = null;
 
+  self.estados = [];
 
   // verificacion del estado del contrato
-  administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(response){
-    self.estado_suspendido = response.data.contratoEstado;
+  administrativaAmazonRequest.get('estado_contrato', $.param({
+    query: "NombreEstado:" + "En ejecucion"
+  })).then(function(ec_response){
+    var estado_temp_to = {
+      "NombreEstado": "ejecucion"
+    }
+    if(ec_response.data[0].NombreEstado == "En ejecucion"){
+      self.estados[1] = estado_temp_to;
+    }
   });
-
 
   administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
     console.log(wso_response.data);
@@ -120,27 +127,41 @@ angular.module('contractualClienteApp')
       self.contrato_estado.Estado = self.estado_ejecucion;
       self.contrato_estado.Usuario = "up";
 
-      argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response_nosql){
-        if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
-          //administrativaRequest.post('contrato_estado', self.contrato_estado).then(function(response){
-            //console.log(response);
-            //if(response.status == 201 || response.statusText == "Created"){
-
-              swal(
-                $translate.instant('TITULO_BUEN_TRABAJO'),
-                $translate.instant('DESCRIPCION_REINICIO') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
-                'success'
-              );
-
-              $location.path('/seguimientoycontrol/legal');
-
-
-              //$location.path('/seguimientoycontrol/legal');
-            //}
-          //});
+      administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
+        var estado_temp_from = {
+          "NombreEstado": "Suspendido"
         }
-      });
 
+        self.estados[0] = estado_temp_from;
+        console.log(self.estados)
+        adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
+          argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response_nosql){
+            if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
+              var cambio_estado_contrato = {
+                "_postcontrato_estado":{
+                  "estado":4,
+                  "usuario":"CC123456",
+                  "numero_contrato_suscrito":self.contrato_id,
+                  "vigencia":parseInt(self.contrato_vigencia)
+                }
+              };
+
+              console.log(cambio_estado_contrato);
+              administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
+                console.log("POST WSO: ", response);
+                if (response.status == 200 || response.statusText == "OK") {
+                  swal(
+                    $translate.instant('TITULO_BUEN_TRABAJO'),
+                    $translate.instant('DESCRIPCION_REINICIO') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
+                    'success'
+                  );
+                  self.formato_generacion_pdf();
+                }
+              });
+            }
+          });
+        });
+      });
     }else{
       swal(
         $translate.instant('TITULO_ERROR'),
@@ -149,4 +170,17 @@ angular.module('contractualClienteApp')
       );
     }
   };
+
+  self.formato_generacion_pdf = function(){
+    argoNosqlRequest.get('plantilladocumento','5a133759d9963a4c9025fbac').then(function(response){
+      //console.log(response.data)
+      //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
+      //var docDefinition = self.get_pdf();
+      //console.log(docDefinition);
+      //var output = JSON.parse(docDefinition);
+      //pdfMake.createPdf(docDefinition).download('acta_suspension.pdf');
+      $location.path('/seguimientoycontrol/legal');
+    });
+  }
+
 });
