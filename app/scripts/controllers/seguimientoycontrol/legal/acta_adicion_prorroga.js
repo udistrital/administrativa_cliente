@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaAdicionProrrogaCtrl', function ($log, $scope, $routeParams, administrativaRequest,$translate,argoNosqlRequest) {
+.controller('SeguimientoycontrolLegalActaAdicionProrrogaCtrl', function ($log, $scope, $routeParams, administrativaRequest,administrativaWsoRequest,$translate,argoNosqlRequest,agoraRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -17,30 +17,35 @@ angular.module('contractualClienteApp')
 
   var self = this;
   self.contrato_id = $routeParams.contrato_id;
+  self.contrato_vigencia = $routeParams.contrato_vigencia;
   self.contrato_obj = {};
 
   /*
   * Obtencion de datos del contrato del servicio
   */
-  administrativaRequest.get('contrato_general',$.param({
-    query: "Id:" + self.contrato_id
-  })).then(function(response) {
-    $scope.response_contrato = response;
-    self.contrato_obj.id = response.data[0].Id;
-    self.contrato_obj.TipoContrato = response.data[0].TipoContrato.TipoContrato;
-    self.contrato_obj.ObjetoContrato = response.data[0].ObjetoContrato;
-    self.contrato_obj.ValorContrato = response.data[0].ValorContrato;
-    self.contrato_obj.Contratista = response.data[0].Contratista;
-    self.contrato_obj.PlazoEjecucion = response.data[0].PlazoEjecucion;
-    self.contrato_obj.Supervisor = response.data[0].Supervisor.Nombre;
-    self.contrato_obj.fecha_inicio = response.data[0].fecha_inicio;
-    self.contrato_obj.FechaRegistro = response.data[0].FechaRegistro;
+  administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response) {
+    $scope.response_contrato = wso_response;
+    self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
+    self.contrato_obj.TipoContrato = wso_response.data.contrato.tipo_contrato;
+    self.contrato_obj.ObjetoContrato = wso_response.data.contrato.objeto_contrato;
+    self.contrato_obj.ValorContrato = wso_response.data.contrato.valor_contrato;
+    self.contrato_obj.PlazoEjecucion = wso_response.data.contrato.plazo_ejecucion;
+    self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
+    // self.contrato_obj.fecha_inicio = response.data[0].fecha_inicio;
+    self.contrato_obj.FechaRegistro = wso_response.data.contrato.FechaRegistro;
     self.fecha_inicio = new Date();
     // self.fecha_inicio = self.contrato_obj.fecha_inicio.substring(0, 10);
-    self.contrato_obj.ValorContrato = response.data[0].ValorContrato;
-    self.contrato_obj.VigenciaContrato = response.data[0].VigenciaContrato;
+    self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
     
-    $log.log(response.data);
+    $log.log(wso_response.data);
+
+    agoraRequest.get('informacion_proveedor', $.param({
+      query: "Id:" + wso_response.data.contrato.contratista
+    })).then(function(ip_response) {
+      self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+      self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+      console.log(ip_response.data);
+    });
   });
 
   //CONSULTAR LOS DATOS NoSQL
@@ -91,7 +96,7 @@ angular.module('contractualClienteApp')
     }else{
       //si no esta visible
       $('.panel_adicion').show("fast");
-      self.contrato_obj.NumeroCdp = $scope.response_contrato.data[0].NumeroCdp;
+      //self.contrato_obj.NumeroCdp = $scope.response_contrato.data[0].NumeroCdp;
       $scope.fecha_adicion = new Date();
     }
   }

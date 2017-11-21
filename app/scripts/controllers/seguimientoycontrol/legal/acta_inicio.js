@@ -145,7 +145,7 @@ angular.module('contractualClienteApp')
               confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
               allowOutsideClick: false
             }).then(function () {
-              //window.location.href = "#/seguimientoycontrol/legal";
+              window.location.href = "#/seguimientoycontrol/legal";
             });
           }
         });
@@ -204,7 +204,7 @@ angular.module('contractualClienteApp')
       var docDefinition = self.formato_pdf();
       console.log(docDefinition);
       pdfMake.createPdf(docDefinition).download('acta_inicio.pdf');
-      $location.path('/seguimientoycontrol/legal');
+      //$location.path('/seguimientoycontrol/legal');
       //argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
         //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
         //console.log(docDefinition);
