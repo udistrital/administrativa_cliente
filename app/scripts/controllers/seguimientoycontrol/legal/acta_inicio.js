@@ -56,7 +56,9 @@ angular.module('contractualClienteApp')
       self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
       self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
       self.contrato_obj.FechaRegistro = wso_response.data.contrato.FechaRegistro;
-
+      /*
+      * Obtencion de datos del contratista
+      */
       agoraRequest.get('informacion_proveedor', $.param({
         query: "Id:" + wso_response.data.contrato.contratista
       })).then(function(ip_response) {
@@ -69,14 +71,11 @@ angular.module('contractualClienteApp')
     /*
     * Obtencion de datos de la poliza
     */
-    administrativaRequest.get('poliza',$.param({
-      query: "NumeroContrato:" + self.contrato_id
-    })).then(function(response) {
-      self.poliza_obj.id = response.data[0].Id;
-      self.poliza_obj.numero_poliza = response.data[0].NumeroPoliza;
-      self.poliza_obj.fecha_expedicion = response.data[0].FechaRegistro;
-      self.poliza_obj.fecha_aprobacion = response.data[0].FechaAprobacion;
-      $log.log(response.data);
+    administrativaWsoRequest.get('poliza_suscrito', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response) {
+      self.poliza_obj.numero_poliza = wso_response.data.poliza_contrato.numero_poliza;
+      self.poliza_obj.fecha_aprobacion = wso_response.data.poliza_contrato.fecha_aprobacion;
+      // self.poliza_obj.fecha_expedicion = response.data[0].FechaRegistro;
+      $log.log(wso_response.data);
     });
 
     self.gridOptions = {
@@ -254,9 +253,9 @@ angular.module('contractualClienteApp')
               {text: ' FECHA DE INICIO: ', bold: true}, self.format_date(self.fecha_inicio), '\n',         
               {text: ' FECHA DE TERMINACIÓN: ', bold: true}, self.format_date(self.fecha_fin), '\n',         
               {text: ' SUPERVISOR UNIVERSIDAD \n DISTRITAL FRANCISCO JOSE DE CALDAS: ', bold: true}, self.contrato_obj.supervisor, '\n',         
-              //{text: ' No. POLIZA: ', bold: true}, self.poliza_obj.numero_poliza, '\n',         
+              {text: ' No. POLIZA: ', bold: true}, self.poliza_obj.numero_poliza, '\n',         
               {text: ' FECHA DE EXPEDICIÓN DE PÓLIZA: ', bold: true}, self.format_date(self.poliza_obj.fecha_expedicion), '\n',         
-              {text: ' FECHA DE APROBACIÓN DE PÓLIZA: ', bold: true}, self.format_date(self.poliza_obj.fecha_aprobacion), '\n\n', 'En Bogotá a los '+self.fecha.dia_mes+' días del mes de '+self.fecha.mes+' del año '+self.fecha.anio+', se reunieron: '+self.contrato_obj.contratista_nombre+' quien ejerce como contratista No. '+self.contrato_obj.contratista_documento+' y '+self.contrato_obj.supervisor+' en calidad de Supervisor del Contrato por parte de la Universidad Distrital Francisco José de Caldas con el objeto de dejar constancia del inicio real y efectivo del contrato anteriormente citado, previo cumplimiento de los requisitos de legalización del contrato. En consecuencia, se procede a la iniciación del contrato a partir del día '+self.fecha_inicio_contrato.dia_mes+' del mes de '+self.fecha_inicio_contrato.mes+' del año '+self.fecha_inicio_contrato.anio+'.','\n\n','El supervisor puso en conocimiento del contratista lo siguiente: 1. Que para la firma de la presente Acta de Iniciación, el contratista ha presentado y reposa en la respectiva carpeta, toda la documentación exigida por la Universidad para estos casos. 2. Que para el desarrollo del contrato es indispensable mantener el plan individual de trabajo elaborado y cualquier modificación debe convenirse entre las partes. 3. Que en todo momento debe acatarse las instrucciones o exigencias que presente la supervisión en lo referente a los procesos y procedimientos de la dependencia.','\n\n','A partir de la firma de la presente Acta, el contratista se hace responsable del siguiente inventario:','\n\n',                    
+              {text: ' FECHA DE APROBACIÓN DE PÓLIZA: ', bold: true}, self.poliza_obj.fecha_aprobacion, '\n\n', 'En Bogotá a los '+self.fecha.dia_mes+' días del mes de '+self.fecha.mes+' del año '+self.fecha.anio+', se reunieron: '+self.contrato_obj.contratista_nombre+' quien ejerce como contratista No. '+self.contrato_obj.contratista_documento+' y '+self.contrato_obj.supervisor+' en calidad de Supervisor del Contrato por parte de la Universidad Distrital Francisco José de Caldas con el objeto de dejar constancia del inicio real y efectivo del contrato anteriormente citado, previo cumplimiento de los requisitos de legalización del contrato. En consecuencia, se procede a la iniciación del contrato a partir del día '+self.fecha_inicio_contrato.dia_mes+' del mes de '+self.fecha_inicio_contrato.mes+' del año '+self.fecha_inicio_contrato.anio+'.','\n\n','El supervisor puso en conocimiento del contratista lo siguiente: 1. Que para la firma de la presente Acta de Iniciación, el contratista ha presentado y reposa en la respectiva carpeta, toda la documentación exigida por la Universidad para estos casos. 2. Que para el desarrollo del contrato es indispensable mantener el plan individual de trabajo elaborado y cualquier modificación debe convenirse entre las partes. 3. Que en todo momento debe acatarse las instrucciones o exigencias que presente la supervisión en lo referente a los procesos y procedimientos de la dependencia.','\n\n','A partir de la firma de la presente Acta, el contratista se hace responsable del siguiente inventario:','\n\n',                    
             ]       
           },
           {         
