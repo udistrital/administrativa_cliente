@@ -233,9 +233,14 @@ var text_es = {
 
   //ALERTAS
   TITULO_ERROR:"Errores en el formulario",
+  TITULO_ADVERTENCIA:"Advertencia",
+  DESCRIPCION_ADVERTENCIA: "Primero debe seleccionar un tipo de novedad!",
   DESCRIPCION_ERROR:"Llenar los campos obligatorios en el formulario",
   TITULO_BUEN_TRABAJO:"¡Buen trabajo!",
   DESCRIPCION_INICIO:"Se registro exitosamente la novedad de 'Acta de inicio'<br>al contrato # ",
+  DESCRIPCION_ADICION:"Se registro exitosamente la novedad de 'Adición'<br>al contrato # ",
+  DESCRIPCION_PRORROGA:"Se registro exitosamente la novedad de 'Prorroga'<br>al contrato # ",
+  DESCRIPCION_ADICION_PRORROGA:"Se registro exitosamente la novedad de 'Adición y Prorroga'<br>al contrato # ",
   DESCRIPCION_INICIO_1:"El estado del presente contrato se actualizo a 'Ejecución'.",
   DESCRIPCION_INICIO_ERROR_FECHA:"La fecha fin debe ser mayor a la fecha inicio!",
   DESCRIPCION_CESION:"Se registro exitosamente la novedad de cesión al contrato # ",
@@ -470,10 +475,15 @@ var text_en = {
 
   //ALERTAS
   TITULO_ERROR:"There has been mistakes in the form",
+  TITULO_ADVERTENCIA:"Warning",
+  DESCRIPCION_ADVERTENCIA: "First you must select a type of novelty!",
   DESCRIPCION_ERROR:"Please fill all mandatory fields in the form",
   TITULO_BUEN_TRABAJO:"Good Job!",
   DESCRIPCION_INICIO:"It has been succesfully registered the novelity of 'Home Act'<br>for the contract # ",
   DESCRIPCION_INICIO_1:"The status of this contract was updated to 'Execution'.",
+  DESCRIPCION_ADICION:"It has been succesfully registered the novelity of 'Adition'<br>for the contract # ",
+  DESCRIPCION_PRORROGA:"It has been succesfully registered the novelity of 'Extension'<br>for the contract # ",
+  DESCRIPCION_ADICION_PRORROGA:"It has been succesfully registered the novelity of 'Adition and Extension'<br>for the contract # ",
   DESCRIPCION_INICIO_ERROR_FECHA:"The end date must be greater than the start date!",
   DESCRIPCION_CESION:"It has been succesfully registered the novelity of assignment for the contract # ",
   DESCRIPCION_SUSPENSION:"It has been succesfully registered the novelity of suspension for the contract # ",
