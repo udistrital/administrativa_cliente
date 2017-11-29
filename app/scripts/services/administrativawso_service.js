@@ -14,12 +14,8 @@ angular.module('administrativaWsoService',[])
     var path = "http://jbpm.udistritaloas.edu.co:8280/services/contratoSuscritoProxyService/";
     var cabecera = {
       headers: {
-	'Accept': 'application/json'
+	'Accept': 'Application/json'
       }
-    };
-
-    var post_header = {
-      "Content-Type": "Application/json"
     };
 
     // Public API here
@@ -31,7 +27,7 @@ angular.module('administrativaWsoService',[])
 	return $http.post(path + tabla, elemento, cabecera);
       },
       put: function (tabla, elemento) {
-	return $http.put(path + table , elemento);
+	return $http.put(path + tabla , elemento, cabecera);
       },
       delete: function (tabla, id) {
 	return $http.delete(path + tabla + id);

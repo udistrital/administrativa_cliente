@@ -24,10 +24,10 @@
               <p>{{'NO_REGISTRA' | translate}}</p>
             </div>
             <div class="col-md-6"><b>{{'SUPERVISOR' | translate}}</b></div>
-            <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.supervisor != null">
-              <p>{{sLactaReinicio.contrato_obj.supervisor}}</p>
+            <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.supervisor_nombre != null">
+              <p>{{sLactaReinicio.contrato_obj.supervisor_nombre}}</p>
             </div>
-            <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.supervisor == null">
+            <div class="col-md-6" ng-if="sLactaReinicio.contrato_obj.supervisor_nombre == null">
               <p>No registra</p>
             </div>
             <div class="col-md-6"><b>{{'OBJETO' | translate}}</b></div>
