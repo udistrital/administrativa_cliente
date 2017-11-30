@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaCesionCtrl', function ($translate, $location, $log, $scope, $routeParams, administrativaRequest, administrativaAmazonRequest, administrativaWsoRequest, agoraRequest, argoNosqlRequest) {
+.controller('SeguimientoycontrolLegalActaCesionCtrl', function ($translate, $location, $log, $scope, $routeParams, coreAmazonRequest, administrativaRequest, administrativaAmazonRequest, administrativaWsoRequest, agoraRequest, argoNosqlRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -45,22 +45,27 @@ angular.module('contractualClienteApp')
     self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
     self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
 
-    administrativaAmazonRequest.get('tipo_contrato', $.param({
-      query:"Id:"+wso_response.data.contrato.tipo_contrato
-    })).then(function(tc_response){
-      self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
-      administrativaAmazonRequest.get('informacion_proveedor', $.param({
-        query: "Id:" + wso_response.data.contrato.contratista
-      })).then(function(ip_response) {
-        self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
-        self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
-        console.log(self.contrato_obj);
+    administrativaAmazonRequest.get('ordenadores', $.param({
+      query:"IdOrdenador:" + wso_response.data.contrato.ordenador_gasto.id
+    })).then(function(ord_response){
+      self.contrato_obj.ordenador_resolucion = ord_response.data[0].InfoResolucion;
+      administrativaAmazonRequest.get('tipo_contrato', $.param({
+        query:"Id:"+wso_response.data.contrato.tipo_contrato
+      })).then(function(tc_response){
+        self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
+        administrativaAmazonRequest.get('informacion_proveedor', $.param({
+          query: "Id:" + wso_response.data.contrato.contratista
+        })).then(function(ip_response) {
+          self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+          self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+          console.log(self.contrato_obj);
+        });
       });
     });
   });
 
   administrativaAmazonRequest.get('informacion_persona_natural', $.param({
-    fields: "Id,PrimerNombre,SegundoNombre,PrimerApellido,SegundoApellido,FechaExpedicionDocumento,TipoDocumento",
+    fields: "Id,PrimerNombre,SegundoNombre,PrimerApellido,SegundoApellido,FechaExpedicionDocumento,TipoDocumento,IdCiudadExpedicionDocumento",
     limit: 0
   })).then(function(response) {
     self.persona_natural_items = response.data;
@@ -103,16 +108,21 @@ angular.module('contractualClienteApp')
       self.cesionario_obj.fecha_expedicion_documento = val.FechaExpedicionDocumento;
       self.cesionario_obj.tipo_documento = val.TipoDocumento.ValorParametro;
       self.cesionario_obj.tipo_persona = "Natural";
+      console.log(val);
+      coreAmazonRequest.get('ciudad','query=IdDepartamento:' + val.IdCiudadExpedicionDocumento).then(function(c_response){
+        self.cesionario_obj.ciudad = c_response.data[0].Nombre;
+        console.log(self.cesionario_obj);
+      });
     }
   }
 
   /**
-  * @ngdoc method
-  * @name generarActa
-  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
-  * @description
-  * funcion para la genracion del pdf del acta correspondiente a la novedad de cesion
-  * actualizacion de los datos del contrato y reporte de la novedad
+   * @ngdoc method
+   * @name generarActa
+   * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+   * @description
+   * funcion para la genracion del pdf del acta correspondiente a la novedad de cesion
+   * actualizacion de los datos del contrato y reporte de la novedad
   */
   self.generarActa = function(){
 
@@ -279,14 +289,14 @@ angular.module('contractualClienteApp')
 
             'Que mediante oficio No. ' + self.cesion_nov.numerooficio + ' de fecha ' + self.format_date(self.cesion_nov.fechaoficio) +
             ', el ' + self.contrato_obj.ordenador_gasto_rol + ' de la Universidad Distrital Francisco José de Caldas,' +
-            ' solicita a la Oficina Asesora Jurídica la elaboración del Acta de Cesión al contrato ' + self.contrato_obj.tipo_contrato + ' ' +
+            ' solicita a la Oficina Asesora Jurídica la elaboración del Acta de Cesión al ' + self.contrato_obj.tipo_contrato + ' ' +
             self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) + ' y como Ordenador del Gasto segun ' +
-            '___________________' + ', manifiesta que aprueba la cesión del '+ self.contrato_obj.tipo_contrato +' en su totalidad.' + '\n\n',
+            self.contrato_obj.ordenador_resolucion + ', manifiesta que aprueba la cesión del '+ self.contrato_obj.tipo_contrato +' en su totalidad.' + '\n\n',
 
             'Por lo anterior, se Cede el Contrato de Prestación de Servicios ' + self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) +
             ' a nombre de ' + self.contrato_obj.contratista_nombre + ', a ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
-            ' identificada con Cédula de Ciudadanía No. ' + self.cesionario_obj.identificacion + ' de ' + self.format_date(self.cesionario_obj.fecha_expedicion_documento) +
-            ' quien cumple con el perfil requerido de acuerdo con lo establecido en el objeto ' +
+            ' identificada con Cédula de Ciudadanía No. ' + self.cesionario_obj.identificacion + ' de ' + self.cesionario_obj.ciudad + ' de ' + 
+            self.format_date(self.cesionario_obj.fecha_expedicion_documento) + ' quien cumple con el perfil requerido de acuerdo con lo establecido en el objeto ' +
             'y continuará con las obligaciones derivadas del Contrato de Prestación de Servicios en mención a partir de '+ '_________________' +'\n\n'
           ]
         },

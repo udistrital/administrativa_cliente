@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($location, $log, $scope, $routeParams, $translate, administrativaAmazonRequest, argoNosqlRequest, agoraRequest, adminMidRequest, administrativaWsoRequest) {
+  .controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($location, $log, $scope, $routeParams, $translate, administrativaAmazonRequest, argoNosqlRequest, coreAmazonRequest, agoraRequest, adminMidRequest, administrativaWsoRequest) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -60,8 +60,10 @@ angular.module('contractualClienteApp')
           administrativaAmazonRequest.get('informacion_persona_natural', $.param({
             query: "Id:" + ip_response.data[0].NumDocumento
           })).then(function(ipn_response){
-            self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
-            console.log(self.contrato_obj)
+            coreAmazonRequest.get('ciudad','query=IdDepartamento:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
+              self.contrato_obj.contratista_ciudad_documento = c_response.data[0].Nombre;
+              console.log(self.contrato_obj)
+            });
           });
         });
       });
@@ -128,9 +130,9 @@ angular.module('contractualClienteApp')
             }
           }
           self.estados[0] = estado_temp_from;
-          //adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
-            //self.validacion = vc_response.data;
-            //if (self.validacion=="true") {
+          adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
+            self.validacion = vc_response.data;
+            if (self.validacion=="true") {
               argoNosqlRequest.post('novedad', self.suspension_nov).then(function (response_nosql) {
                 if (response_nosql.status == 200 || response.statusText == "Ok") {
 
@@ -157,8 +159,8 @@ angular.module('contractualClienteApp')
                   });
                 }
               });
-            //}
-          //});
+            }
+          });
         });
       }else{
         swal(

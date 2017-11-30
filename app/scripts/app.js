@@ -43,7 +43,8 @@ angular
     'adminMidService',
     'argoNosqlService',
     'administrativaWsoService',
-    'administrativaAmazonService'
+    'administrativaAmazonService',
+    'coreAmazonService'
   ])
     .run(function(amMoment) {
       amMoment.changeLocale('es');
