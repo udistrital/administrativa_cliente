@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalActaInicioCtrl', function ($log, $scope, $location, $routeParams, administrativaRequest, $translate, argoNosqlRequest, administrativaWsoRequest, agoraRequest)  {
+  .controller('SeguimientoycontrolLegalActaInicioCtrl', function ($log, $scope, $location, $routeParams, administrativaRequest, $translate, argoNosqlRequest, administrativaWsoRequest, agoraRequest, administrativaAmazonRequest)  {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -56,15 +56,15 @@ angular.module('contractualClienteApp')
       self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
       self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
       self.contrato_obj.FechaRegistro = wso_response.data.contrato.FechaRegistro;
+      
       /*
       * Obtencion de datos del contratista
       */
-      agoraRequest.get('informacion_proveedor', $.param({
+      administrativaAmazonRequest.get('informacion_proveedor', $.param({
         query: "Id:" + wso_response.data.contrato.contratista
       })).then(function(ip_response) {
         self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
         self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
-        console.log(ip_response.data);
       });
     });
 
@@ -76,6 +76,19 @@ angular.module('contractualClienteApp')
       self.poliza_obj.fecha_aprobacion = wso_response.data.poliza_contrato.fecha_aprobacion;
       // self.poliza_obj.fecha_expedicion = response.data[0].FechaRegistro;
       $log.log(wso_response.data);
+    });
+
+    // verificacion del estado del contrato
+    administrativaAmazonRequest.get('estado_contrato', $.param({
+      query: "NombreEstado:" + "En ejecucion"
+    })).then(function(ec_response){
+      console.log(ec_response);
+      var estado_temp_to = {
+        "NombreEstado": "ejecucion"
+      }
+      if(ec_response.data[0].NombreEstado == "En ejecucion"){
+        self.estados[1] = estado_temp_to;
+      }
     });
 
     self.gridOptions = {

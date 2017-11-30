@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-.controller('SeguimientoycontrolLegalActaAdicionProrrogaCtrl', function ($log, $scope, $routeParams, administrativaRequest,administrativaWsoRequest,$translate,argoNosqlRequest,agoraRequest) {
+.controller('SeguimientoycontrolLegalActaAdicionProrrogaCtrl', function ($log, $scope, $routeParams, administrativaRequest,administrativaWsoRequest,$translate,argoNosqlRequest,agoraRequest,administrativaAmazonRequest) {
   this.awesomeThings = [
     'HTML5 Boilerplate',
     'AngularJS',
@@ -39,12 +39,14 @@ angular.module('contractualClienteApp')
     
     $log.log(wso_response.data);
 
-    agoraRequest.get('informacion_proveedor', $.param({
+    /*
+    * Obtencion de datos del contratista
+    */
+    administrativaAmazonRequest.get('informacion_proveedor', $.param({
       query: "Id:" + wso_response.data.contrato.contratista
     })).then(function(ip_response) {
       self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
       self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
-      console.log(ip_response.data);
     });
   });
 
@@ -146,8 +148,10 @@ angular.module('contractualClienteApp')
     }
     if ($scope.prorroga) {
       $scope.estado_novedad = "Prorroga";
-      $scope.valor_adicion = "0";
       $scope.alert = 'DESCRIPCION_PRORROGA';
+      if ($scope.adicion != true && $scope.prorroga == true){
+        $scope.valor_adicion = "0";
+      }
     }if ($scope.adicion == true && $scope.prorroga == true){
       $scope.estado_novedad = "Adición y Prorroga";
       $scope.alert = 'DESCRIPCION_ADICION_PRORROGA';
@@ -169,7 +173,7 @@ angular.module('contractualClienteApp')
       argoNosqlRequest.post('novedad', self.data_acta_adicion_prorroga).then(function(request){
         console.log(request);
         if (request.status == 200) {
-          //self.formato_generacion_pdf();
+          self.formato_generacion_pdf();
 
           swal({
             title: $translate.instant('TITULO_BUEN_TRABAJO'),
@@ -188,10 +192,33 @@ angular.module('contractualClienteApp')
     }
   };
 
+  /**
+  * @ngdoc method
+  * @name format_date
+  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+  * @description
+  * funcion para el formateo de objetos tipo fecha a formato dd/mm/yyyy
+  * @param {date} param
+  */
+  self.format_date = function(param){
+    var date = new Date(param);
+    var dd = date.getDate();
+    var mm = date.getMonth()+1;
+    var yyyy = date.getFullYear();
+    if(dd<10){
+        dd='0'+dd;
+    }
+    if(mm<10){
+        mm='0'+mm;
+    }
+    var today = dd+'/'+mm+'/'+yyyy;
+    return today;
+  };
+
   self.formato_generacion_pdf = function(){
     var docDefinition = self.formato_pdf();
     console.log(docDefinition);
-    pdfMake.createPdf(docDefinition).download('acta_inicio.pdf');
+    pdfMake.createPdf(docDefinition).download('acta_adicion_prorroga.pdf');
     //$location.path('/seguimientoycontrol/legal');
     //argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
       //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
@@ -212,20 +239,20 @@ angular.module('contractualClienteApp')
             body:[             
               [               
                 {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},               
-                {text: 'ACTA DE INICIO DE CONTRATO DE CPS', alignment: 'center', fontSize: 12},               
-                {text: 'Código: GJ-PR-001-FR-004', fontSize: 9},               
+                {text: 'SOLICITUD DE ADICIÓN O PRORROGA', alignment: 'center', fontSize: 12},               
+                {text: 'Código: GJ-PR-002-FR-011', fontSize: 9},               
                 {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10, margin: [0, 30]}             
               ],             
               [ 
                 ' ',               
                 {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},               
-                {text: 'Versión: 04', fontSize: 9, margin: [0, 6]},               
+                {text: 'Versión: 02', fontSize: 9, margin: [0, 6]},               
                 ' '             
               ],             
               [ 
                 ' ',               
                 {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},               
-                {text: 'Fecha de Aprobación: 21/10/16', fontSize: 9},               
+                {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},               
                 ' '             
               ],           
             ]         
@@ -233,43 +260,35 @@ angular.module('contractualClienteApp')
         },       
         {         
           style:['general_font'],         
-          text:[           
-            {text: 'CONTRATO No: ', bold: true}, self.contrato_id, '\n',         
-            {text: ' OBJETO: ', bold: true}, self.contrato_obj.objeto, '\n',         
-            {text: ' VALOR: ', bold: true}, '$ ', self.contrato_obj.valor, '\n',         
-            {text: ' CONTRATISTA: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',         
-            {text: ' PLAZO: ', bold: true}, self.contrato_obj.plazo, ' meses', '\n',         
-            {text: ' FECHA DE INICIO: ', bold: true}, self.format_date(self.fecha_inicio), '\n',         
-            {text: ' FECHA DE TERMINACIÓN: ', bold: true}, self.format_date(self.fecha_fin), '\n',         
-            {text: ' SUPERVISOR UNIVERSIDAD \n DISTRITAL FRANCISCO JOSE DE CALDAS: ', bold: true}, self.contrato_obj.supervisor, '\n',         
-            {text: ' No. POLIZA: ', bold: true}, self.poliza_obj.numero_poliza, '\n',         
-            {text: ' FECHA DE EXPEDICIÓN DE PÓLIZA: ', bold: true}, self.format_date(self.poliza_obj.fecha_expedicion), '\n',         
-            {text: ' FECHA DE APROBACIÓN DE PÓLIZA: ', bold: true}, self.poliza_obj.fecha_aprobacion, '\n\n', 'En Bogotá a los '+self.fecha.dia_mes+' días del mes de '+self.fecha.mes+' del año '+self.fecha.anio+', se reunieron: '+self.contrato_obj.contratista_nombre+' quien ejerce como contratista No. '+self.contrato_obj.contratista_documento+' y '+self.contrato_obj.supervisor+' en calidad de Supervisor del Contrato por parte de la Universidad Distrital Francisco José de Caldas con el objeto de dejar constancia del inicio real y efectivo del contrato anteriormente citado, previo cumplimiento de los requisitos de legalización del contrato. En consecuencia, se procede a la iniciación del contrato a partir del día '+self.fecha_inicio_contrato.dia_mes+' del mes de '+self.fecha_inicio_contrato.mes+' del año '+self.fecha_inicio_contrato.anio+'.','\n\n','El supervisor puso en conocimiento del contratista lo siguiente: 1. Que para la firma de la presente Acta de Iniciación, el contratista ha presentado y reposa en la respectiva carpeta, toda la documentación exigida por la Universidad para estos casos. 2. Que para el desarrollo del contrato es indispensable mantener el plan individual de trabajo elaborado y cualquier modificación debe convenirse entre las partes. 3. Que en todo momento debe acatarse las instrucciones o exigencias que presente la supervisión en lo referente a los procesos y procedimientos de la dependencia.','\n\n','A partir de la firma de la presente Acta, el contratista se hace responsable del siguiente inventario:','\n\n',                    
+          text:[       
+            {text: ' ADICIÓN _______            PRORROGA _______', bold: true, alignment: 'center'}, '\n\n\n',
+            {text: ' PRESENTACIÓN ', bold: true, alignment: 'center'}, '\n\n\n',
+            {text: ' El presente informe tiene como objetivo solicitar a la Universidad Distrital la modificación al Contrato que se describe a continuación:'}, '\n\n\n',     
+            {text: ' a. Información General ', bold: true, alignment: 'center'}, '\n\n',
+            {text: ' TIPOD DE CONTRATO: ', bold: true}, self.contrato_obj.TipoContrato, '\n',         
+            {text: ' CONTRATO No: ', bold: true}, self.contrato_id, '\n', 
+            {text: ' OBJETO: ', bold: true}, self.contrato_obj.ObjetoContrato, '\n',
+            {text: ' LOCALIZACIÓN DEL PROYECTO: ', bold: true}, 'Universidad Distrital Francisco Jose de Caldas', '\n',   
+            {text: ' PLAZO INICIAL: ', bold: true}, self.contrato_obj.PlazoEjecucion, ' meses', '\n', 
+            {text: ' VIGENCIA: ', bold: true}, self.contrato_vigencia, '\n', 
+            {text: ' FECHA DE INICIACIÓN: ', bold: true}, self.format_date(self.fecha_inicio), '\n',       
+            {text: ' VALOR INICIAL DEL CONTRATO: ', bold: true}, '$ ', self.contrato_obj.ValorContrato, '\n',         
+            {text: ' CONTRATISTA: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',              
+            {text: ' SUPERVISOR: ', bold: true}, self.contrato_obj.supervisor, '\n\n',
+            {text: ' b. Prorrogas ', bold: true}, '\n\n',
           ]       
         },
         {         
-          style: ['bottom_space'], pageBreak: 'after',        
+          style: ['bottom_space'], pageBreak: 'after',    
           table:{
-            widths:['*', '*', '*', '*','*','*'],
+            widths:['*', '*'],
             body:[
               [
-                {text: 'INVENTARIO ASIGNADO', alignment: 'center', bold: true,fontSize: 9, colSpan: 6}, 
-                {}, 
-                {},
-                {},
-                {},
-                {}
+                {text: 'Contrato adicional No.', alignment: 'center',bold: true, fontSize: 12},
+                {text: 'Tiempo (mes/ días calendario)', alignment: 'center',bold: true, fontSize: 12}
               ],
-              [
-                {text: 'Tipo de Bien', alignment: 'center',bold: true, fontSize: 9},
-                {text: 'Placa', alignment: 'center',bold: true, fontSize: 9},
-                {text: 'Descripción', alignment: 'center',bold: true, fontSize: 9},
-                {text: 'Sede', alignment: 'center',bold: true, fontSize: 9},
-                {text: 'Dependencia', alignment: 'center',bold: true, fontSize: 9},
-                {text: 'Estado del bien', alignment: 'center',bold: true, fontSize: 9}
-              ],
-              [' ','','','','',' '],
-              [' ','','','','',' ']
+              [' ',' '],
+              [' ',' ']
             ]
           }
         },
@@ -301,8 +320,272 @@ angular.module('contractualClienteApp')
         },
         {         
           style:['general_font'],         
+          text:[      
+            {text: ' c. Suspensión y ampliaciones de suspensión ', bold: true}, '\n\n',
+          ]       
+        },
+        {         
+          style: ['bottom_space'],         
+          table:{
+            widths:['*', '*'],
+            body:[
+              [
+                {text: 'Contrato adicional No.', alignment: 'center',bold: true, fontSize: 12},
+                {text: 'Tiempo (mes/ días calendario)', alignment: 'center',bold: true, fontSize: 12}
+              ],
+              [' ',' '],
+              [' ',' ']
+            ]
+          }
+        },
+        {         
+          style:['general_font'],         
+          text:[      
+            {text: ' d. Adiciones ', bold: true}, '\n\n',
+          ]       
+        },
+        {         
+          style: ['bottom_space'],         
+          table:{
+            widths:['*', '*'],
+            body:[
+              [
+                {text: 'Contrato adicional No.', alignment: 'center',bold: true, fontSize: 12},
+                {text: 'Valor', alignment: 'center',bold: true, fontSize: 12}
+              ],
+              [' ',' '],
+              [' ',' ']
+            ]
+          }
+        },
+        {         
+          style:['general_font'],         
+          text:[      
+            {text: ' e. Condiciones actuales del contrato ', bold: true}, '\n\n',
+          ]       
+        },
+        {         
+          style: ['bottom_space'],         
+          table:{
+            widths:['*', '*'],
+            body:[
+              [
+                {text: 'Plazo actual del contrato', alignment: 'center', bold: true, fontSize: 12},
+                {text: self.contrato_obj.PlazoEjecucion, fontSize: 12}
+              ],
+              [
+                {text: 'Fecha de terminación actual del contrato', alignment: 'center', bold: true, fontSize: 12},
+                {text: self.contrato_obj.PlazoEjecucion,  fontSize: 12}
+              ],
+              [
+                {text: 'Valor actual del contrato', alignment: 'center', bold: true, fontSize: 12},
+                {text: self.contrato_obj.ValorContrato,  fontSize: 12}
+              ]
+            ]
+          }
+        },
+        {         
+          style:['general_font'],         
+          text:[      
+            {text: ' f. Estado físico ', bold: true}, '\n\n',
+            {text: ' Hasta el ________ ( ) día del mes ________ del año ________________ < escriba la fecha del ultimo corte >, el proyecto presentaba un avance físico ejecutado del _____ % contra un avance físico programado del ______ % '}, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'],       
+          text:[      
+            {text: ' g. Estado financiero ', bold: true}, '\n\n',
+            {text: ' Hasta el ________ ( ) día del mes ________ del año __________ el proyecto presentaba un valor ejecutado de $ <________________> que corresponde _____ % con respecto al valor actual del contrato. '}, '\n\n\n',
+          ]       
+        },
+        {         
+          style: ['bottom_space'], pageBreak: 'after',      
+          table:{
+            widths:['*', '*'],
+            body:[
+              [
+                {text: 'Plazo actual del contrato', alignment: 'center', bold: true, fontSize: 12},
+                {text: self.contrato_obj.PlazoEjecucion, fontSize: 12}
+              ],
+              [
+                {text: 'Fecha de terminación actual del contrato', alignment: 'center', bold: true, fontSize: 12},
+                {text: self.contrato_obj.PlazoEjecucion,  fontSize: 12}
+              ],
+              [
+                {text: 'Valor actual del contrato', alignment: 'center', bold: true, fontSize: 12},
+                {text: self.contrato_obj.ValorContrato,  fontSize: 12}
+              ]
+            ]
+          }
+        },
+        {         
+          style: ['bottom_space'],         
+          table: {           
+            widths:[65, '*', 120, 65],           
+            body:[             
+              [               
+                {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},               
+                {text: 'ACTA DE INICIO DE CONTRATO DE CPS', alignment: 'center', fontSize: 12},               
+                {text: 'Código: GJ-PR-001-FR-004', fontSize: 9},               
+                {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10, margin: [0, 30]}             
+              ],             
+              [ 
+                ' ',               
+                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},               
+                {text: 'Versión: 04', fontSize: 9, margin: [0, 6]},               
+                ' '             
+              ],             
+              [ 
+                ' ',               
+                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},               
+                {text: 'Fecha de Aprobación: 21/10/16', fontSize: 9},               
+                ' '             
+              ],           
+            ]         
+          }       
+        },
+        {         
+          style:['general_font'],        
+          text:[      
+            {text: ' h. Solicitud de adición ', bold: true}, '\n\n',
+            {text: ' 1. Causales de adición  ', bold: true}, '\n\n',
+            {text: ' El (Contratista o Consultor), a través de la comunicación radicada en la interventoría y a la Universidad Distrital bajo el No. ____________________________ de _______________________ solicita una adición para la terminación del contrato de ___________________ por _______________________________________________________________, argumentando, que (señalar los argumentos principales para la adición): '},
+            {text: ' _______________________________________________________________ ' }, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'],         
+          text:[      
+            {text: ' 2. Recursos a Suprimir correspondiente a las actividades que no se van a ejecutar ', bold: true}, '\n\n',
+            {text: ' En el Cuadro No. _____________________, en este cuadro se presentan los ítems y las cantidades originales del contrato a suprimir> se relacionan los recursos a suprimir que corresponden principalmente a: '},
+            {text: ' _______________________________________________________________ ' },
+            {text: ' El valor de los recursos a suprimir asciende a la suma de $ ______________________' }, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'],         
+          text:[      
+            {text: ' 3. Recursos para obras adicionales ', bold: true}, '\n\n',
+            {text: ' En el Cuadro No. ____________________<citar anexo, en este cuadro se presentan los items y las cantidades originales del contrato que se requieren adicionar > se relacionan los recursos adicionales que corresponden principalmente a: '},
+            {text: ' _______________________________________________________________ ' },
+            {text: ' <descripción de los items originales del contrato a adicionar> El valor los recursos adicionales asciende a la suma de $ ____________ ' }, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'], pageBreak: 'after',     
+          text:[      
+            {text: ' 4. Recursos para items no previstos ', bold: true}, '\n\n',
+            {text: ' En el Cuadro No _____________________ <citar anexo, en este cuadro se presentan los items y las cantidades de actividades no previstas del contrato para adicionar >se relacionan los recursos para actividades no previstas que corresponden principalmente a: '},
+            {text: ' _______________________________________________________________ ' },
+            {text: ' <descripción de los recursos para actividades no previstas > El valor de los recursos de items no previstos, asciende a la suma de $ __________________________________. ' }, '\n\n',
+            {text: ' Los items de actividades no previstas se soportan con el acta No.___________ (citar anexo ) de fijación de precios no previstos. ' }, '\n\n\n',
+          ]       
+        },
+        {         
+          style: ['bottom_space'],         
+          table: {           
+            widths:[65, '*', 120, 65],           
+            body:[             
+              [               
+                {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},               
+                {text: 'ACTA DE INICIO DE CONTRATO DE CPS', alignment: 'center', fontSize: 12},               
+                {text: 'Código: GJ-PR-001-FR-004', fontSize: 9},               
+                {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10, margin: [0, 30]}             
+              ],             
+              [ 
+                ' ',               
+                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},               
+                {text: 'Versión: 04', fontSize: 9, margin: [0, 6]},               
+                ' '             
+              ],             
+              [ 
+                ' ',               
+                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},               
+                {text: 'Fecha de Aprobación: 21/10/16', fontSize: 9},               
+                ' '             
+              ],           
+            ]         
+          }       
+        },
+        {         
+          style:['general_font'],         
+          text:[      
+            {text: ' 5. Valor de la adición ', bold: true}, '\n\n',
+            {text: ' 5.1  De los valores totales de los cuadros se obtiene el valor total de la adición '}, '\n\n',
+            {text: ' a. Valor recursos del contrato:$____________________ '}, '\n',
+            {text: ' b. Valor recursos suprimidos : $ ___________________________ '}, '\n',
+            {text: ' c. Valor recursos adicionales : $ _________________________ '}, '\n',
+            {text: ' d. valor recursos extras : $ ____________________________ '}, '\n',
+            {text: ' e. Valor adicion (c+d-b) : $ _______________________________ '}, '\n',
+            {text: ' f. Nuevo valor del contrato : $ ___________________________ '}, '\n\n',
+            {text: ' 5.2  Valor de la adición en S.M.M.L.V. '}, '\n\n',
+            {text: ' a. Valor contrato original: _________________________ '}, '\n',
+            {text: ' b. Valor adicion n°.....n (si aplica): ________________________ '}, '\n',
+            {text: ' c. Valor presente adicion : ________________________ '}, '\n',
+            {text: ' d. porcentaje presente adicion (c/a) : _______ % '}, '\n',
+            {text: ' e. porcentaje adicion acumulada (( b+c)/a) * %: _______ % '}, '\n\n',
+            {text: ' Nota: El S.M.M.L.V. para el cálculo de la presente adición es $ _____________<el S.M.M.L.V. a la fecha> '}, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'],       
+          text:[      
+            {text: ' i. Solicitud de prorroga ', bold: true}, '\n\n',
+            {text: ' El (______________________________ Contratista o Consultor), a través de la comunicación radicada en la interventoría y a la Universidad Distrital bajo el No. ______________________ <número del oficio radicado solicitando la ampliación de plazo del contrato> de ________________ < Fecha de radicación > solicita una ampliación de plazo para la terminación del contrato de ___________________ <tipo de contrato)> por ____________________<días en letras (días en número)> días calendario, argumentando, que (señalar los argumentos principales para la prorroga) '},
+            {text: ' _______________________________________________________________ ' }, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'], pageBreak: 'after',      
+          text:[      
+            {text: ' j. Concepto de la interventoría sobre la adición y/o prorroga ', bold: true}, '\n\n',
+            {text: ' La Interventoría considera que________________________<mencionar el valor de la adición y el tiempo> son aceptables para la terminación del contrato de __________________________, con lo cual, la nueva fecha de terminación del contrato será el día _________________ ( ) del mes de < _________________> del año <______________> y el nuevo valor del contrato es <____________________________________> '}, '\n\n\n',
+          ]       
+        },
+        {         
+          style: ['bottom_space'],         
+          table: {           
+            widths:[65, '*', 120, 65],           
+            body:[             
+              [               
+                {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},               
+                {text: 'ACTA DE INICIO DE CONTRATO DE CPS', alignment: 'center', fontSize: 12},               
+                {text: 'Código: GJ-PR-001-FR-004', fontSize: 9},               
+                {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10, margin: [0, 30]}             
+              ],             
+              [ 
+                ' ',               
+                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},               
+                {text: 'Versión: 04', fontSize: 9, margin: [0, 6]},               
+                ' '             
+              ],             
+              [ 
+                ' ',               
+                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},               
+                {text: 'Fecha de Aprobación: 21/10/16', fontSize: 9},               
+                ' '             
+              ],           
+            ]         
+          }       
+        },
+        {         
+          style:['general_font'],     
+          text:[      
+            {text: ' k. Solicitud de aprobación ', bold: true}, '\n\n',
+            {text: ' Teniendo en cuenta las razones anteriormente expuestas, la Interventoría solicita a la Universidad Distrital autorizar una Adición al Valor del contrato de _________________________, por la suma de$__________________ y una prórroga en plazo de ___________________ '}, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'],     
+          text:[      
+            {text: ' l. Obligaciones parafiscales ', bold: true}, '\n\n',
+            {text: ' El (Contratista o Consultor) anexa a esta solicitud de modificación del contrato de ___________________________, No._____ la certificación de pago de aportes de empleados del contrato, expedida por el revisor fiscal o representante legal del contratista, como también copia de la relación de pago de obligaciones parafiscales. '}, '\n\n\n',
+          ]       
+        },
+        {         
+          style:['general_font'],         
           text:[
-            {text: 'Para constancia de lo anterior, se firma la presente Acta bajo la responsabilidad expresa de los que intervienen en ella:'},'\n\n\n\n','_______________________','\n','Firma','\n',self.contrato_obj.supervisor,'\n','Supervisor','\n\n\n\n','________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','Contratista'
+            {text: 'Para constancia de lo anterior, se firma en original y tres (3) copias la presente acta bajo la responsabilidad expresa de los que intervienen en ella, a los _____ días del mes ________ del __________. '},'\n\n\n\n','_______________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','Contratista','\n\n\n\n','________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','Interventor','\n\n\n\n','________________','\n','Firma','\n',self.contrato_obj.supervisor,'\n','Supervisor'
           ]       
         }                
       ],
