@@ -40,7 +40,6 @@ angular.module('contractualClienteApp')
     });
 
     administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
-      console.log(wso_response.data);
       self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
       self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
       self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
@@ -48,49 +47,54 @@ angular.module('contractualClienteApp')
       self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
       self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
       self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
-      self.contrato_obj.tipo_contrato = wso_response.data.contrato.tipo_contrato;
       self.contrato_obj.plazo = wso_response.data.contrato.plazo_ejecucion;
       self.contrato_obj.supervisor_nombre = wso_response.data.contrato.supervisor.nombre;
       self.contrato_obj.supervisor_cedula = wso_response.data.contrato.supervisor.documento_identificacion;
 
-      administrativaAmazonRequest.get('informacion_proveedor', $.param({
-        query: "Id:" + wso_response.data.contrato.contratista
-      })).then(function(ip_response) {
-        self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
-        self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+      administrativaAmazonRequest.get('tipo_contrato', $.param({
+        query:"Id:"+wso_response.data.contrato.tipo_contrato
+      })).then(function(tc_response){
+        self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
 
-        administrativaAmazonRequest.get('informacion_persona_natural', $.param({
-          query: "Id:" + ip_response.data[0].NumDocumento
-        })).then(function(ipn_response){
-          self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
+        administrativaAmazonRequest.get('informacion_proveedor', $.param({
+          query: "Id:" + wso_response.data.contrato.contratista
+        })).then(function(ip_response) {
+          self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+          self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
 
-          argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
-            console.log(response)
-            for(var i = 0 ; i < response.data.length ; i++){
-              if(response.data[i].tiponovedad == "59d7965e867ee188e42d8c72"){
-                self.suspension_id_nov = response.data[i]._id;
-                self.f_suspension = new Date(response.data[i].fechasuspension);
-                self.f_reinicio = new Date(response.data[i].fechareinicio);
-                self.motivo_suspension = response.data[i].motivo;
+          administrativaAmazonRequest.get('informacion_persona_natural', $.param({
+            query: "Id:" + ip_response.data[0].NumDocumento
+          })).then(function(ipn_response){
+            self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
+
+            argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
+              console.log(response)
+              for(var i = 0 ; i < response.data.length ; i++){
+                if(response.data[i].tiponovedad == "59d7965e867ee188e42d8c72"){
+                  self.suspension_id_nov = response.data[i]._id;
+                  self.f_suspension = new Date(response.data[i].fechasuspension);
+                  self.f_reinicio = new Date(response.data[i].fechareinicio);
+                  self.motivo_suspension = response.data[i].motivo;
+                }
               }
-            }
-            console.log(self.contrato_obj);
+              console.log(self.contrato_obj);
+            });
           });
         });
       });
     });
 
-    /**
-     * @ngdoc method
-     * @name calculoTiempo
-     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaReinicioCtrl
-     * @description
-     * Funcion que observa el cambio de fecha de reinicio y calcula el periodo de suspension
-     * @param {date} f_reinicio
-     */
-    $scope.$watch('sLactaReinicio.f_reinicio', function(){
-      var dt1 = self.f_suspension;
-      var dt2 = self.f_reinicio;
+      /**
+       * @ngdoc method
+       * @name calculoTiempo
+       * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaReinicioCtrl
+       * @description
+       * Funcion que observa el cambio de fecha de reinicio y calcula el periodo de suspension
+       * @param {date} f_reinicio
+       */
+      $scope.$watch('sLactaReinicio.f_reinicio', function(){
+        var dt1 = self.f_suspension;
+        var dt2 = self.f_reinicio;
       var timeDiff = 0;
 
       if(dt2 != null){
@@ -279,13 +283,15 @@ angular.module('contractualClienteApp')
         ],
         styles: {
           top_space: {
+            fontSize: 11,
             marginTop: 30
           },
           bottom_space: {
+            fontSize: 11,
             marginBottom: 30
           },
           general_font:{
-            fontSize: 12,
+            fontSize: 11,
             alignment: 'justify'
           }
         },

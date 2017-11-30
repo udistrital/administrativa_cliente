@@ -56,7 +56,7 @@
                   <b>{{'PERIODO_SUSPENSION' | translate}} *:</b>
                 </p>
                 <md-input-container style="margin:0;">
-                  <input type="number" name="diff_dias" id="periodo" required ng-model="sLactaSuspension.diff_dias" ng-disabled="false" min="0">
+                  <input type="number" name="diff_dias" id="periodo" required ng-model="sLactaSuspension.diff_dias" ng-disabled="true" min="0">
                   <div ng-messages="formSuspension.diff_dias.$error">
                     <div ng-message="required">Este campo es requerido.</div>
                   </div>

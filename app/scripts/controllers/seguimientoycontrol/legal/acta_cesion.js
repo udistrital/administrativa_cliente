@@ -28,8 +28,14 @@ angular.module('contractualClienteApp')
   self.observaciones = "";
   self.n_solicitud = null;
 
+  /**
+  * @ngdoc method
+  * @name administrativaWsoRequest
+  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+  * @description
+  * Funcion para la carga de toda la informacion de un contrato especifico
+  */
   administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
-    console.log(wso_response.data);
     self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
     self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
     self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
@@ -37,14 +43,19 @@ angular.module('contractualClienteApp')
     self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
     self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
     self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
-    self.contrato_obj.tipo_contrato = wso_response.data.contrato.tipo_contrato;
     self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
 
-    administrativaAmazonRequest.get('informacion_proveedor', $.param({
-      query: "Id:" + wso_response.data.contrato.contratista
-    })).then(function(ip_response) {
-      self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
-      self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+    administrativaAmazonRequest.get('tipo_contrato', $.param({
+      query:"Id:"+wso_response.data.contrato.tipo_contrato
+    })).then(function(tc_response){
+      self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
+      administrativaAmazonRequest.get('informacion_proveedor', $.param({
+        query: "Id:" + wso_response.data.contrato.contratista
+      })).then(function(ip_response) {
+        self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+        self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+        console.log(self.contrato_obj);
+      });
     });
   });
 
@@ -56,14 +67,14 @@ angular.module('contractualClienteApp')
   });
 
   /**
-  * @ngdoc method
-  * @name cargar_persona_natural
-  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
-  * @description
-  * funcion para la carga de una persoan natural segun el parametro de entrada
-  * despliega en la interfaz la lista de personas naturales cuya cedula correspona
-  * @param {integer} id_persona
-  */
+   * @ngdoc method
+   * @name cargar_persona_natural
+   * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+   * @description
+   * funcion para la carga de una persoan natural segun el parametro de entrada
+   * despliega en la interfaz la lista de personas naturales cuya cedula correspona
+   * @param {integer} id_persona
+   */
   self.cargar_persona_natural = function(id_persona){
     self.persona_natural_grep = jQuery.grep(self.persona_natural_items, function(value, index) {
       var str_value = value.Id.toString();
@@ -75,14 +86,14 @@ angular.module('contractualClienteApp')
   }
 
   /**
-  * @ngdoc method
-  * @name persona_sel_change
-  * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
-  * @description
-  * funcion que despliega la informacion formateada de la persona natural seleccionada
-  * en el panel de cesionario
-  * @param {object} val
-  */
+   * @ngdoc method
+   * @name persona_sel_change
+   * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+   * @description
+   * funcion que despliega la informacion formateada de la persona natural seleccionada
+   * en el panel de cesionario
+   * @param {object} val
+   */
   self.persona_sel_change = function(val){
     if (val != null){
       self.cesionario_obj = {};
@@ -201,7 +212,7 @@ angular.module('contractualClienteApp')
     argoNosqlRequest.get('plantilladocumento','59d79414867ee188e42d8a59').then(function(response){
       var str_plantilla = response.data[0].plantilla;
       var docDefinition = JSON.parse(JSON.stringify(str_plantilla));
-      console.log(docDefinition);
+      //console.log(docDefinition);
       var output = self.get_plantilla();
       pdfMake.createPdf(output).download('acta_cesion.pdf');
       $location.path('/seguimientoycontrol/legal');
@@ -246,10 +257,10 @@ angular.module('contractualClienteApp')
             {text: 'Cedente: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',
             {text: 'Cesionario: ', bold: true}, self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos, '\n\n',
 
-            'La presente Acta hace parte del Contrato de Prestación de Servicios No. ' + self.contrato_id, ' del dia ' +
+            'La presente Acta hace parte del '+ self.contrato_obj.tipo_contrato +' No. ' + self.contrato_id, ' del dia ' +
             self.format_date(self.contrato_obj.fecha_registro) + ' cuyo objeto es: ' + self.contrato_obj.objeto,
             {text: ', de acuerdo con la propuesta de servicios que forma parte integral del presente Contrato', italics: true},
-            ' Firmada por ' + self.contrato_obj.ordenador_gasto_nombre + ' como LA UNIVERSIDAD y ' + self.contrato_obj.contratista_nombre,
+            ' Firmada por ' + self.contrato_obj.ordenador_gasto_nombre + 'quien actua '+ self.contrato_obj.ordenador_gasto_rol +' en representacion de la UNIVERSIDAD y ' + self.contrato_obj.contratista_nombre,
             ' Como EL CONTRATISTA.', '\n\n', ' De conformidad con el Contrato de prestación de servicios ', self.contrato_id,
             ' Del dia ', self.format_date(self.contrato_obj.fecha_registro), ' en la CLÁUSULA OCTAVA. CESIÓN DEL CONTRATO, establece: ',
             {text:'El Contratista no podrá ceder total ni parcialmente los derechos' + ' y obligaciones emanadas de esta Orden a persona natural o jurídica, sino con autorización previa y por escrito de la Universidad.', italics:true}, '\n\n',
@@ -259,39 +270,29 @@ angular.module('contractualClienteApp')
         {
           style:['general_font'],
           ol: [
-            'Que mediante escrito de fecha: '+ self.format_date(self.cesion_nov.fecharegistro) + ', el contratista ' +
-            self.contrato_obj.contratista_nombre + ' (Cedente),' + ' solicita a' + self.contrato_obj.ordenador_gasto_nombre +
-            ', quien cumple la función Ordenador de Gasto, la autorización para realizar la Cesión del Contrato de Prestación de Servicios ' +
+            'Que mediante escrito de fecha: '+ self.format_date(self.cesion_nov.fechaoficio) + ', el contratista ' +
+            self.contrato_obj.contratista_nombre + ' (Cedente),' + ' solicita a ' + self.contrato_obj.ordenador_gasto_nombre +
+            ', quien cumple la función Ordenador de Gasto, la autorización para realizar la Cesión del '+ self.contrato_obj.tipo_contrato +' ' +
             self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) + ' a partir del ' +
             self.format_date(self.cesion_nov.fechacesion) + ' a ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
             ' (cesionario) quien cumple con las calidades y competencias para desarrollar el objeto del Contrato.' + '\n\n',
 
             'Que mediante oficio No. ' + self.cesion_nov.numerooficio + ' de fecha ' + self.format_date(self.cesion_nov.fechaoficio) +
-            ', el ' + self.contrato_obj.ordenador_gasto_cargo + ' de la Universidad Distrital Francisco José de Caldas,' +
+            ', el ' + self.contrato_obj.ordenador_gasto_rol + ' de la Universidad Distrital Francisco José de Caldas,' +
             ' solicita a la Oficina Asesora Jurídica la elaboración del Acta de Cesión al contrato ' + self.contrato_obj.tipo_contrato + ' ' +
             self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) + ' y como Ordenador del Gasto segun ' +
-            '___________________' + ', manifiesta que aprueba la cesión del contrato '+ self.contrato_obj.tipo_contrato +' en su totalidad.' + '\n\n',
+            '___________________' + ', manifiesta que aprueba la cesión del '+ self.contrato_obj.tipo_contrato +' en su totalidad.' + '\n\n',
 
             'Por lo anterior, se Cede el Contrato de Prestación de Servicios ' + self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) +
             ' a nombre de ' + self.contrato_obj.contratista_nombre + ', a ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
             ' identificada con Cédula de Ciudadanía No. ' + self.cesionario_obj.identificacion + ' de ' + self.format_date(self.cesionario_obj.fecha_expedicion_documento) +
-            ' quien cumple con el perfil requerido de acuerdo con lo establecido en el objeto' +
-            'y continuará con las obligaciones derivadas del Contrato de Prestación de Servicios en mención a partir de ' +
-            self.format_date(self.cesion_nov.fechacesion) + '\n\n'
-          ]
-        },
-        {
-          style:['general_font'],
-          pageBreak: 'after',
-
-          text:[
-            {text:'Otras consideraciones: ', bold:true}, '\n\n' + self.cesion_nov.observacion + '\n\n' +
-            'La presente acta se perfecciona e inicia su ejecución con la firma de las partes y la aceptación del cesionario a partir de: ' +
-            self.format_date(self.cesion_nov.fechacesion) + '\n\n\n',
+            ' quien cumple con el perfil requerido de acuerdo con lo establecido en el objeto ' +
+            'y continuará con las obligaciones derivadas del Contrato de Prestación de Servicios en mención a partir de '+ '_________________' +'\n\n'
           ]
         },
         {
           style: ['bottom_space'],
+          pageBreak: 'before',
           table:{
             widths:[65, '*', 120, 65],
             body:[
@@ -319,6 +320,14 @@ angular.module('contractualClienteApp')
         {
           style:['general_font'],
           text:[
+            {text:'Otras consideraciones: ', bold:true}, '\n\n' + self.cesion_nov.observacion + '\n\n' +
+            'La presente acta se perfecciona e inicia su ejecución con la firma de las partes y la aceptación del cesionario a partir de: ' +
+            self.format_date(self.cesion_nov.fechacesion) + '\n\n\n'
+          ]
+        },
+        {
+          style:['general_font'],
+          text:[
             '\n\n_____________________________________ \n',
             'Ordenador de Gasto \n\n\n'
           ]
@@ -341,13 +350,15 @@ angular.module('contractualClienteApp')
       ],
       styles: {
         top_space: {
+          fontSize: 11,
           marginTop: 30
         },
         bottom_space: {
+          fontSize: 11,
           marginBottom: 30
         },
         general_font:{
-          fontSize: 12,
+          fontSize: 11,
           alignment: 'justify'
         }
       },

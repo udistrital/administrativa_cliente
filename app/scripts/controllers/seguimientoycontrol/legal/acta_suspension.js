@@ -46,19 +46,23 @@ angular.module('contractualClienteApp')
       self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
       self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
       self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
-      self.contrato_obj.tipo_contrato = wso_response.data.contrato.tipo_contrato;
 
-      agoraRequest.get('informacion_proveedor', $.param({
-        query: "Id:" + wso_response.data.contrato.contratista
-      })).then(function(ip_response) {
-        self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
-        self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+      administrativaAmazonRequest.get('tipo_contrato', $.param({
+        query: "Id:" + wso_response.data.contrato.tipo_contrato
+      })).then(function(tc_response){
+        self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
+        administrativaAmazonRequest.get('informacion_proveedor', $.param({
+          query: "Id:" + wso_response.data.contrato.contratista
+        })).then(function(ip_response) {
+          self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+          self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
 
-        agoraRequest.get('informacion_persona_natural', $.param({
-          query: "Id:" + ip_response.data[0].NumDocumento
-        })).then(function(ipn_response){
-          self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
-          console.log(self.contrato_obj)
+          administrativaAmazonRequest.get('informacion_persona_natural', $.param({
+            query: "Id:" + ip_response.data[0].NumDocumento
+          })).then(function(ipn_response){
+            self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
+            console.log(self.contrato_obj)
+          });
         });
       });
     });
@@ -124,9 +128,9 @@ angular.module('contractualClienteApp')
             }
           }
           self.estados[0] = estado_temp_from;
-          adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
-            self.validacion = vc_response.data;
-            if (self.validacion=="true") {
+          //adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
+            //self.validacion = vc_response.data;
+            //if (self.validacion=="true") {
               argoNosqlRequest.post('novedad', self.suspension_nov).then(function (response_nosql) {
                 if (response_nosql.status == 200 || response.statusText == "Ok") {
 
@@ -153,8 +157,8 @@ angular.module('contractualClienteApp')
                   });
                 }
               });
-            }
-          });
+            //}
+          //});
         });
       }else{
         swal(
@@ -256,10 +260,40 @@ angular.module('contractualClienteApp')
 
               'Por los motivos antes expuestos las partes acuerdan: ', '\n\n',
               'Suspender el Contrato ' + self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id +
-              ', durante el periodo de ' + self.suspension_nov.periodosuspension + '\n\n',
-
-              'La presente suspensión rige una vez perfeccionado por los intervinientes, para constancia, firman las partes en la fecha ' +
-              self.format_date(self.suspension_nov.fecharegistro) + '\n\n\n',
+              ', durante el periodo comprendido entre ' + self.format_date(self.suspension_nov.fechasuspension) + ' y ' + self.format_date(self.suspension_nov.fechareinicio) + '\n\n',
+            ]
+          },
+          {
+            style: ['bottom_space'],
+            pageBreak: 'before',
+            table:{
+              widths:[65, '*', 120, 65],
+              body:[
+                [
+                  {image: 'logo_ud', fit:[65, 120], rowSpan: 3, alignment: 'center', fontSize: 10},
+                  {text: 'ACTA DE CESIÓN', alignment: 'center', fontSize: 12},
+                  {text: 'Código: GJ-PR- 002-FR- 010', fontSize: 9},
+                  {image: 'logo_sigud', fit:[65, 120], rowSpan: 3, alignment: 'center', fontSize: 10}
+                ],
+                [
+                  ' ',
+                  {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},
+                  {text: 'Versión: 01', fontSize: 9, margin: [0, 6]},
+                  ' '
+                ],
+                [
+                  ' ',
+                  {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},
+                  {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},
+                  ' '
+                ]
+              ]
+            }
+          },
+          {
+            style:['general_font'],
+            text:[
+              'La presente suspensión rige una vez perfeccionado por los intervinientes, para constancia, firman las partes en la fecha ___________________' + '\n\n\n'
             ]
           },
           {
@@ -286,13 +320,15 @@ angular.module('contractualClienteApp')
         ],
         styles: {
           top_space: {
+            fontSize: 11,
             marginTop: 30
           },
           bottom_space: {
+            fontSize: 11,
             marginBottom: 30
           },
           general_font:{
-            fontSize: 12,
+            fontSize: 11,
             alignment: 'justify'
           }
         },
