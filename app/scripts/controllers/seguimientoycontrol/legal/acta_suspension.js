@@ -122,7 +122,10 @@ angular.module('contractualClienteApp')
         self.contrato_estado.Estado = self.estado_suspendido;
         self.contrato_estado.Usuario = "usuario_prueba";
 
-        //es el estado al que pasará
+        //primero obtenemos el estado actual - en esta caso es 'En ejecucion'
+        //Se guarda en la posicion [0] del arreglo estados el estado actual
+        //Luego se valida si es posible cambiar el estado - en este caso pasar de ejecucion a suspension - devuelve si es true o false
+        //si es true guardamos la novedad - y enviamos el cambio de estado del contrato
         administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function (response) {
           if(response.data.contratoEstado.estado.nombreEstado == "En ejecucion"){
             var estado_temp_from = {
