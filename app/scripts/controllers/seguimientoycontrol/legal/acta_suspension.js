@@ -276,7 +276,7 @@ angular.module('contractualClienteApp')
               body:[
                 [
                   {image: 'logo_ud', fit:[65, 120], rowSpan: 3, alignment: 'center', fontSize: 10},
-                  {text: 'ACTA DE CESIÓN', alignment: 'center', fontSize: 12},
+                  {text: 'ACTA DE SUSPENSIÓN', alignment: 'center', fontSize: 12},
                   {text: 'Código: GJ-PR- 002-FR- 010', fontSize: 9},
                   {image: 'logo_sigud', fit:[65, 120], rowSpan: 3, alignment: 'center', fontSize: 10}
                 ],

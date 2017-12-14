@@ -160,7 +160,6 @@ angular.module('contractualClienteApp')
             };
 
             administrativaWsoRequest.post('contratista', cambio_contratista).then(function(response){
-              console.log("PUT WSO: ", response);
               if(response.status == 200 || response.statusText == "OK"){
                 swal(
                   $translate.instant('TITULO_BUEN_TRABAJO'),
@@ -270,7 +269,7 @@ angular.module('contractualClienteApp')
             'La presente Acta hace parte del '+ self.contrato_obj.tipo_contrato +' No. ' + self.contrato_id, ' del dia ' +
             self.format_date(self.contrato_obj.fecha_registro) + ' cuyo objeto es: ' + self.contrato_obj.objeto,
             {text: ', de acuerdo con la propuesta de servicios que forma parte integral del presente Contrato', italics: true},
-            ' Firmada por ' + self.contrato_obj.ordenador_gasto_nombre + 'quien actua '+ self.contrato_obj.ordenador_gasto_rol +' en representacion de la UNIVERSIDAD y ' + self.contrato_obj.contratista_nombre,
+            ' Firmada por ' + self.contrato_obj.ordenador_gasto_nombre + ' quien actua '+ self.contrato_obj.ordenador_gasto_rol +' en representacion de la UNIVERSIDAD y ' + self.contrato_obj.contratista_nombre,
             ' Como EL CONTRATISTA.', '\n\n', ' De conformidad con el Contrato de prestación de servicios ', self.contrato_id,
             ' Del dia ', self.format_date(self.contrato_obj.fecha_registro), ' en la CLÁUSULA OCTAVA. CESIÓN DEL CONTRATO, establece: ',
             {text:'El Contratista no podrá ceder total ni parcialmente los derechos' + ' y obligaciones emanadas de esta Orden a persona natural o jurídica, sino con autorización previa y por escrito de la Universidad.', italics:true}, '\n\n',
@@ -282,10 +281,10 @@ angular.module('contractualClienteApp')
           ol: [
             'Que mediante escrito de fecha: '+ self.format_date(self.cesion_nov.fechaoficio) + ', el contratista ' +
             self.contrato_obj.contratista_nombre + ' (Cedente),' + ' solicita a ' + self.contrato_obj.ordenador_gasto_nombre +
-            ', quien cumple la función Ordenador de Gasto, la autorización para realizar la Cesión del '+ self.contrato_obj.tipo_contrato +' ' +
+            ', quien cumple la función Ordenador de Gasto, la autorización para realizar la Cesión del '+ self.contrato_obj.tipo_contrato +' No. ' +
             self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) + ' a partir del ' +
             self.format_date(self.cesion_nov.fechacesion) + ' a ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
-            ' (cesionario) quien cumple con las calidades y competencias para desarrollar el objeto del Contrato.' + '\n\n',
+            ' (Cesionario) quien cumple con las calidades y competencias para desarrollar el objeto del Contrato.' + '\n\n',
 
             'Que mediante oficio No. ' + self.cesion_nov.numerooficio + ' de fecha ' + self.format_date(self.cesion_nov.fechaoficio) +
             ', el ' + self.contrato_obj.ordenador_gasto_rol + ' de la Universidad Distrital Francisco José de Caldas,' +
@@ -331,8 +330,7 @@ angular.module('contractualClienteApp')
           style:['general_font'],
           text:[
             {text:'Otras consideraciones: ', bold:true}, '\n\n' + self.cesion_nov.observacion + '\n\n' +
-            'La presente acta se perfecciona e inicia su ejecución con la firma de las partes y la aceptación del cesionario a partir de: ' +
-            self.format_date(self.cesion_nov.fechacesion) + '\n\n\n'
+            'La presente acta se perfecciona e inicia su ejecución con la firma de las partes y la aceptación del cesionario a partir de: ___________________' + '\n\n\n'
           ]
         },
         {

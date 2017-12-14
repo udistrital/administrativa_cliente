@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalCtrl', function ($log,$location,$scope,administrativaRequest, administrativaAmazonRequest, $window,$translate, administrativaWsoRequest, agoraRequest) {
+  .controller('SeguimientoycontrolLegalCtrl', function ($log,$location,$scope,administrativaRequest, administrativaAmazonRequest, coreAmazonRequest, $window,$translate, administrativaWsoRequest, agoraRequest) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -21,17 +21,12 @@ angular.module('contractualClienteApp')
     self.contratos = [{}];
     self.vigencias = [];
     self.vigencia_seleccionada = self.vigencias[0];
+    self.contrato_obj = {};
+    self.estado_resultado_response = false;
 
-    // Obtiene las vigencias de contratos
-    administrativaRequest.get('vigencia_contrato', '').then(function(response) {
-      self.vigencias = response.data;
-    });
 
-    // Mantiene constante observacion las vigencias
-    $scope.$watch('sLegal.vigencia_seleccionada', function(){
-      self.get_contratos_vigencia(self.vigencia_seleccionada);
-    });
-    
+
+
     /**
     * @ngdoc method
     * @name get_contratos_vigencia
@@ -39,30 +34,51 @@ angular.module('contractualClienteApp')
     * @description
     * funcion para obtener la totalidad de los contratos por vigencia seleccionada
     */
-    self.get_contratos_vigencia = function(vigencia){
-      administrativaWsoRequest.get('contrato','').then(function(wso_response){
-        var wso_contratos = wso_response.data.contratos.contrato;
-        self.contratos = [];
-        $.each(wso_contratos, function(idx, contrato){
-          if(contrato){
-            if(contrato.vigencia == vigencia){
-              var contrato_temp = {};
+    self.buscar_contrato = function(){
+      administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
+        console.log(wso_response);
+        if(wso_response.data.contrato.numero_contrato_suscrito){
+          self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
+          self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
+          self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
+          self.contrato_obj.fecha_registro = wso_response.data.contrato.fecha_registro;
+          self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
+          self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
+          self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
+
+          administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
+            self.estado_contrato_obj.estado = ce_response.data.contratoEstado.estado.id; 
+            administrativaAmazonRequest.get('tipo_contrato', $.param({
+              query: "Id:" + wso_response.data.contrato.tipo_contrato
+            })).then(function(tc_response){
+              self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
               administrativaAmazonRequest.get('informacion_proveedor', $.param({
-                query: "Id:" + contrato.contratista
-              })).then(function(ip_response){
-                if(ip_response.data != null){
-                  contrato_temp.informacion_proveedor = ip_response.data[0];
-                  contrato_temp.contrato = contrato;
-                  self.contratos.push(contrato_temp);
-                }
+                query: "Id:" + wso_response.data.contrato.contratista
+              })).then(function(ip_response) {
+                self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+                self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+
+                administrativaAmazonRequest.get('informacion_persona_natural', $.param({
+                  query: "Id:" + ip_response.data[0].NumDocumento
+                })).then(function(ipn_response){
+                  coreAmazonRequest.get('ciudad','query=IdDepartamento:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
+                    self.contrato_obj.contratista_ciudad_documento = c_response.data[0].Nombre;
+                    self.estado_resultado_response = true;
+                  });
+                });
               });
-            }
-          }
-        });
-        self.gridOptions.data = self.contratos;
-        console.log(self.contratos);
+            });
+          });
+        }else{
+          swal(
+            $translate.instant('TITULO_ERROR'),
+            $translate.instant('DESCRIPCION_ERROR_LEGAL'),
+            'error'
+          );
+        }
       });
     }
+    
 
     /**
     * @ngdoc method

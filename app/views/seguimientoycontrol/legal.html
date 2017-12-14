@@ -1,33 +1,46 @@
 <br>
 <div class="panel panel-default">
-    <div class="panel panel-body">
-        <p>
-          <div class="centrado">
-            <center>  <h3><b>{{'SEGUIMIENTO_LEGAL' | translate}}</b></h3> </center>
-              <hr>
-              <center><div style="float:left;margin-bottom:2%;width:100%">
-                <div class="row" style="border:0px solid;">
-                  <div class="col-md-2 col-md-offset-3">
-                    <div>
-                      <label>{{'VIGENCIA_SELECCIONADA' | translate}}<b>{{sLegal.vigencia_seleccionada}}</b> </label>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <div class="col-md-3" align="right">
-                      <label>{{'SELECCIONE_UNA_VIGENCIA' | translate}}</label>
-                    </div>
-                    <div class="col-md-2">
-                      <md-select style="margin-top:0;" ng-model="sLegal.vigencia_seleccionada">
-                        <md-option ng-repeat="vigencia in sLegal.vigencias" ng-value="vigencia" ng-selected="$index === 0">
-                          {{vigencia}}
-                        </md-option>
-                      </md-select>
-                    </div>
-                  </div>
+  <div class="panel panel-body">
+    <p>
+    <div class="centrado">
+      <center>  <h3><b>{{'SEGUIMIENTO_LEGAL' | translate}}</b></h3> </center>
+      <hr>
+      <div style="float:left;margin-bottom:2%;width:100%">
+        <div class="row" style="border:0px solid;">
+          <div class="col-md-6">
+            <div class="form-group col-md-12">
+              <p style="margin:0; display:inline-block; width:40%;">
+              <b>{{'NUMERO_CONTRATO' | translate}} *:</b>
+              </p>
+              <md-input-container style="margin:0; display:inline-block; width:40%;">
+                <input type="number" id="contrato_id" name="contrato_id" required ng-model="sLegal.contrato_id" ng-disabled="false" min="0">
+                <div ng-messages="formLegal.contrato_id.$error">
+                  <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
                 </div>
-                <hr>
+              </md-input-container>
+            </div>
+            <div class="form-group col-md-12">
+              <p style="margin:0; display:inline-block; width:40%;">
+              <b>{{'VIGENCIA_CONTRATO' | translate}} *:</b>
+              </p>
+              <md-input-container style="margin:0; display:inline-block; width:40%;">
+                <input type="number" id="contrato_vigencia" name="contrato_vigencia" required ng-model="sLegal.contrato_vigencia" ng-disabled="false" min="0">
+                <div ng-messages="formLegal.contrato_vigencia.$error">
+                  <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                </div>
+              </md-input-container>
+            </div>
+            <div class="col-md-12 form-group">
+              <button class="btn btn-success dropdown-toggle" ng-click="sLegal.buscar_contrato()">
+                {{'BTN.BUSCAR' | translate}}
+                {{'NUMERO_CONTRATO' | translate}}
+              </button>
+              <hr>
+            </div>
+            <div class="row">
+              <div class="col-md-6" style="padding-left:25px;">
                 <label for="boton_novedad">{{'SELECCIONE_UNA_NOVEDAD' | translate}}</label>
-                <div class="btn-group" ng-if="sLegal.estado_resultado_response == 200">
+                <div class="btn-group" ng-if="sLegal.estado_resultado_response == true">
                   <button type="button" id="boton_novedad" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
                     {{'NOVEDADES' | translate}} <span class="caret"></span>
                   </button>
@@ -49,19 +62,52 @@
                   <button type="button" id="boton_novedad" class="btn btn-success dropdown-toggle" data-toggle="dropdown" ng-disabled="true">{{'NOVEDADES' | translate}}
                     <span class="caret"></span>
                   </button>
+                </div>       
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class=" panel panel-primary" >
+              <div class="panel-heading"><center><h4><b>{{'INFORMACION' | translate}}</b></h4></center></div>
+              <div class="panel-body" style="text-align:left;" ng-if="sLegal.estado_resultado_response == true">
+                <div class="col-md-6"><b>{{'NUMERO_CONTRATO' | translate}}</b></div>
+                <div class="col-md-6"><p>{{sLegal.contrato_obj.id}}</p></div>
+                <div class="col-md-6"><b>{{'CONTRATANTE' | translate}}</b></div>
+                <div class="col-md-6"><p>{{'UNIVERSIDAD_NOMBRE' | translate}}</p></div>
+                <div class="col-md-6"><b>{{'CONTRATISTA' | translate}}</b></div>
+                <div class="col-md-6" ng-if="sLegal.contrato_obj.contratista_documento != null">
+                  <p>
+                  {{sLegal.contrato_obj.contratista_nombre}} <br>
+                  <span style="color:#555; font-size:14px;">
+                    {{sLegal.contrato_obj.contratista_documento}}
+                  </span>
+                  </p>
                 </div>
-              </div></center>
+                <div class="col-md-6" ng-if="sLegal.contrato_obj.contratista_documento == null">
+                  <p>{{'NO_REGISTRA' | translate}}</p>
+                </div>
+                <div class="col-md-6"><b>{{'OBJETO' | translate}}</b></div>
+                <div class="col-md-6" ng-if="sLegal.contrato_obj.objeto != null">
+                  <p>{{sLegal.contrato_obj.objeto}}</p>
+                </div>
+                <div class="col-md-6" ng-if="sLegal.contrato_obj.objeto == null">
+                  <p>{{'NO_REGISTRA' | translate}}</p>
+                </div>
+                <div class="col-md-6"><b>{{'VALOR_CONTRATO' | translate}}</b></div>
+                <div class="col-md-6"><p>{{sLegal.contrato_obj.valor | currency}}</p></div>
+              </div>
+              <div class="panel-body" style="text-align:left;" ng-if="sLegal.estado_resultado_response == false">
+                <div class="col-md-12">
+                  <p>{{'SELECCIONAR_CONTRATO' | translate}}</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-
-              <table style="width:85.5%;" align="center">
-                <tr>
-                  <td>
-                    <div ui-grid="sLegal.gridOptions" ui-grid-selection class="myGrid"></div>
-                  </td>
-                </tr>
-                <tr>
-                </tr>
-              </table>
         </div>
+      </div>
     </div>
+  </div>
+</div>
 </div>

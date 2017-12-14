@@ -223,6 +223,7 @@ var text_es = {
   OTRAS_OBSERVACIONES:"Otras observaciones",
   INFORMACION_CESIONARIO:"INFORMACIÓN CESIONARIO",
   SELECCIONAR_CESIONARIO:"Seleccionar cesionario",
+  SELECCIONAR_CONTRATO:"Seleccionar contrato",
   ACTA_REINICIO:"ACTA DE REINICIO",
   FECHA_SUSPENSION:"Fecha suspension",
   FECHA_REINICIO:"Fecha reinicio",
@@ -236,6 +237,7 @@ var text_es = {
   TITULO_ADVERTENCIA:"Advertencia",
   DESCRIPCION_ADVERTENCIA: "Primero debe seleccionar un tipo de novedad!",
   DESCRIPCION_ERROR:"Llenar los campos obligatorios en el formulario",
+  DESCRIPCION_ERROR_LEGAL:"Contrato no encontrado",
   TITULO_BUEN_TRABAJO:"¡Buen trabajo!",
   DESCRIPCION_INICIO:"Se registro exitosamente la novedad de 'Acta de inicio'<br>al contrato # ",
   DESCRIPCION_ADICION:"Se registro exitosamente la novedad de 'Adición'<br>al contrato # ",
@@ -350,6 +352,7 @@ var text_en = {
 
   //SEGUIMIENTO LEGAL
   NOVEDADES: "Novelty",
+  DESCRIPCION_ERROR_LEGAL:"Imposible to find contract",
   SEGUIMIENTO_LEGAL: "Legal Tracking",
   SELECCIONE_UNA_NOVEDAD: "Please select the novelty",
   CREAR_NOVEDAD_ADICION_PRORROGA: "Create Novelty Addition and / or Extension",
@@ -359,6 +362,7 @@ var text_en = {
   CREAR_NOVEDAD_CESION: "Create Novelty Assignment",
   CREAR_NOVEDAD_LIQUIDACION: "Create Novelty Clearance",
   CREAR_NOVEDAD_TERMINACION_ANTICIPADA: "Create Novelty Early Termination",
+  SELECCIONAR_CONTRATO:"Choose contract",
   CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO: "Create Other Yes Modification",
   CREAR_NOVEDAD_OTRO_SI_ACLARATORIO: "Create Other Yes Clear",
 

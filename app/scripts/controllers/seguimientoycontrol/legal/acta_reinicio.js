@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalActaReinicioCtrl', function ($location, $log, $scope, $routeParams, $translate, adminMidRequest, administrativaWsoRequest, administrativaAmazonRequest, argoNosqlRequest, agoraRequest) {
+  .controller('SeguimientoycontrolLegalActaReinicioCtrl', function ($location, $log, $scope, $routeParams, $translate, adminMidRequest, administrativaWsoRequest, administrativaAmazonRequest, coreAmazonRequest, argoNosqlRequest, agoraRequest) {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -34,6 +34,7 @@ angular.module('contractualClienteApp')
       var estado_temp_to = {
         "NombreEstado": "ejecucion"
       }
+
       if(ec_response.data[0].NombreEstado == "En ejecucion"){
         self.estados[1] = estado_temp_to;
       }
@@ -67,18 +68,28 @@ angular.module('contractualClienteApp')
           })).then(function(ipn_response){
             self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
 
-            argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
-              console.log(response)
-              for(var i = 0 ; i < response.data.length ; i++){
-                if(response.data[i].tiponovedad == "59d7965e867ee188e42d8c72"){
-                  self.suspension_id_nov = response.data[i]._id;
-                  self.f_suspension = new Date(response.data[i].fechasuspension);
-                  self.f_reinicio = new Date(response.data[i].fechareinicio);
-                  self.motivo_suspension = response.data[i].motivo;
+            coreAmazonRequest.get('ciudad','query=IdDepartamento:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
+              self.contrato_obj.contratista_ciudad_documento = c_response.data[0].Nombre;
+              console.log(self.contrato_obj)
+
+              argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
+                console.log(response)
+                for(var i = 0 ; i < response.data.length ; i++){
+                  if(response.data[i].tiponovedad == "59d7965e867ee188e42d8c72"){
+                    self.suspension_id_nov = response.data[i]._id;
+                    self.f_suspension = new Date(response.data[i].fechasuspension);
+                    self.f_reinicio = new Date(response.data[i].fechareinicio);
+                    self.motivo_suspension = response.data[i].motivo;
+                  }
                 }
-              }
-              console.log(self.contrato_obj);
+                console.log(self.contrato_obj);
+              });
+
+
             });
+
+
+
           });
         });
       });
@@ -164,39 +175,45 @@ angular.module('contractualClienteApp')
         self.contrato_estado.Usuario = "up";
 
         administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
-          var estado_temp_from = {
-            "NombreEstado": "Suspendido"
+          if(ce_response.data.contratoEstado.estado.nombreEstado == "Suspendido"){
+            var estado_temp_from = {
+              "NombreEstado": "suspendido"
+            }
           }
-
+          
           self.estados[0] = estado_temp_from;
           console.log(self.estados)
-          //adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
-            argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response_nosql){
-              if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
-                var cambio_estado_contrato = {
-                  "_postcontrato_estado":{
-                    "estado":4,
-                    "usuario":"CC123456",
-                    "numero_contrato_suscrito":self.contrato_id,
-                    "vigencia":parseInt(self.contrato_vigencia)
-                  }
-                };
+          adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
+            self.validacion = vc_response.data;
+            if(self.validacion == "true"){
+              argoNosqlRequest.put('novedad', self.suspension_id_nov, self.reinicio_nov).then(function(response_nosql){
+                if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
+                  var cambio_estado_contrato = {
+                    "_postcontrato_estado":{
+                      "estado":4,
+                      "usuario":"CC123456",
+                      "numero_contrato_suscrito":self.contrato_id,
+                      "vigencia":parseInt(self.contrato_vigencia)
+                    }
+                  };
 
-                console.log(cambio_estado_contrato);
-                administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
-                  console.log("POST WSO: ", response);
-                  if (response.status == 200 || response.statusText == "OK") {
-                    swal(
-                      $translate.instant('TITULO_BUEN_TRABAJO'),
-                      $translate.instant('DESCRIPCION_REINICIO') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
-                      'success'
-                    );
-                    self.formato_generacion_pdf();
-                  }
-                });
-              }
-            });
-          //});
+                  console.log(cambio_estado_contrato);
+                  administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
+                    console.log("POST WSO: ", response);
+                    if (response.status == 200 || response.statusText == "OK") {
+                      swal(
+                        $translate.instant('TITULO_BUEN_TRABAJO'),
+                        $translate.instant('DESCRIPCION_REINICIO') + self.contrato_obj.id + ' ' + $translate.instant('ANIO') + ': ' + self.contrato_obj.vigencia,
+                        'success'
+                      );
+                      self.formato_generacion_pdf();
+                    }
+                  });
+                }
+              });
+
+            }
+          });
         });
       }else{
         swal(
@@ -226,7 +243,7 @@ angular.module('contractualClienteApp')
               body:[
                 [
                   {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},
-                  {text: 'ACTA DE SUSPENSIÓN', alignment: 'center', fontSize: 12},
+                  {text: 'ACTA DE REINICIO', alignment: 'center', fontSize: 12},
                   {text: 'Código: GJ-PR-002-FR-010', fontSize: 9},
                   {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10}
                 ],
