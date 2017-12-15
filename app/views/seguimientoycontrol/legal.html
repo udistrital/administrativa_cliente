@@ -46,7 +46,7 @@
                   </button>
 
                   <ul class="dropdown-menu" role="menu">
-                    <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga/{{sLegal.contrato_id}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_ADICION_PRORROGA' | translate}}</a></li>
+                    <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_adicion_prorroga/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_ADICION_PRORROGA' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_inicio/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_ACTA_INICIO' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_SUSPENSION' | translate}}</a></li>
                     <li ng-if="sLegal.estado_contrato_obj.estado == 2"><a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_REINICIO' | translate}}</a></li>
