@@ -109,7 +109,7 @@ angular.module('contractualClienteApp')
       self.cesionario_obj.tipo_documento = val.TipoDocumento.ValorParametro;
       self.cesionario_obj.tipo_persona = "Natural";
       console.log(val);
-      coreAmazonRequest.get('ciudad','query=IdDepartamento:' + val.IdCiudadExpedicionDocumento).then(function(c_response){
+      coreAmazonRequest.get('ciudad','query=Id:' + val.IdCiudadExpedicionDocumento).then(function(c_response){
         self.cesionario_obj.ciudad = c_response.data[0].Nombre;
         console.log(self.cesionario_obj);
       });
@@ -159,6 +159,7 @@ angular.module('contractualClienteApp')
               }
             };
 
+            console.log(cambio_contratista);
             administrativaWsoRequest.post('contratista', cambio_contratista).then(function(response){
               if(response.status == 200 || response.statusText == "OK"){
                 swal(

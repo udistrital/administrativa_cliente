@@ -61,7 +61,7 @@ angular.module('contractualClienteApp')
                 administrativaAmazonRequest.get('informacion_persona_natural', $.param({
                   query: "Id:" + ip_response.data[0].NumDocumento
                 })).then(function(ipn_response){
-                  coreAmazonRequest.get('ciudad','query=IdDepartamento:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
+                  coreAmazonRequest.get('ciudad','query=Id:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
                     self.contrato_obj.contratista_ciudad_documento = c_response.data[0].Nombre;
                     self.estado_resultado_response = true;
                   });
