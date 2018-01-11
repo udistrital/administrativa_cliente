@@ -9,11 +9,6 @@
  */
 angular.module('contractualClienteApp')
   .controller('SeguimientoycontrolLegalActaSuspensionCtrl', function ($location, $log, $scope, $routeParams, $translate, administrativaAmazonRequest, argoNosqlRequest, coreAmazonRequest, agoraRequest, adminMidRequest, administrativaWsoRequest) {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
 
     var self = this;
     self.f_registro = new Date();
@@ -46,7 +41,9 @@ angular.module('contractualClienteApp')
       self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
       self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
       self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
-
+      self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
+      self.contrato_obj.supervisor_documento = wso_response.data.contrato.supervisor.documento_identificacion;
+      console.log(wso_response.data.contrato);
       administrativaAmazonRequest.get('tipo_contrato', $.param({
         query: "Id:" + wso_response.data.contrato.tipo_contrato
       })).then(function(tc_response){
@@ -60,9 +57,17 @@ angular.module('contractualClienteApp')
           administrativaAmazonRequest.get('informacion_persona_natural', $.param({
             query: "Id:" + ip_response.data[0].NumDocumento
           })).then(function(ipn_response){
-            coreAmazonRequest.get('ciudad','query=IdDepartamento:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
+            coreAmazonRequest.get('ciudad','query=Id:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(c_response){
               self.contrato_obj.contratista_ciudad_documento = c_response.data[0].Nombre;
-              console.log(self.contrato_obj)
+
+              administrativaAmazonRequest.get('informacion_persona_natural', $.param({
+                query: "Id:" + self.contrato_obj.supervisor_documento              
+              })).then(function(ispn_response){
+                coreAmazonRequest.get('ciudad','query=Id:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(sc_response){
+                  self.contrato_obj.supervisor_ciudad_documento = sc_response.data[0].Nombre;
+                  console.log(self.contrato_obj)
+                });
+              });
             });
           });
         });
@@ -246,25 +251,25 @@ angular.module('contractualClienteApp')
           {
             style:['general_font'],
             text:[
-              {text:'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id, '\n',
+              {text:'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id +' de '+ self.contrato_vigencia, '\n',
               {text:'Contratante: ', bold: true}, 'Universidad Distrital Francísco José de Caldas', '\n',
               {text:'Contratista: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',
               {text:'Objeto: ', bold: true}, self.contrato_obj.objeto, '\n',
-              {text:'Valor: ', bold: true}, self.contrato_obj.valor, '\n',
+              {text:'Valor: ', bold: true}, '$'+parseInt(self.contrato_obj.valor).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'), '\n',
               {text:'Fecha de inicio: ', bold: true}, self.format_date(self.suspension_nov.fechasuspension), '\n',
               {text:'Periodo de suspensión: ', bold: true}, self.suspension_nov.periodosuspension, '\n',
               {text:'Fecha de reinicio: ', bold: true}, self.format_date(self.suspension_nov.fechareinicio), '\n\n',
 
-              'Entre los subscritos a saber, Universidad Distrital Francísco José de Caldas, y ' + self.contrato_obj.contratista_nombre +
-              ' identificado con cédula de ciudadanía No. ' + self.contrato_obj.contratista_documento + ' de ' + self.contrato_obj.contratista_ciudad_documento +
-              ' en su calidad de contratista, hemos determinado SUSPENDER el ' + self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id +
+              'Entre los subscritos a saber, '+ self.contrato_obj.supervisor +' identificado con cédula de ciudadanía No. '+ self.contrato_obj.supervisor_documento +' de '+ self.contrato_obj.supervisor_ciudad_documento +
+              ' y ' + self.contrato_obj.contratista_nombre + ' identificado con cédula de ciudadanía No. ' + self.contrato_obj.contratista_documento + ' de ' + self.contrato_obj.contratista_ciudad_documento +
+              ' en su calidad de contratista, hemos determinado SUSPENDER el ' + self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id +' de '+ self.contrato_vigencia +
               ' durante el periodo comprendido entre el día ' + self.format_date(self.f_inicio) + ' y el dia ' + self.format_date(self.f_reinicio) + '.\n\n',
 
               {text:'MOTIVO DE LA SUSPENSIÓN', bold:true}, '\n\n',
               self.suspension_nov.motivo, '\n\n',
 
               'Por los motivos antes expuestos las partes acuerdan: ', '\n\n',
-              'Suspender el Contrato ' + self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id +
+              'Suspender el Contrato ' + self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id + ' de '+ self.contrato_vigencia +
               ', durante el periodo comprendido entre ' + self.format_date(self.suspension_nov.fechasuspension) + ' y ' + self.format_date(self.suspension_nov.fechareinicio) + '\n\n',
             ]
           },

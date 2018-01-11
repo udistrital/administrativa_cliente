@@ -263,11 +263,11 @@ angular.module('contractualClienteApp')
           {
             style:['general_font'],
             text:[
-              {text:'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id, '\n',
+              {text:'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id +' de '+ self.contrato_vigencia, '\n',
               {text:'Contratante: ', bold: true}, 'Universidad Distrital Francísco José de Caldas', '\n',
               {text:'Contratista: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',
               {text:'Objeto: ', bold: true}, self.contrato_obj.objeto, '\n',
-              {text:'Valor: ', bold: true}, self.contrato_obj.valor, '\n',
+              {text:'Valor: ', bold: true}, '$'+parseInt(self.contrato_obj.valor).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'), '\n',
               {text:'Plazo: ', bold: true}, self.contrato_obj.plazo, '\n',
               {text:'Fecha de inicio: ', bold: true}, self.format_date(self.reinicio_nov.fechasuspension), '\n',
               {text:'Periodo de suspensión: ', bold: true}, self.reinicio_nov.periodosuspension, '\n',
@@ -276,7 +276,7 @@ angular.module('contractualClienteApp')
               'Entre los suscritos a saber ' + self.contrato_obj.supervisor_nombre + ' identificado con la cédula de ciudadanía '+ 
               self.contrato_obj.supervisor_cedula + ' en su calidad de interventor y/o supervisor y ' + self.contrato_obj.contratista_nombre + 
               ' identificado con la cédula de ciudadanía '+ self.contrato_obj.contratista_documento + ' de ' + self.contrato_obj.contratista_ciudad_documento +
-              ' en su calidad de contratista, se ha determinado REINICIAR el contrato '+ self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id +
+              ' en su calidad de contratista, se ha determinado REINICIAR el contrato '+ self.contrato_obj.tipo_contrato + ' No. ' + self.contrato_id + ' de ' + self.contrato_vigencia +
               ' suspendido durante el periodo comprendido entre el dia ' + self.format_date(self.reinicio_nov.fechasuspension) + ' y ' + self.format_date(self.reinicio_nov.fechareinicio), '\n\n',
 
               'Para constancia, firman las partes a los _____ dias del mes de ______________ del año ________', '\n\n\n',

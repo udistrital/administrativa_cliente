@@ -46,7 +46,7 @@
               <div class="col-md-6">
                 <label>
                   {{'NUMERO_SOLICITUD' | translate}}
-                </label>
+                </label> <br>
                 <md-input-container style="margin:0;">
                   <input type="number" id="n_solicitud" name="n_solicitud" required ng-model="sLactaReinicio.n_solicitud" ng-disabled="false" min="0">
                   <div ng-messages="formReinicio.n_solicitud.$error">
@@ -56,7 +56,7 @@
               </div>
 
               <div class="col-md-6">
-                <label for="perido">{{'PERIODO_SUSPENSION' | translate}}</label>
+                <label for="perido">{{'PERIODO_SUSPENSION' | translate}}</label><br>
                 <md-input-container style="margin:0;">
                   <input type="number" name="diff_dias" ng-model="sLactaReinicio.diff_dias" required id="periodo">
                   <div ng-messages="formReinicio.diff_dias.$error">

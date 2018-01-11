@@ -9,11 +9,6 @@
  */
 angular.module('contractualClienteApp')
 .controller('SeguimientoycontrolLegalActaCesionCtrl', function ($translate, $location, $log, $scope, $routeParams, coreAmazonRequest, administrativaRequest, administrativaAmazonRequest, administrativaWsoRequest, agoraRequest, argoNosqlRequest) {
-  this.awesomeThings = [
-    'HTML5 Boilerplate',
-    'AngularJS',
-    'Karma'
-  ];
 
   var self = this;
 
@@ -259,8 +254,7 @@ angular.module('contractualClienteApp')
         {
           style:['general_font'],
           text:[
-            {text: 'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato,
-            {text: ' No: ', bold: true}, self.contrato_id, '\n',
+            {text: 'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id +' de '+ self.contrato_vigencia, '\n',
             {text: 'Fecha de suscripcion: ', bold: true},
             {text: self.format_date(self.contrato_obj.fecha_registro)}, '\n',
             {text: 'Contratante: ', bold: true}, 'Universidad Distrital Francísco José de Caldas', '\n',
