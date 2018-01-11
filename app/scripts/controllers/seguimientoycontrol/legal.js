@@ -48,6 +48,13 @@ angular.module('contractualClienteApp')
 
           administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
             self.estado_contrato_obj.estado = ce_response.data.contratoEstado.estado.id; 
+            console.log(self.estado_contrato_obj.estado);
+            if (self.estado_contrato_obj.estado == 7) {
+              swal('Contrato Cancelado!');
+            }
+            if (self.estado_contrato_obj.estado == 6) {
+              swal('Contrato Finalizado!');
+            }
             administrativaAmazonRequest.get('tipo_contrato', $.param({
               query: "Id:" + wso_response.data.contrato.tipo_contrato
             })).then(function(tc_response){
@@ -70,6 +77,7 @@ angular.module('contractualClienteApp')
             });
           });
         }else{
+          self.estado_resultado_response = false;
           swal(
             $translate.instant('TITULO_ERROR'),
             $translate.instant('DESCRIPCION_ERROR_LEGAL'),

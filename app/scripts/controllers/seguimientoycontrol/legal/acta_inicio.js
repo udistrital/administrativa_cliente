@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('SeguimientoycontrolLegalActaInicioCtrl', function ($log, $scope, $location, $routeParams, administrativaRequest, $translate, argoNosqlRequest, administrativaWsoRequest, agoraRequest, administrativaAmazonRequest)  {
+  .controller('SeguimientoycontrolLegalActaInicioCtrl', function ($log, $scope, $location, $routeParams, administrativaRequest, $translate, argoNosqlRequest, administrativaWsoRequest, agoraRequest, administrativaAmazonRequest, adminMidRequest)  {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
@@ -56,7 +56,22 @@ angular.module('contractualClienteApp')
       self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
       self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
       self.contrato_obj.FechaRegistro = wso_response.data.contrato.FechaRegistro;
-      
+
+      self.estados= [];
+
+      // Obtiene el estado al cual se quiere pasar el contrato
+      administrativaAmazonRequest.get('estado_contrato', $.param({
+        query: "NombreEstado:" + "En ejecucion"
+      })).then(function(ec_response){
+        var estado_temp_to = {
+          "NombreEstado": "ejecucion"
+        }
+
+        if(ec_response.data[0].NombreEstado == "En ejecucion"){
+          self.estados[1] = estado_temp_to;
+        }
+      });
+
       /*
       * Obtencion de datos del contratista
       */
@@ -65,6 +80,16 @@ angular.module('contractualClienteApp')
       })).then(function(ip_response) {
         self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
         self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+      });
+
+      /*
+      * Obtencion tipo de contrato
+      */
+      administrativaAmazonRequest.get('tipo_contrato', $.param({
+        query:"Id:"+wso_response.data.contrato.tipo_contrato
+      })).then(function(tc_response){
+        self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
+        console.log("Tipo Contrato --> " + self.contrato_obj.tipo_contrato);
       });
     });
 
@@ -76,19 +101,6 @@ angular.module('contractualClienteApp')
       self.poliza_obj.fecha_aprobacion = wso_response.data.poliza_contrato.fecha_aprobacion;
       // self.poliza_obj.fecha_expedicion = response.data[0].FechaRegistro;
       $log.log(wso_response.data);
-    });
-
-    // verificacion del estado del contrato
-    administrativaAmazonRequest.get('estado_contrato', $.param({
-      query: "NombreEstado:" + "En ejecucion"
-    })).then(function(ec_response){
-      console.log(ec_response);
-      var estado_temp_to = {
-        "NombreEstado": "ejecucion"
-      }
-      if(ec_response.data[0].NombreEstado == "En ejecucion"){
-        self.estados[1] = estado_temp_to;
-      }
     });
 
     self.gridOptions = {
@@ -116,6 +128,15 @@ angular.module('contractualClienteApp')
                             ];
 
     self.generarActa = function(){
+
+      //CONDICIONALES PARA CUANDO NO TIENE DATOS DE POLIZA
+      if (self.poliza_obj.numero_poliza == undefined) {
+        self.poliza_obj.numero_poliza = "n/a";
+      }
+      if (self.poliza_obj.fecha_aprobacion == undefined) {
+        self.poliza_obj.fecha_aprobacion = "n/a";
+      }
+      
       self.actualizar_fecha_inicio_seleccionada();
       if (self.fecha_inicio > self.fecha_fin) {
         swal(
@@ -144,25 +165,69 @@ angular.module('contractualClienteApp')
                                   Usuario: "prueba"
                                 }
         // alert(JSON.stringify(self.contrato_estado));
-        argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(request){
-          console.log(request);
-          if (request.status == 200) {
-            self.formato_generacion_pdf();
-            swal({
-              title: $translate.instant('TITULO_BUEN_TRABAJO'),
-              type: 'success',
-              html: $translate.instant('DESCRIPCION_INICIO') + self.contrato_obj.id + $translate.instant('ANIO') + self.contrato_obj.VigenciaContrato+'.<br><br>' + $translate.instant('DESCRIPCION_INICIO_1'),
-              showCloseButton: false,
-              showCancelButton: false,
-              confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
-              allowOutsideClick: false
-            }).then(function () {
-              window.location.href = "#/seguimientoycontrol/legal";
-            });
+
+
+        //primero obtenemos el estado actual - en esta caso es 'En ejecucion'
+        //Se guarda en la posicion [0] del arreglo estados el estado actual
+        //Luego se valida si es posible cambiar el estado - en este caso pasar de ejecucion a suspension - devuelve si es true o false
+        //si es true guardamos la novedad - y enviamos el cambio de estado del contrato
+        administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
+          if(ce_response.data.contratoEstado.estado.nombreEstado == "Suscrito"){
+            console.log("Estado actual --> " + ce_response.data.contratoEstado.estado.nombreEstado);
+            var estado_temp_from = {
+              "NombreEstado": "suscrito"
+            }
           }
+          
+          administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
+            if(ce_response.data.contratoEstado.estado.nombreEstado == "Suscrito"){
+              var estado_temp_from = {
+                "NombreEstado": "suscrito"
+              }
+            }
+            
+            self.estados[0] = estado_temp_from;
+            console.log(self.estados)
+            adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
+              self.validacion = vc_response.data;
+              console.log("validacion --> " + self.validacion);
+              if(self.validacion == "true"){
+                argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(response_nosql){
+                  if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
+                    var cambio_estado_contrato = {
+                      "_postcontrato_estado":{
+                        "estado":4,
+                        "usuario":"CC123456",
+                        "numero_contrato_suscrito":self.contrato_id,
+                        "vigencia":parseInt(self.contrato_vigencia)
+                      }
+                    };
+
+                    console.log(cambio_estado_contrato);
+                    administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
+                      console.log("POST WSO: ", response);
+                      if (response.status == 200 || response.statusText == "OK") {
+                        self.formato_generacion_pdf();
+                        swal({
+                          title: $translate.instant('TITULO_BUEN_TRABAJO'),
+                          type: 'success',
+                          html: $translate.instant('DESCRIPCION_INICIO') + self.contrato_obj.id + $translate.instant('ANIO') + self.contrato_obj.VigenciaContrato+'.<br><br>' + $translate.instant('DESCRIPCION_INICIO_1'),
+                          showCloseButton: false,
+                          showCancelButton: false,
+                          confirmButtonText: '<i class="fa fa-thumbs-up"></i> Aceptar',
+                          allowOutsideClick: false
+                        }).then(function () {
+                          window.location.href = "#/seguimientoycontrol/legal";
+                        });
+                      }
+                    });
+                  }
+                });
+
+              }
+            });
+          });
         });
-
-
 
         // argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(request){
         //   // console.log(request);
@@ -258,7 +323,8 @@ angular.module('contractualClienteApp')
           {         
             style:['general_font'],         
             text:[           
-              {text: 'CONTRATO No: ', bold: true}, self.contrato_id, '\n',         
+              {text: ' CONTRATO No: ', bold: true}, self.contrato_id + ' - ' + self.contrato_vigencia, '\n', 
+              {text: ' TIPO DE CONTRATO: ', bold: true}, self.contrato_obj.tipo_contrato, '\n',         
               {text: ' OBJETO: ', bold: true}, self.contrato_obj.objeto, '\n',         
               {text: ' VALOR: ', bold: true}, '$ ', self.contrato_obj.valor, '\n',         
               {text: ' CONTRATISTA: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',         
