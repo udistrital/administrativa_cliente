@@ -1,7 +1,7 @@
 <br>
 <div class="panel panel-default">
   <div><center><h3 class="titulo-centrado">{{'ACTA_ADICION_PRORROGA' | translate}}</h3></center></div>
-  <form name="formadipro" id="formulario" ng-submit="sLactaAdicionProrroga.generarActa()" method="post">
+  <form name="formadipro" id="formulario" ng-submit="sLactaAdicionProrroga.formato_generacion_pdf()" method="post">
     <div class="panel-body">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-1"></div>
@@ -11,7 +11,7 @@
             <div class="panel-body">
               <div class="row">
                 <div class="col-md-6"><b>{{'TIPO_CONTRATO' | translate}}</b></div>
-                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.TipoContrato}}</p></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.tipo_contrato}}</p></div>
                 <div class="col-md-6"><b>{{'NUMERO_CONTRATO' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.id}}</p></div>
                 <div class="col-md-6"><b>{{'OBJETO' | translate}}</b></div>
@@ -25,7 +25,7 @@
                 <div class="col-md-6"><b>{{'SUPERVISOR' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.supervisor}}</p></div>
                 <div class="col-md-6"><b>{{'FECHA_INICIACION' | translate}}</b></div>
-                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.FechaRegistro | date:"dd/MM/yyyy"}}</p></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.FechaRegistro | date : format : timezone}}</p></div>
               </div>
             </div>
           </div>

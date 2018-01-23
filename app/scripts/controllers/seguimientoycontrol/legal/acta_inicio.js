@@ -326,7 +326,7 @@ angular.module('contractualClienteApp')
               {text: ' CONTRATO No: ', bold: true}, self.contrato_id + ' - ' + self.contrato_vigencia, '\n', 
               {text: ' TIPO DE CONTRATO: ', bold: true}, self.contrato_obj.tipo_contrato, '\n',         
               {text: ' OBJETO: ', bold: true}, self.contrato_obj.objeto, '\n',         
-              {text: ' VALOR: ', bold: true}, '$ ', self.contrato_obj.valor, '\n',         
+              {text: ' VALOR: ', bold: true}, '$ ', numberFormat(self.contrato_obj.valor), '\n',         
               {text: ' CONTRATISTA: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',         
               {text: ' PLAZO: ', bold: true}, self.contrato_obj.plazo, ' meses', '\n',         
               {text: ' FECHA DE INICIO: ', bold: true}, self.format_date(self.fecha_inicio), '\n',         
@@ -414,6 +414,51 @@ angular.module('contractualClienteApp')
         }   
       }
     }
+
+    /* =========================================================
+    * FUNCION QUE DEVUELVE UN NUMERO SEPARANDO LOS SEPARADORES DE MILES
+    * PUEDE RECIBIR VALORES NEGATIVOS Y CON DECIMALES
+    * ========================================================== */
+    function numberFormat(numero){
+      // Variable que contendra el resultado final
+      var resultado = "";
+      var nuevoNumero = 0;
+
+      // Si el numero empieza por el valor "-" (numero negativo)
+      if(numero[0]=="-")
+      {
+        // Cogemos el numero eliminando las posibles comas que tenga, y sin
+        // el signo negativo
+        nuevoNumero=numero.replace(/\,/g,'').substring(1);
+      }else{
+        // Cogemos el numero eliminando las posibles comas que tenga
+        nuevoNumero=numero.replace(/\,/g,'');
+      }
+
+      // Si tiene decimales, se los quitamos al numero
+      if(numero.indexOf(".")>=0)
+        nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+
+      // Ponemos un punto cada 3 caracteres
+      for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+
+      // Si tiene decimales, se lo añadimos al numero una vez forateado con 
+      // los separadores de miles
+      if(numero.indexOf(".")>=0)
+        resultado+=numero.substring(numero.indexOf("."));
+
+      if(numero[0]=="-")
+      {
+        // Devolvemos el valor añadiendo al inicio el signo negativo
+        return "-"+resultado;
+      }else{
+        return resultado;
+      }
+    }
+
+    // document.write(""+numberFormat("123456789.12"));
+    // document.write(""+numberFormat("-1100000.23"));
 
     /**
     * @ngdoc method
