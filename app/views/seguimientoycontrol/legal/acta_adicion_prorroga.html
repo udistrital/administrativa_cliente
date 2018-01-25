@@ -17,7 +17,7 @@
                 <div class="col-md-6"><b>{{'OBJETO' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.ObjetoContrato}}</p></div>
                 <div class="col-md-6"><b>{{'VALOR_TOTAL_CONTRATO' | translate}}</b></div>
-                <div class="col-md-6"><p>$ {{sLactaAdicionProrroga.contrato_obj.ValorContrato}}</p></div>
+                <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.ValorContrato | currency}}</p></div>
                 <div class="col-md-6"><b>{{'DATOS_CONTRATISTA' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaAdicionProrroga.contrato_obj.contratista_nombre}}</p></div>
                 <div class="col-md-6"><b>{{'PLAZO_INICIAL_MESES' | translate}}</b></div>
@@ -103,11 +103,11 @@
                 <div class="col-xs-12 col-md-12" ng-if="valor_adicion != undefined">
                   <div class="row">
                     <div class="col-xs-12 col-md-6">
-                      <span><b>Valor Adición en Letras</b></span><br><br>
+                      <span><b>{{VALOR_ADICION}}</b></span>
                       <span>{{valor_adicion_letras}}</span>
                     </div>
                     <div class="col-xs-12 col-md-6">
-                      <span><b>Nuevo Valor en Letras</b></span><br><br>
+                      <span><b>{{NUEVO_VALOR_ADICION}}</b></span>
                       <span>{{nuevo_valor_contrato_letras}}</span>
                     </div>
                   </div>
@@ -133,11 +133,9 @@
                   <label>{{'FECHA_PRORROGA' | translate}}</label>
                   <md-datepicker ng-model="fecha_prorroga" md-min-date="sLactaAdicionProrroga.fecha_inicio"></md-datepicker>
                 </div>
-                <div class="fcol-xs-12 col-md-12">
+                <div class="fcol-xs-12 col-md-12" ng-if="tiempo_prorroga != undefined">
                   <label>{{'NUEVO_PLAZO_CONTRATO' | translate}}</label><br>
-                  <md-input-container style="margin:0;">
-                    <input type="number" id="nuevo_plazo_contrato" name="nuevo_plazo_contrato" ng-model="nuevo_plazo_contrato" readonly>
-                  </md-input-container>
+                  <span>{{nuevo_plazo_contrato}}.</span>
                 </div>
               </div>
             </div>

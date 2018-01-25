@@ -43,8 +43,13 @@ angular.module('contractualClienteApp')
     self.fecha_inicio = new Date();
     // self.fecha_inicio = self.contrato_obj.fecha_inicio.substring(0, 10);
     self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
+
+    self.contrato_obj.OrdenadorGasto = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
+    self.contrato_obj.RolOrdenadorGasto = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
     
     $log.log(wso_response.data);
+
+    $log.log("Probando --> "+self.contrato_obj.OrdenadorGasto);
 
     /*
     * Fecha de registro dividida
@@ -52,7 +57,7 @@ angular.module('contractualClienteApp')
     var fecha_reg = self.contrato_obj.FechaRegistro;
     var res = fecha_reg.split("-");
     self.fecha_reg_dia = res[2];
-    self.fecha_reg_mes = meses[parseInt(res[1]-1)].toUpperCase();
+    self.fecha_reg_mes = meses[parseInt(res[1]-1)];
     self.fecha_reg_ano = res[0];
     $log.log(self.fecha_reg_mes);
 
@@ -62,6 +67,7 @@ angular.module('contractualClienteApp')
     administrativaAmazonRequest.get('informacion_proveedor', $.param({
       query: "Id:" + wso_response.data.contrato.contratista
     })).then(function(ip_response) {
+      console.log("Datos contratista --> " + JSON.stringify(ip_response.data[0]));
       self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
       self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
     });
@@ -77,6 +83,8 @@ angular.module('contractualClienteApp')
     });
   });
 
+
+
   //CONSULTAR LOS DATOS NoSQL
   // argoNosqlRequest.get('novedad/8/2017').then(function(response) {     
   //   $log.log(response.data[0].motivo);
@@ -86,32 +94,67 @@ angular.module('contractualClienteApp')
     // var valor_adicion = (evento.target.value).replace(/\,/g,''); //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL ELIMINANDO LAS COMAS QUE TENGA
     var valor_adicion = (evento.target.value).replace(/[^0-9\.]/g,''); //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL ELIMINANDO OTROS CARACTERES DEJANDO SOLO NUMEROS Y EL PTO DECIMAL
     var valor_contrato = parseFloat(valor_adicion) + parseFloat(self.contrato_obj.ValorContrato);
-    $scope.nuevo_valor_contrato = numberFormat(String(valor_contrato));
+    var valor_valido_adicion = self.contrato_obj.ValorContrato * 0.5; //No permitir que el valor de adición sea superior al 50% del mismo
 
-    // alert(valor_adicion);
-    $scope.valor_adicion_letras = numeroALetras(valor_adicion, {
-      plural: $translate.instant('PESOS'),
-      singular: $translate.instant('PESO'),
-      centPlural: $translate.instant('CENTAVOS'),
-      centSingular: $translate.instant('CENTAVO')
-    });
+    if (valor_adicion <= valor_valido_adicion) {
+      $scope.nuevo_valor_contrato = numberFormat(String(valor_contrato));
+      // alert(valor_adicion);
+      $scope.valor_adicion_letras = numeroALetras(valor_adicion, {
+        plural: $translate.instant('PESOS'),
+        singular: $translate.instant('PESO'),
+        centPlural: $translate.instant('CENTAVOS'),
+        centSingular: $translate.instant('CENTAVO')
+      });
 
-    $scope.nuevo_valor_contrato_letras = numeroALetras(valor_contrato, {
-      plural: $translate.instant('PESOS'),
-      singular: $translate.instant('PESO'),
-      centPlural: $translate.instant('CENTAVOS'),
-      centSingular: $translate.instant('CENTAVO')
-    });
+      $scope.nuevo_valor_contrato_letras = numeroALetras(valor_contrato, {
+        plural: $translate.instant('PESOS'),
+        singular: $translate.instant('PESO'),
+        centPlural: $translate.instant('CENTAVOS'),
+        centSingular: $translate.instant('CENTAVO')
+      });
 
-    $scope.valor_adicion = numberFormat(valor_adicion);
+      $scope.valor_adicion = numberFormat(valor_adicion);
+    }else{
+      $scope.valor_adicion = undefined; //SE COLOCA UNDEFINED PARA REINICIAR LOS LABEL QUE MUESTRAN EL VALOR EN LETRAS
+      $scope.nuevo_valor_contrato = "";
+      swal($translate.instant('TITULO_ADVERTENCIA'),
+           $translate.instant('DESCRIPCION_ADVERTENCIA_ADICION'),
+           'info');
+    }
   }
 
   $scope.total_plazo_contrato = function(evento) {
     var valor_prorroga = evento.target.value; //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL
     var plazo_actual_dias = parseInt(self.contrato_obj.PlazoEjecucion) * (30);
-    var valor_plazo_dias = parseInt(valor_prorroga) + plazo_actual_dias;
-    var valor_plazo_meses = valor_plazo_dias / (30);
-    $scope.nuevo_plazo_contrato = valor_plazo_meses;
+    var valor_valido_prorroga = plazo_actual_dias * 0.5;
+
+    $scope.valor_prorroga_final = valor_prorroga;
+
+    if (valor_prorroga <= valor_valido_prorroga) {
+      var valor_plazo_dias = parseInt(valor_prorroga) + plazo_actual_dias;
+      var valor_plazo_meses = valor_plazo_dias / (30);
+      var res = String(valor_plazo_meses).split(".");
+      var cantidad_meses = res[0];
+      var decimal_cantidad_dias = "0."+res[1]; //COMPLETAMOS EL NUMERO DECIMAL CON UN CERO INICIAL
+      var cantidad_dias = Math.ceil(parseFloat(decimal_cantidad_dias) / 0.03333333333336); //0.03333333333336 <- equivale al valor de un dia || SE UTILIZA LA FUNCION CEIL PARA REDONDEAR POR ARRIBA
+
+      $scope.cantidad_meses_letras = numeroALetras(cantidad_meses, {
+        plural: $translate.instant('('),
+        singular: $translate.instant('(')
+      });
+
+      $scope.cantidad_dias_letras = numeroALetras(cantidad_dias, {
+        plural: $translate.instant('('),
+        singular: $translate.instant('(')
+      });
+
+      $scope.nuevo_plazo_contrato = $scope.cantidad_meses_letras + cantidad_meses + " ) " + $translate.instant('MENSAJE_MESES') + " " + $scope.cantidad_dias_letras + cantidad_dias + " ) " + $translate.instant('DIAS');
+    }else{
+      $scope.tiempo_prorroga = undefined;
+      swal($translate.instant('TITULO_ADVERTENCIA'),
+           $translate.instant('DESCRIPCION_ADVERTENCIA_PRORROGA'),
+           'info');
+    }
   }
 
   $scope.click_check_adicion = function(){
@@ -166,6 +209,27 @@ angular.module('contractualClienteApp')
            $translate.instant('DESCRIPCION_ADVERTENCIA'),
            'info');
     }
+
+    var valor_contrato_inicial = self.contrato_obj.ValorContrato;
+    $scope.valor_contrato_letras = numeroALetras(valor_contrato_inicial, {
+      plural: $translate.instant('PESOS'),
+      singular: $translate.instant('PESO'),
+      centPlural: $translate.instant('CENTAVOS'),
+      centSingular: $translate.instant('CENTAVO')
+    });
+
+    $scope.cantidad_salarios_minimos = (valor_contrato_inicial / 737717).toFixed(2);
+
+    $scope.contrato_plazo_letras = numeroALetras(self.contrato_obj.PlazoEjecucion, {
+      plural: $translate.instant('('),
+      singular: $translate.instant('(')
+    });
+
+    $scope.contrato_prorroga_letras = numeroALetras($scope.valor_prorroga_final, {
+      plural: $translate.instant('('),
+      singular: $translate.instant('(')
+    });
+    console.log("Cantidad de salarios -> "+$scope.cantidad_salarios_minimos);
   }
 
   self.generarActa = function(){
@@ -286,7 +350,7 @@ angular.module('contractualClienteApp')
           style:['general_font'],         
           text:[      
             {text: 'PRÓRROGA Y ADICIÓN No. 01 '},
-            {text: 'AL CONTRATO DE PRESTACIÓN DE SERVICIOS No. '+self.contrato_id+' DEL '+self.fecha_reg_dia+' DE '+self.fecha_reg_mes+' DE '+self.fecha_reg_ano+' CELEBRADO ENTRE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS '},
+            {text: 'AL CONTRATO DE PRESTACIÓN DE SERVICIOS No. '+self.contrato_id+' DEL '+self.fecha_reg_dia+' DE '+self.fecha_reg_mes.toUpperCase()+' DE '+self.fecha_reg_ano+' CELEBRADO ENTRE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS '},
             {text: 'Y '+self.contrato_obj.contratista_nombre}, '\n\n'
           ]       
         },
@@ -294,40 +358,40 @@ angular.module('contractualClienteApp')
           style:['general_font'], pageBreak: 'after',
           text:[      
             {text: 'Entre los suscritos, de una parte, '},
-            {text: 'SANTIAGO NIÑO MORALES ', bold:true},
+            {text: self.contrato_obj.OrdenadorGasto + ' ', bold:true},
             {text: 'mayor de edad, vecino de esta ciudad, identificado con cédula de ciudadanía No.79.522.574 expedida en Bogotá D.C., '},
-            {text: 'quien actúa en calidad de Decano Facultad de Artes ASAB '},
+            {text: 'quien actúa en calidad de ' +self.contrato_obj.RolOrdenadorGasto+ ' '},
             {text: 'según Resolución de Rectoría Nº 090 del 06 de marzo de 2015, debidamente autorizado para contratar, según Acuerdo No. 003 de 2015 (Estatuto de Contratación de la Universidad Distrital Francisco José de Caldas) y Resoluciones rectorales No. 262 de 2015, 443 de 2015 y 003 de 2016, quien en lo sucesivo se denominará LA UNIVERSIDAD, con NIT 899999230-7, ente universitario autónomo de conformidad con la Ley 30 de 1992, '},
             {text: 'y por la otra '},
-            {text: 'SANDRA PATRICIA RODRIGUEZ CORREA, ', bold:true},
-            {text: 'identificada con la cédula de ciudadanía No. 52.543.242 de Bogotá., '},
+            {text: ''+self.contrato_obj.contratista_nombre+', ', bold:true},
+            {text: 'identificado(a) con la cédula de ciudadanía No. '+self.contrato_obj.contratista_documento+' de Bogotá., '},
             {text: 'quien  para los efectos del presente documento, se denominará '},
-            {text: 'LA CONTRATISTA, ', bold:true},
-            {text: 'acordamos prorrogar el plazo y adicionar  el valor del Contrato de Prestación de Servicios No. 272 de 2017 , teniendo en cuenta los siguientes documentos y consideraciones: '}, '\n\n',
+            {text: 'EL CONTRATISTA, ', bold:true},
+            {text: 'acordamos prorrogar el plazo y adicionar  el valor del Contrato de Prestación de Servicios No. '+self.contrato_id+' de '+self.fecha_reg_ano+' , teniendo en cuenta los siguientes documentos y consideraciones: '}, '\n\n',
             {text: '1) ', bold:true},
-            {text: 'El 20 de enero de 2017, '},
-            {text: 'LA UNIVERSIDAD y LA CONTRATISTA ', bold:true},
-            {text: 'suscribieron el Contrato de Prestación de Servicios No. 272 de 2017, '},
-            {text: 'y que de conformidad con la Cláusula 1 - el objeto es “PRESTAR SERVICIOS ASISTENCIALES COMO SECRETARIA DE MANERA AUTÓNOMA E INDEPENDIENTE EN EL PROYECTO CURRICULAR DE ARTES ESCÉNICAS DE LA FACULTAD DE ARTES ASAB DESARROLLANDO ACTIVIDADES DE APOYO A LA GESTIÓN A CARGO DE ESTA DEPENDENCIA PARA EL ADECUADO FUNCIONAMIENTO DE LOS PROCESOS DE ADMISIONES, REGISTRO Y CONTROL Y GESTIÓN DE DOCENCIA DE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS.”'}, '\n\n',
+            {text: 'El '+self.fecha_reg_dia+' de '+self.fecha_reg_mes+' de '+self.fecha_reg_ano+', '},
+            {text: 'LA UNIVERSIDAD y EL CONTRATISTA ', bold:true},
+            {text: 'suscribieron el Contrato de Prestación de Servicios No. '+self.contrato_id+' de '+self.fecha_reg_ano+', '},
+            {text: 'y que de conformidad con la Cláusula 1 - el objeto es “'+self.contrato_obj.ObjetoContrato+'”'}, '\n\n',
             {text: '2) ', bold:true},
             {text: 'Como plazo de ejecución del contrato se estableció '},
-            {text: 'ONCE (11) MESES, ', bold:true},
+            {text: ''+$scope.contrato_plazo_letras +self.contrato_obj.PlazoEjecucion+' ) MESES, ', bold:true},
             {text: 'contados a partir de la suscripción de la correspondiente acta de inicio (cláusula 6), lo cual tuvo lugar el 01 de febrero de 2017.'}, '\n\n',
             {text: '3) ', bold:true},
             {text: 'En la cláusula número 3, se pactó como valor la suma de '},
-            {text: 'DIECIOCHO MILLONES SEISCIENTOS SESENTA Y CUATRO MIL DOSCIENTOS TREINTA Y NUEVE PESOS MONEDA CORRIENTE ($18.664.239.00) ', bold:true},
+            {text: ''+$scope.valor_contrato_letras+' MONEDA CORRIENTE ($'+numberFormat(self.contrato_obj.ValorContrato)+') ', bold:true},
             {text: 'incluido IVA; '},
-            {text: 'suma equivalente a 25.5 salarios mínimos legales mensuales vigentes para el año 2017 ($737.717 SMMLV).'}, '\n\n',
+            {text: 'suma equivalente a '+$scope.cantidad_salarios_minimos+' salarios mínimos legales mensuales vigentes para el año '+self.fecha.anio+' ($781.242 SMMLV).'}, '\n\n',
             {text: '4) ', bold:true},
             {text: 'Que, con fecha 01 de diciembre de 2017, '},
-            {text: 'el Decano de  la Facultad de Artes – ASAB  de '},
+            {text: 'el '+self.contrato_obj.RolOrdenadorGasto+'  de '},
             {text: 'LA UNIVERSIDAD, ', bold:true},
             {text: 'como Ordenador del Gasto, '},
             {text: 'suscribió el formato de “solicitud de necesidad” No. 7854, '},
             {text: 'en el cual solicita la adición y prórroga del contrato de que se viene hablando, en su orden, en '},
-            {text: 'QUINIENTOS NUEVE MIL VEINTICINCO PESOS MONEDA CORRIENTE ($509.025.00), ', bold:true},
+            {text: ''+$scope.valor_adicion_letras+' MONEDA CORRIENTE ($'+$scope.valor_adicion+'), ', bold:true},
             {text: 'y un plazo de '},
-            {text: 'NUEVE (09) DÍAS CALENDARIO, ', bold:true},
+            {text: ''+$scope.nuevo_plazo_contrato+' CALENDARIO, ', bold:true},
             {text: 'cuya justificación se encuentra implícita en la citada solicitud de necesidad. '}, '\n\n',
           ]       
         },
@@ -359,7 +423,7 @@ angular.module('contractualClienteApp')
           text:[      
             {text: '5) ', bold:true},
             {text: 'Que mediante oficio con fecha de recibido de diciembre 11 de 2017, '},
-            {text: 'el Decano de la Facultad de Artes – ASAB de '},
+            {text: 'el '+self.contrato_obj.RolOrdenadorGasto+' de '},
             {text: 'LA UNIVERSIDAD, ', bold:true},
             {text: 'en calidad de ordenador del gasto, solicitó a la Oficina Asesora Jurídica de esta, la elaboración del presente documento.'}, '\n\n',
             {text: '6) ', bold:true},
@@ -375,19 +439,19 @@ angular.module('contractualClienteApp')
             {text: '9) ', bold:true},
             {text: 'Que el acto aquí planteado es jurídicamente viable, de acuerdo con lo establecido en las normas civiles y comerciales pertinentes, y, en especial, en el Estatuto de Contratación de la Universidad Distrital Francisco José de Caldas y demás normas reglamentarias pertinentes y vigentes. En consecuencia de lo anterior, las partes acuerdan:'}, '\n\n',
             {text: 'CLÁUSULA PRIMERA.- ADICIONAR ', bold:true},
-            {text: 'al valor del contrato de Prestación de Servicios No.272 de 2017, la suma de '},
-            {text: 'QUINIENTOS NUEVE MIL VEINTICINCO PESOS MONEDA CORRIENTE ($509.025.00)', bold:true}, '\n\n',
+            {text: 'al valor del contrato de Prestación de Servicios No.'+self.contrato_id+' de '+self.fecha_reg_ano+', la suma de '},
+            {text: ''+$scope.valor_adicion_letras+' MONEDA CORRIENTE ($'+$scope.valor_adicion+')', bold:true}, '\n\n',
             {text: 'CLÁUSULA SEGUNDA.- ', bold:true},
             {text: 'El nuevo valor del Contrato de Prestación de Servicios en cuestión, a que se refiere su cláusula 3, es la suma de '},
-            {text: 'DIECINUEVE MILLONES CIENTO SETENTA Y CINCO MIL DOSCIENTOS SESENTA Y CUATRO PESOS MONEDA CORRIENTE ($19.173.264.00), ', bold:true},
+            {text: ''+$scope.nuevo_valor_contrato_letras+' MONEDA CORRIENTE ($'+$scope.nuevo_valor_contrato+'), ', bold:true},
             {text: 'incluido el valor de  impuestos, tasas, contribuciones, estampillas y permisos.'}, '\n\n',
             {text: 'CLÁUSULA TERCERA.- PRORROGAR ', bold:true},
             {text: 'el plazo de ejecución del citado Contrato, en'},
-            {text: 'NUEVE (09)  DIAS CALENDARIO, ', bold:true},
+            {text: ''+$scope.contrato_prorroga_letras+$scope.valor_prorroga_final+' ) DÍAS CALENDARIO, ', bold:true},
             {text: 'contados a partir de la fecha de terminación del mismo.'}, '\n\n',
             {text: 'CLÁUSULA CUARTA.- ', bold:true},
             {text: 'El nuevo plazo de ejecución de contrato en mención, en los términos estipulados en la cláusula 6, es de '},
-            {text: 'ONCE (11) MESES y NUEVE (09) DÍAS CALENDARIO, ', bold:true},
+            {text: ''+$scope.nuevo_plazo_contrato+' CALENDARIO, ', bold:true},
             {text: 'los cuales vencen el nueve (09) de enero de 2018.'}, '\n\n',
             {text: 'CLÁUSULA QUINTA.- ', bold:true},
             {text: 'Las cláusulas y condiciones no modificadas por el presente instrumento continúan vigentes en los términos del contrato primigenio.'}, '\n\n',
@@ -433,12 +497,12 @@ angular.module('contractualClienteApp')
             widths:['*', '*'],           
             body:[             
               [               
-                {text: 'SANTIAGO NIÑO MORALES', fontSize: 12}, 
-                {text: 'SANDRA PATRICIA RODRIGUEZ CORREA', fontSize: 12},              
+                {text: ''+self.contrato_obj.OrdenadorGasto+'', fontSize: 12}, 
+                {text: ''+self.contrato_obj.contratista_nombre+'', fontSize: 12},              
               ],             
               [ 
-                {text: 'Decano Facultad de Artes ASAB\nLa Universidad', fontSize: 12},
-                {text: 'La Contratista', fontSize: 12},           
+                {text: ''+self.contrato_obj.RolOrdenadorGasto+'\nLa Universidad', fontSize: 12},
+                {text: 'El Contratista', fontSize: 12},           
               ],          
             ]         
           }       
