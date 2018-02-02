@@ -31,6 +31,7 @@ angular.module('contractualClienteApp')
   * Funcion para la carga de toda la informacion de un contrato especifico
   */
   administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
+    console.log(wso_response);
     self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
     self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
     self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
@@ -38,7 +39,9 @@ angular.module('contractualClienteApp')
     self.contrato_obj.ordenador_gasto_nombre = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
     self.contrato_obj.ordenador_gasto_rol = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
     self.contrato_obj.vigencia = wso_response.data.contrato.vigencia;
-    self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
+    self.contrato_obj.supervisor_nombre = wso_response.data.contrato.supervisor.nombre;
+    self.contrato_obj.supervisor_rol = wso_response.data.contrato.supervisor.cargo;
+    self.contrato_obj.supervisor_cedula = wso_response.data.contrato.supervisor.documento_identificacion;
 
     administrativaAmazonRequest.get('ordenadores', $.param({
       query:"IdOrdenador:" + wso_response.data.contrato.ordenador_gasto.id
@@ -120,7 +123,6 @@ angular.module('contractualClienteApp')
    * actualizacion de los datos del contrato y reporte de la novedad
   */
   self.generarActa = function(){
-
     if($scope.formCesion.$valid){
       administrativaAmazonRequest.get('informacion_proveedor', $.param({
         query: "NumDocumento:" + self.cesionario_obj.identificacion
@@ -229,99 +231,64 @@ angular.module('contractualClienteApp')
       content: [
         {
           style: ['bottom_space'],
-          table: {
-            widths:[65, '*', 120, 65],
-            body:[
-              [
-                {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},
-                {text: 'ACTA DE CESIÓN', alignment: 'center', fontSize: 12},
-                {text: 'Código: GJ-PR- 002-FR- 010', fontSize: 9},
-                {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10}
-              ],
-              [ ' ',
-                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},
-                {text: 'Versión: 01', fontSize: 9, margin: [0, 6]},
-                ' '
-              ],
-              [ ' ',
-                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},
-                {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},
-                ' '
-              ],
-            ]
-          }
+          image: 'logo_ud', fit:[80,110], rowSpan: 3, alignment: 'center', fontSize: 12,
+          alignment: 'center'
         },
         {
           style:['general_font'],
           text:[
-            {text: 'Contrato: ', bold: true}, self.contrato_obj.tipo_contrato, {text:' No. ', bold: true}, self.contrato_id +' de '+ self.contrato_vigencia, '\n',
-            {text: 'Fecha de suscripcion: ', bold: true},
-            {text: self.format_date(self.contrato_obj.fecha_registro)}, '\n',
-            {text: 'Contratante: ', bold: true}, 'Universidad Distrital Francísco José de Caldas', '\n',
-            {text: 'Cedente: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',
-            {text: 'Cesionario: ', bold: true}, self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos, '\n\n',
+            {
+              text:'OTROSÍ DE CESIÓN No. 01 AL '+ self.contrato_obj.tipo_contrato +' No. '+ self.contrato_id +' de '+ self.contrato_vigencia +' A NOMBRE DE '+ 
+              self.contrato_obj.contratista_nombre +' (Cedente) a '+ self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +' (Cesionario)', bold:true
+            },'\n\n',
 
-            'La presente Acta hace parte del '+ self.contrato_obj.tipo_contrato +' No. ' + self.contrato_id, ' del dia ' +
-            self.format_date(self.contrato_obj.fecha_registro) + ' cuyo objeto es: ' + self.contrato_obj.objeto,
-            {text: ', de acuerdo con la propuesta de servicios que forma parte integral del presente Contrato', italics: true},
-            ' Firmada por ' + self.contrato_obj.ordenador_gasto_nombre + ' quien actua '+ self.contrato_obj.ordenador_gasto_rol +' en representacion de la UNIVERSIDAD y ' + self.contrato_obj.contratista_nombre,
-            ' Como EL CONTRATISTA.', '\n\n', ' De conformidad con el Contrato de prestación de servicios ', self.contrato_id,
-            ' Del dia ', self.format_date(self.contrato_obj.fecha_registro), ' en la CLÁUSULA OCTAVA. CESIÓN DEL CONTRATO, establece: ',
-            {text:'El Contratista no podrá ceder total ni parcialmente los derechos' + ' y obligaciones emanadas de esta Orden a persona natural o jurídica, sino con autorización previa y por escrito de la Universidad.', italics:true}, '\n\n',
-            {text:'La presente Cesión se lleva a cabo en la forma que se determina a continuación, previa las siguientes consideraciones: '}, '\n\n'
+            'Entre los suscritos, ' + self.contrato_obj.supervisor_nombre + ', mayor de edad, vecino de esta ciudad, identificado con cédula de ciudadanía No.' + 
+            self.contrato_obj.supervisor_cedula + ' expedida en ______ciudad_supervisor_______, quien actúa en calidad de '+ self.contrato_obj.supervisor_rol +
+            ', según Resolución de Rectoría '+ self.contrato_obj.ordenador_resolucion + ', debidamente autorizado para contratar, según Acuerdo No. 003 de 2015 E(Estatuto de Contratación de la'+
+            ' Universidad Distrital Francisco José de Caldas) y Resoluciones rectorales No. 262 de 2015, 443 de 2015 y 003 de 2016, quien en lo sucesivo se denominará LA UNIVERSIDAD,'+
+            'con NIT 899999230-7, ente universitario autónomo de conformidad con la Ley 30 de 1992, , y, de otra  '+ self.contrato_obj.contratista_nombre +' como EL CONTRATISTA, acordamos ceder el '+ 
+            self.contrato_obj.tipo_contrato +' No. '+ self.contrato_id +' de '+ self.contrato_vigencia +' a '+ self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
+            ', teniendo en cuenta los siguientes documentos y consideraciones: \n\n'
+          ]
+        },
+        {
+          style:['general_list'],
+          ol: [
+            {
+              text:[
+                'Que el Contrato de '+ self.contrato_obj.tipo_contrato +' No. '+ self.contrato_id +' de '+ self.contrato_vigencia +', tiene por objeto ',
+                {text:'“'+self.contrato_obj.objeto+'”\n\n', italics:true}
+              ] 
+            },
+
+            'Que de conformidad con el '+ self.contrato_obj.tipo_contrato +' No. '+ self.contrato_id +' de '+ self.contrato_vigencia +', en la ' +
+            'CLÁUSULA QUINCE. CESIÓN DEL CONTRATO, establece: “El Contratista no podrá ceder total ni parcialmente los derechos y obligaciones emanadas ' +
+            'de este Contrato a persona natural o jurídica, sino con autorización previa y por escrito de la Universidad”.'+ '\n\n',
+
+            'Que por medio oficio de fecha '+ self.format_date(self.cesion_nov.fechaoficio) + ', el Contratista '+ self.contrato_obj.contratista_nombre +
+            ', le informa al supervisor del citado contrato que “es mi voluntad CEDER mi contrato, el cual no inicié, a favor de '+ self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +'”.'+ '\n\n',
+
+            'Que mediante escrito de fecha '+ self.format_date(self.cesion_nov.fechasolicitud) +', el supervisor del '+ self.contrato_obj.tipo_contrato +' No. '+ self.contrato_id +' de '+ self.contrato_vigencia +
+            ' le comunicó al '+ self.contrato_obj.ordenador_gasto_rol +', como Ordenador del Gasto de dicho contrato, que el mismo pretende ser cedido a ' +
+            self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +' (Cesionario) quien cumple con las cualidades y competencias para desarrollar el objeto del contrato.'+ '\n\n',
+
+            'Que según el escrito de fecha ___________________, el ' + self.contrato_obj.ordenador_gasto_rol + ', solicita a la Oficina Asesora Jurídica la elaboración del presente ' + 
+            'documento, y como Ordenador del Gasto, manifiesta que aprueba la cesión del mismo en su totalidad, teniendo en cuenta que no se ha suscrito acta de inicio a la fecha.' + '\n\n',
           ]
         },
         {
           style:['general_font'],
-          ol: [
-            'Que mediante escrito de fecha: '+ self.format_date(self.cesion_nov.fechaoficio) + ', el contratista ' +
-            self.contrato_obj.contratista_nombre + ' (Cedente),' + ' solicita a ' + self.contrato_obj.ordenador_gasto_nombre +
-            ', quien cumple la función Ordenador de Gasto, la autorización para realizar la Cesión del '+ self.contrato_obj.tipo_contrato +' No. ' +
-            self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) + ' a partir del ' +
-            self.format_date(self.cesion_nov.fechacesion) + ' a ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
-            ' (Cesionario) quien cumple con las calidades y competencias para desarrollar el objeto del Contrato.' + '\n\n',
-
-            'Que mediante oficio No. ' + self.cesion_nov.numerooficio + ' de fecha ' + self.format_date(self.cesion_nov.fechaoficio) +
-            ', el ' + self.contrato_obj.ordenador_gasto_rol + ' de la Universidad Distrital Francisco José de Caldas,' +
-            ' solicita a la Oficina Asesora Jurídica la elaboración del Acta de Cesión al ' + self.contrato_obj.tipo_contrato + ' ' +
-            self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) + ' y como Ordenador del Gasto segun ' +
-            self.contrato_obj.ordenador_resolucion + ', manifiesta que aprueba la cesión del '+ self.contrato_obj.tipo_contrato +' en su totalidad.' + '\n\n',
-
-            'Por lo anterior, se Cede el Contrato de Prestación de Servicios ' + self.contrato_id + ' de fecha ' + self.format_date(self.contrato_obj.fecha_registro) +
-            ' a nombre de ' + self.contrato_obj.contratista_nombre + ', a ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +
-            ' identificada con Cédula de Ciudadanía No. ' + self.cesionario_obj.identificacion + ' de ' + self.cesionario_obj.ciudad + ' de ' + 
-            self.format_date(self.cesionario_obj.fecha_expedicion_documento) + ' quien cumple con el perfil requerido de acuerdo con lo establecido en el objeto ' +
-            'y continuará con las obligaciones derivadas del Contrato de Prestación de Servicios en mención a partir de '+ '_________________' +'\n\n'
+          text:[
+            'Por lo anterior, se Cede el '+ self.contrato_obj.tipo_contrato +' No. '+ self.contrato_id +' de '+ self.contrato_vigencia +' a nombre de ' +
+            self.contrato_obj.contratista_nombre +' a '+ self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos +' identificada con Cédula de ' + 
+            'Ciudadanía No. ' + self.cesionario_obj.identificacion + ' de '+ self.cesionario_obj.ciudad +', quien cumple con el perfil requerido de acuerdo con lo ' +
+            'establecido en el objeto y continuará con las obligaciones derivadas del '+ self.contrato_obj.tipo_contrato +' en mención a partir del '+ 
+            self.format_date(self.cesion_nov.fechacesion) +', fecha en la cual se debe suscribir el acta de inicio, teniendo en cuenta que '+ self.contrato_obj.contratista_nombre +
+            ' en ningún momento dio inicio a su contrato.\n\n'
           ]
         },
         {
-          style: ['bottom_space'],
           pageBreak: 'before',
-          table:{
-            widths:[65, '*', 120, 65],
-            body:[
-              [
-                {image: 'logo_ud', fit:[65, 120], rowSpan: 3, alignment: 'center', fontSize: 10},
-                {text: 'ACTA DE CESIÓN', alignment: 'center', fontSize: 12},
-                {text: 'Código: GJ-PR- 002-FR- 010', fontSize: 9},
-                {image: 'logo_sigud', fit:[65, 120], rowSpan: 3, alignment: 'center', fontSize: 10}
-              ],
-              [
-                ' ',
-                {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},
-                {text: 'Versión: 01', fontSize: 9, margin: [0, 6]},
-                ' '
-              ],
-              [
-                ' ',
-                {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},
-                {text: 'Fecha de Aprobación: 20/03/14', fontSize: 9},
-                ' '
-              ]
-            ]
-          }
-        },
-        {
           style:['general_font'],
           text:[
             {text:'Otras consideraciones: ', bold:true}, '\n\n' + self.cesion_nov.observacion + '\n\n' +
@@ -361,8 +328,14 @@ angular.module('contractualClienteApp')
           marginBottom: 30
         },
         general_font:{
-          fontSize: 11,
-          alignment: 'justify'
+          fontSize: 10,
+          alignment: 'justify',
+          margin: [25, 0, 25, 0]
+        },
+        general_list:{
+          fontSize: 10,
+          alignment: 'justify',
+          margin: [45, 0, 25, 0]
         }
       },
       images: {

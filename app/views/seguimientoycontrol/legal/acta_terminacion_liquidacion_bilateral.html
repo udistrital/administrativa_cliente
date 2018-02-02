@@ -2,72 +2,121 @@
 <div class="panel panel-default">
 <center><h3 class="titulo-centrado">Terminación Anticipada</h3></center>
     <div class="panel-body">
-      <div class=" panel panel-primary col-sm-5 paneles" >
-        <div class="panel-heading row"><center><h4><b>Información</b></h4></center></div>
-        <div class="col-md-6"><b>Tipo de contrato</b></div>
-        <div class="col-md-6"><p>Contrato de Prestación de Servicios</p></div>
-        <div class="col-md-6"><b>Número de contrato</b></div>
-        <div class="col-md-6"><p>150246</p></div>
-        <div class="col-md-6"><b>Objeto</b></div>
-        <div class="col-md-6"> <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam vel commodo mi, ut sollicitudin elit. Aliquam erat volutpat.
-          Pellentesque mollis odio sed bibendum mattis. Nunc viverra ante a eros elementum consequat.</p> </div>
-        <div class="col-md-6"><b>Valor contrato</b></div>
-        <div class="col-md-6"><p>$ 2.264.427</p></div>
-        <div class="col-md-6"><b>Contratista</b></div>
-        <div class="col-md-6"><p>Pepe Perez</p></div>
-        <div class="col-md-6"><b>Supervisor</b></div>
-        <div class="col-md-6"><p>Juan Rodriguez</p></div>
-        <div class="col-md-6"><b>Fecha de Inicio</b></div>
-        <div class="col-md-6"><p>Febrero 15 de 2017</p></div>
-        <div class="col-md-6"><b>Numero RP</b></div>
-        <div class="col-md-6"><p>111</p></div>
-        <div class="col-md-6"><b>Fecha RP</b></div>
-        <div class="col-md-6"><p>Febrero 15 de 2017</p></div>
-
+      <div class="row">
+        <div class="col-md-6">
+          <div class=" panel panel-primary" >
+            <div class="panel-heading"><center><h4><b>{{'INFORMACION' | translate}}</b></h4></center></div>
+            <div class="panel-body">
+              <div class="col-md-6"><b>{{'NUMERO_CONTRATO' | translate}}</b></div>
+              <div class="col-md-6"><p>{{sLactaTerminacionAnticipada.contrato_obj.id}}</p></div>
+              <div class="col-md-6"><b>{{'CONTRATANTE' | translate}}</b></div>
+              <div class="col-md-6"><p>{{'UNIVERSIDAD_NOMBRE' | translate}}</p></div>
+              <div class="col-md-6"><b>{{'CONTRATISTA' | translate}}</b></div>
+              <div class="col-md-6" ng-if="sLactaTerminacionAnticipada.contrato_obj.contratista_documento != null">
+                <p>
+                {{sLactaTerminacionAnticipada.contrato_obj.contratista_nombre}} <br>
+                <span style="color:#555; font-size:14px;">
+                  {{sLactaTerminacionAnticipada.contrato_obj.contratista_documento}}
+                </span>
+                </p>
+              </div>
+              <div class="col-md-6" ng-if="sLactaTerminacionAnticipada.contrato_obj.contratista_documento == null">
+                <p>{{'NO_REGISTRA' | translate}}</p>
+              </div>
+              <div class="col-md-6"><b>{{'OBJETO' | translate}}</b></div>
+              <div class="col-md-6" ng-if="sLactaTerminacionAnticipada.contrato_obj.objeto != null">
+                <p>{{sLactaTerminacionAnticipada.contrato_obj.objeto}}</p>
+              </div>
+              <div class="col-md-6" ng-if="sLactaTerminacionAnticipada.contrato_obj.objeto == null">
+                <p>{{'NO_REGISTRA' | translate}}</p>
+              </div>
+              <div class="col-md-6"><b>{{'VALOR_CONTRATO' | translate}}</b></div>
+              <div class="col-md-6"><p>{{sLactaTerminacionAnticipada.contrato_obj.valor | currency}}</p></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class=" panel panel-primary" >
+            <div class="panel-heading"><center><h4><b>Información</b></h4></center></div>
+            <div class="panel-body">
+              <form action="" class="col-md-12">
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <p>
+                      <b>{{'NUMERO_SOLICITUD' | translate}} *:</b>
+                    </p>
+                    <md-input-container style="margin:0;">
+                      <input type="number" id="n_solicitud" name="n_solicitud" required ng-model="sLactaSuspension.n_solicitud" ng-disabled="false" min="0">
+                      <div ng-messages="formSuspension.n_solicitud.$error">
+                        <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                      </div>
+                    </md-input-container>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label style="width:100%;">
+                      {{'NUMERO_OFICIO_ESTADO_CUENTAS' | translate}}
+                    </label>
+                    <md-input-container style="margin:0;">
+                      <input type="number" name="num_oficio" ng-model="sLactaCesion.num_oficio" required id="oficio" >
+                      <div ng-messages="formCesion.num_oficio.$error">
+                        <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                      </div>
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-6" >
+                    <label for="fechainicio">{{'FECHA_SOLICITUD' | translate}}:</label> <br>
+                    <md-datepicker ng-model="sLactaSuspension.f_inicio"> </md-datepicker>
+                  </div>
+                  <div class="form-group col-md-6" >
+                    <label for="fechainicio">{{'FECHA_TERMINACION_ANTICIPADA' | translate}}:</label> <br>
+                    <md-datepicker ng-model="sLactaSuspension.f_inicio"> </md-datepicker>
+                  </div>
+                </div>
+                <br>
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label style="width:100%;">
+                      {{'VALOR_DESEMBOLSADO' | translate}}
+                    </label>
+                    <md-input-container style="margin:0;">
+                      <input type="number" name="num_oficio" ng-model="sLactaCesion.num_oficio" required id="oficio" >
+                      <div ng-messages="formCesion.num_oficio.$error">
+                        <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                      </div>
+                    </md-input-container>
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label style="width:100%;">
+                      {{'SALDO_A_FAVOR_CONTRATISTA' | translate}}
+                    </label>
+                    <md-input-container style="margin:0;">
+                      <input type="number" name="num_oficio" ng-model="sLactaCesion.num_oficio" required id="oficio" >
+                      <div ng-messages="formCesion.num_oficio.$error">
+                        <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                      </div>
+                    </md-input-container>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="form-group col-md-6">
+                    <label style="width:100%;">
+                      {{'SALDO_A_FAVOR_UNIVERSIDAD' | translate}}
+                    </label>
+                    <md-input-container style="margin:0;">
+                      <input type="number" name="num_oficio" ng-model="sLactaCesion.num_oficio" required id="oficio" >
+                      <div ng-messages="formCesion.num_oficio.$error">
+                        <div ng-message="required">{{'CAMPO_REQUERIDO' | translate}}</div>
+                      </div>
+                    </md-input-container>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
       </div>
-
-
-
-
-
-    <div class=" panel panel-primary col-sm-5 paneles" >
-      <div class="panel-heading row"><center><h4><b>Información General de la Novedad</b></h4></center></div>
-
-      <div class="form-group col-md-6" >
-        <label for="numero_solicitud">Número de Solicitud</label>
-        <input type="number" class="form-control" id="numero_solicitud" >
-      </div>
-      <div class="form-group col-md-6" >
-        <label for="fecha_solicitud">Fecha Solicitud</label>
-        <input type="date" class="form-control" id="fecha_solicitud" value="2017-07-04" >
-      </div>
-      <div class="form-group col-md-6" >
-        <label for="numero_oficio">Número de Oficio Estado de Cuentas</label>
-        <input type="number" class="form-control" id="numero_oficio"  >
-      </div>
-      <div class="form-group col-md-6" >
-        <label for="fecha_terminacion">Fecha Terminación Anticipada</label>
-        <input type="date" class="form-control" id="fecha_terminacion" value="2017-07-04" >
-      </div>
-      <div class="form-group col-md-6" >
-        <label for="valor_desembolsado">Valor desembolsado</label>
-        <input type="number" class="form-control" id="valor_desembolsado"  >
-      </div>
-      <div class="form-group col-md-6" >
-        <label for="saldo_a_favor_contratista">Saldo a favor del Contratista</label>
-        <input type="number" class="form-control" id="saldo_a_favor_contratista"  >
-      </div>
-      <div class="form-group col-md-6" >
-        <label for="saldo_a_favor_universidad">Saldo a favor de la Universidad</label>
-        <input type="number" class="form-control" id="saldo_a_favor_universidad"  >
-      </div>
-
-
-    </div>
-
-
-
-
 
     </div>
     <div class="panel-footer">
