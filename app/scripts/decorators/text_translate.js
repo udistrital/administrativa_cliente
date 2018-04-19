@@ -509,6 +509,7 @@ var text_es = {
   NUMERO_CANCELACIONES: "Número de vinculaciones canceladas",
   DATOS_CANCELADOS:"Las vinculaciones asociadas a esta resolución de cancelación han sido removidas",
   DATOS_EXPEDICION: "Datos de Expedición",
+  FECHA_INVALIDA: "Por favor escoja otra fecha. La fecha escojida es un Sábado, Domingo o un día festivo",
   FECHA_EXPEDICION: "Fecha de Expedición",
   NUMERO_SEMANAS: "Número de Semanas",
   TITULO_RESOLUCION: "Título de la Resolución",
