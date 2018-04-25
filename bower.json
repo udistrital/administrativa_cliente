@@ -35,7 +35,7 @@
     "angular-file-model": "^0.3.1",
     "angular-bootstrap-fileinput": "^0.1.0",
     "nuxeo": "^3.5.0",
-    "colombia-holidays": "^0.0.4"
+    "colombia-holidays": "^0.0.5"
   },
   "resolutions": {
     "angular": "1.6.10",
