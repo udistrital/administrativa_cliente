@@ -4,11 +4,9 @@
     <div class="col-md-2 col-md-offset-4">
       <center><label> {{ 'SELECCIONE_TIPO_RES' | translate }} </label></center>
     </div>
-    <div class="col-md-6">
-    <select ng-model="resolucionGeneracion.tipo_resolucion_elegida">
-      <option value="">{{'SELECCIONE' | translate }}</option>
-      <option value=1>{{'VINCULACION' | translate }}</option>
-      <option value=2>{{'CANCELACION' | translate }}</option>
+    <div class="col-md-2">
+    <select class="form-control" ng-model="resolucionGeneracion.tipo_resolucion_elegida" >
+        <option ng-selected="{{tipoResolucion.Id == resolucionGeneracion.tipoResolucionDefecto}}" ng-repeat="tipoResolucion in resolucionGeneracion.tipos_resolucion" value="{{tipoResolucion.Id}}">{{tipoResolucion.NombreTipoResolucion}}</option>
     </select>
   </div>
   </div>

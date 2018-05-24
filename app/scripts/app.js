@@ -18,7 +18,7 @@ angular
         'ngMessages',
         'ngResource',
         'ngRoute',
-        'ngSanitize',
+       // 'ngSanitize',
         'afOAuth2',
         'treeControl',
         'ngMaterial',
@@ -60,7 +60,8 @@ angular
         'gridOptionsService',
         'configuracionService',
         'requestService',
-        'gridApiService'
+        'gridApiService',
+        'colombiaHolidaysService'
     ])
     .run(function(amMoment) {
         amMoment.changeLocale('es');

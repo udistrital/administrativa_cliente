@@ -157,21 +157,13 @@ angular.module('contractualClienteApp')
 
     //Funcion para cargar los datos de las resoluciones creadas y almacenadas dentro del sistema
     self.cargarDatosResolucion = function (offset, query) {
-
-      adminMidRequest.get("gestion_resoluciones/get_resoluciones_aprobadas", $.param({
+      var req = adminMidRequest.get("gestion_resoluciones/get_resoluciones_aprobadas", $.param({
         limit: self.resolucionesAprobadas.paginationPageSize,
         offset: offset,
         query: query
-      })).then(function (response) {
-        if (response.data === null) {
-          self.resolucionesAprobadas.data = [];
-        } else {
-          //console.log(response.data);
-          self.resolucionesAprobadas.data = response.data;
-          if (response.data.length == self.resolucionesAprobadas.paginationPageSize)
-            self.resolucionesAprobadas.totalItems = offset + self.resolucionesAprobadas.paginationPageSize + 5;
-        }
-      });
+      }))
+      req.then(gridApiService.paginationFunc(self.resolucionesAprobadas, offset));
+      return req;
     };
 
     //Función para asignar controlador de la vista contrato_registro.html (expedición de la resolución), donde se pasa por parámetro el id de la resolucion seleccionada, la lista de resoluciones paraque sea recargada y los datos completos de la resolución con ayuda de $mdDialog
@@ -270,13 +262,6 @@ angular.module('contractualClienteApp')
     //Función para asignar controlador de la vista resolucion_vista.html, donde se pasa por parámetro el id de la resolucion seleccionada con ayuda de $mdDialog
     $scope.verVisualizarResolucion = function (row) {
 
-      if (row.entity.FechaExpedicion === null || row.entity.FechaExpedicion.toString() === "0001-01-01T00:00:00Z") {
-        self.FechaParaPDF = "Fecha de expedición pendiente";
-      } else {
-        var string1 = row.entity.FechaExpedicion;
-        string1 = string1.split('T')[0];
-        self.FechaParaPDF = string1;
-      }
 
 
       var resolucion = {
@@ -289,7 +274,7 @@ angular.module('contractualClienteApp')
         NumeroSemanas: row.entity.NumeroSemanas,
         Dedicacion: row.entity.Dedicacion,
         FacultadNombre: row.entity.FacultadNombre,
-        FechaExpedicion: self.FechaParaPDF
+        FechaExpedicion:row.entity.FechaExpedicion
       };
 
       var local = JSON.stringify(resolucion);

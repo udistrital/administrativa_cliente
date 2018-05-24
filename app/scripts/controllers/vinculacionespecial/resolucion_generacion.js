@@ -120,14 +120,23 @@ angular.module('contractualClienteApp')
             }
         });
 
-        oikosRequest.get("dependencia_tipo_dependencia", "query=TipoDependenciaId.Id%3A2&fields=DependenciaId&limit=-1").then(function(response) {
+        oikosRequest.get('dependencia_tipo_dependencia', $.param({
+            query: "TipoDependenciaId.Id:2",
+            fields: "DependenciaId",
+            limit: -1
+          })).then(function(response) {
             self.facultades = response.data;
         });
 
         self.resolucion = {};
 
-        administrativaRequest.get("tipo_resolucion", "limit=-1").then(function(response) {
+        administrativaRequest.get('tipo_resolucion', $.param({
+            limit: -1,
+            sortby:"Id",
+            order:"asc"
+          })).then(function(response) {
             self.tipos_resolucion = response.data;
+            self.tipoResolucionDefecto = self.tipos_resolucion[0].Id;
         });
 
 
