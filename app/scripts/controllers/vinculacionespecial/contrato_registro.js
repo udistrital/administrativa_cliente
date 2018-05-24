@@ -7,8 +7,10 @@
  * # ContratoRegistroCtrl
  * Controller of the clienteApp
  */
+
+//TODO: unificar contrato_registro, contrato_registro_horas y contrato_resistro_cancelar
 angular.module('contractualClienteApp')
-    .controller('ContratoRegistroCtrl', function (amazonAdministrativaRequest, administrativaRequest, adminMidRequest, oikosRequest, coreAmazonRequest, financieraRequest, sicapitalRequest, idResolucion, $mdDialog, lista, resolucion, $translate, $window, $scope, colombiaHolidaysService) {
+    .controller('ContratoRegistroCtrl', function (amazonAdministrativaRequest, administrativaRequest, adminMidRequest, oikosRequest, coreAmazonRequest, financieraRequest, sicapitalRequest, idResolucion, colombiaHolidaysService, $mdDialog, lista, resolucion, $translate, $window, $scope) {
 
         var self = this;
         self.contratoGeneralBase = {};
@@ -17,15 +19,18 @@ angular.module('contractualClienteApp')
         self.estado = false;
         self.CurrentDate = new Date();
         self.esconderBoton = false;
-
         self.idResolucion = idResolucion;
+        self.FechaExpedicion = null;
 
         administrativaRequest.get('resolucion/' + self.idResolucion).then(function (response) {
             self.resolucionActual = response.data;
-            administrativaRequest.get('tipo_resolucion/' + self.resolucionActual.IdTipoResolucion.Id).then(function (response) {
-                self.resolucionActual.IdTipoResolucion.NombreTipoResolucion = response.data.NombreTipoResolucion;
-            });
-        });
+            if (self.resolucionActual.FechaExpedicion != undefined && self.resolucionActual.FechaExpedicion !== "0001-01-01T00:00:00Z") {
+                self.FechaExpedicion = new Date(self.resolucionActual.FechaExpedicion);
+            }
+            return administrativaRequest.get('tipo_resolucion/' + self.resolucionActual.IdTipoResolucion.Id);
+        }).then(function (response) {
+            self.resolucionActual.IdTipoResolucion.NombreTipoResolucion = response.data.NombreTipoResolucion;
+        });;
 
         oikosRequest.get('dependencia/' + resolucion.Facultad).then(function (response) {
             resolucion.Facultad = response.data.Nombre;
@@ -125,7 +130,7 @@ angular.module('contractualClienteApp')
                 self.contratoGeneralBase.Contrato.TipoContrato = { Id: 18 };
                 self.contratoGeneralBase.Contrato.ObjetoContrato = "Docente de Vinculación Especial - Medio Tiempo Ocasional (MTO) - Tiempo Completo Ocasional (TCO)";
             }
-            if(self.FechaExpedicion && self.acta.FechaInicio){
+            if (self.FechaExpedicion && self.acta.FechaInicio) {
                 swal({
                     title: $translate.instant('EXPEDIR'),
                     text: $translate.instant('SEGURO_EXPEDIR'),
@@ -156,11 +161,11 @@ angular.module('contractualClienteApp')
                 swal({
                     text: $translate.instant('COMPLETE_CAMPOS'),
                     type: 'warning'
-                  });
+                });
             }
         };
 
-        self.cancelarExpedicion = function(){
+        self.cancelarExpedicion = function () {
             $mdDialog.hide();
         };
 

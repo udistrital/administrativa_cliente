@@ -13,8 +13,9 @@ angular.module('contractualClienteApp')
   var self=this;
 
   self.resolucion = JSON.parse(localStorage.getItem("resolucion"));
-  self.resolucion.FechaExpedicion = new Date(self.resolucion.FechaExpedicion);
-
+  if (self.resolucion.FechaExpedicion != undefined && self.resolucion.FechaExpedicion !== "0001-01-01T00:00:00Z") {
+    self.resolucion.FechaExpedicion = new Date(self.resolucion.FechaExpedicion);
+  }
   self.proyectos=[];
 
   oikosRequest.get("dependencia/proyectosPorFacultad/"+self.resolucion.IdFacultad+"/"+self.resolucion.NivelAcademico_nombre,"").then(function(response){

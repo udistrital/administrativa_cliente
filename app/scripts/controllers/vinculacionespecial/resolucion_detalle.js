@@ -13,8 +13,9 @@ angular.module('contractualClienteApp')
     var self = this;
     self.resolucion = JSON.parse(localStorage.getItem("resolucion"));
     //TODO: ver porque Json.Parse no transforma las fechas :/
-    self.resolucion.FechaExpedicion = new Date(self.resolucion.FechaExpedicion);
-    self.resolucion.FechaRegistro = new Date(self.resolucion.FechaRegistro);
+    if (self.resolucion.FechaExpedicion != undefined && self.resolucion.FechaExpedicion !== "0001-01-01T00:00:00Z") {
+      self.resolucion.FechaExpedicion = new Date(self.resolucion.FechaExpedicion);
+    }
     self.proyectos = [];
 
     oikosRequest.get("dependencia", "query=Id:" + self.resolucion.IdFacultad + "&limit=-1").then(function (response) {
@@ -153,7 +154,7 @@ angular.module('contractualClienteApp')
           localRes.FechaExpedicion = res.FechaExpedicion;
           var local = JSON.stringify(localRes);
           localStorage.setItem('resolucion', local);
-
+          res.FechaExpedicion = res.FechaExpedicion.toJSON();
           return administrativaRequest.put("resolucion", self.resolucion.Id, res);
         }).then(function (response) {
           if (response.data !== "OK") {
@@ -235,6 +236,16 @@ angular.module('contractualClienteApp')
           type: "error"
         });
       }
+    };
+
+    self.getNumeros = function (objeto) {
+      var numeros = [];
+      if (objeto) {
+        for (var i = 0; i < objeto.length; i++) {
+          numeros.push(i);
+        }
+      }
+      return numeros;
     };
 
     self.volver = function () {
