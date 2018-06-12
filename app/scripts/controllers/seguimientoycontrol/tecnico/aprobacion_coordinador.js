@@ -403,7 +403,6 @@ angular.module('contractualClienteApp')
 
       homologacionDependenciaService.get('proyecto_curricular_snies', self.coordinador.codigo_snies).
       then(function(response){
-        console.log(self.coordinador.codigo_snies);
         self.proyecto_homologado = response.data.homologacion;
 
             //adminMidRequest.get('aprobacion_pago/certificacion_visto_bueno/*/**/*').
@@ -422,9 +421,7 @@ angular.module('contractualClienteApp')
                 var mes = moment(date).format('M');
                 var anio = moment(date).format('YYYY');
                 var contenido = [];
-                //console.log(self.contenido);
                 contenido.push( {text:'EL SUSCRITO COORDINADOR DEL PROYECTO CURRICULAR DE ' + self.coordinador.nombre_proyecto_curricular + ' DE LA ' + self.facultad.Padre.Nombre + ' DE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
-                //console.log(self.contenido);
                 contenido.push({text:'CERTIFICA QUE: ', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
                 contenido.push({text:'Los Docentes de Vinculación Especial contratados para el periodo Académico 2018-1, del Proyecto Curricular de ' + self.coordinador.nombre_proyecto_curricular + ' cumplieron a cabalidad con las funciones docentes durante el mes de ' +self.mes.Nombre+ ' de ' +self.anio+ ' (según calendario académico).', style:'general_font'}, '\n\n')
                 if(self.docentes_incumplidos){
@@ -475,12 +472,10 @@ angular.module('contractualClienteApp')
                 //Variable para obtener la fecha y hora que se genera el dcoumento
                 var date = new Date();
                 date = moment(date).format('DD_MMM_YYYY_HH_mm_ss');
-                //console.log(self.contenido);
                 pdfMake.createPdf(docDefinition).download('Certificación cumplido coordinación ' + date + '.pdf');
 
 
               });
-                //console.log(self.contenido);
 
 
                 //Sirve para descargar el documento y setearle el nombre

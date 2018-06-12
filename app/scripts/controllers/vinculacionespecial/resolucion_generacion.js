@@ -51,8 +51,8 @@ angular.module('contractualClienteApp')
                     displayName: $translate.instant('PERIODO')
                 },
                 {
-                    field: 'Facultad',
-                    width: '20%',
+                    field: 'NombreFacultad',
+                    width: '27%',
                     displayName: $translate.instant('FACULTAD')
                 },
                 {
@@ -67,12 +67,12 @@ angular.module('contractualClienteApp')
                 },
                 {
                     field: 'NumeroSemanas',
-                    width: '15%',
+                    width: '8%',
                     displayName: $translate.instant('SEMANAS')
                 },
                 {
                     field: 'Estado',
-                    width: '12%',
+                    width: '10%',
                     displayName: $translate.instant('ESTADO')
                 },
 
@@ -89,8 +89,8 @@ angular.module('contractualClienteApp')
             });
 
         };
-        //CALCULAR EN QUÉ PERIODO SE ESTÁ
-        administrativaRequest.get("resolucion_vinculacion/expedidas_vigencia_periodo", "vigencia="+self.anioPeriodo+"&periodo=1").then(function(response) {
+        
+        administrativaRequest.get("resolucion_vinculacion/expedidas_vigencia_periodo_vinculacion", "vigencia="+self.anioPeriodo).then(function(response) {
             self.resolucionesExpedidasPeriodo.data = response.data;
             if (self.resolucionesExpedidasPeriodo.data !== null) {
                 self.resolucionesExpedidasPeriodo.data.forEach(function(resolucion) {
@@ -113,28 +113,32 @@ angular.module('contractualClienteApp')
                             resolucion.EstadoTexto = "Cancelada";
                         }
                     }
+                    oikosRequest.get("dependencia/"+resolucion.Facultad).then(function(response){
+                        resolucion.NombreFacultad = response.data.Nombre;
+                      });
                 });
             }
         });
 
-        oikosRequest.get("dependencia_tipo_dependencia", "query=TipoDependenciaId.Id%3A2&fields=DependenciaId&limit=-1").then(function(response) {
+        oikosRequest.get('dependencia_tipo_dependencia', $.param({
+            query: "TipoDependenciaId.Id:2",
+            fields: "DependenciaId",
+            limit: -1
+          })).then(function(response) {
             self.facultades = response.data;
         });
 
         self.resolucion = {};
 
-        administrativaRequest.get("tipo_resolucion", "limit=-1").then(function(response) {
+        administrativaRequest.get('tipo_resolucion', $.param({
+            limit: -1,
+            sortby:"Id",
+            order:"asc"
+          })).then(function(response) {
             self.tipos_resolucion = response.data;
+            self.tipoResolucionDefecto = self.tipos_resolucion[0].Id;
         });
 
-        /*
-
-        administrativaRequest.get("contenido_resolucion/ResolucionTemplate").then(function(response) {
-            self.resolucion.preambulo = response.data.Preambulo;
-            self.resolucion.consideracion = response.data.Consideracion;
-        });
-
-        */
 
 
         self.crearResolucion = function() {
@@ -155,7 +159,8 @@ angular.module('contractualClienteApp')
                     cancelButtonText: $translate.instant('CANCELAR_GUARDAR_RESOLUCION'),
                     confirmButtonClass: 'btn btn-success',
                     cancelButtonClass: 'btn btn-danger',
-                    buttonsStyling: false
+                    buttonsStyling: false,
+                    allowOutsideClick: false
                 }).then(function() {
                     self.guardarResolucion();
                 }, function( /*dismiss*/ ) {});
@@ -178,8 +183,6 @@ angular.module('contractualClienteApp')
                 NumeroSemanas: parseInt(self.resolucion.numeroSemanas),
                 Periodo: parseInt(self.resolucion.Periodo),
                 IdTipoResolucion: tipoResolucion,
-              //  PreambuloResolucion: self.resolucion.preambulo,
-                //ConsideracionResolucion: self.resolucion.consideracion,
             };
 
             var resolucionVinculacionDocenteData = {
@@ -202,7 +205,8 @@ angular.module('contractualClienteApp')
                     swal({
                         text: $translate.instant('ALERTA_RESOLUCION_EXITOSA'),
                         type: 'success',
-                        confirmButtonText: $translate.instant('ACEPTAR')
+                        confirmButtonText: $translate.instant('ACEPTAR'),
+                        allowOutsideClick: false
                     }).then(function() {
                         $window.location.href = '#/vinculacionespecial/resolucion_gestion';
                     });
@@ -244,7 +248,6 @@ angular.module('contractualClienteApp')
                 });
             }
 
-            //
         };
 
     });

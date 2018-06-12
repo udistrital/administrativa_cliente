@@ -41,14 +41,16 @@
 						<br>
 						<div class="col-md-10">
 						<select class="form-control" ng-model="hojasDeVidaSeleccion.term" ng-change="hojasDeVidaSeleccion.get_docentes_vinculados()">
+							<option value="">{{ 'TODOS_PROY' | translate }}</option>
 							<option ng-selected="{{proyecto.Id == HojasDeVidaSeleccion.defaultSelectedPrecont}}" ng-repeat="proyecto in hojasDeVidaSeleccion.proyectos" value="{{proyecto.Id}}">{{proyecto.Nombre}}</option>
 						</select>
 					 </div>
 						<br>
 						<div class="panel-body">
 						<br>
-						<div ui-grid="hojasDeVidaSeleccion.precontratados" ui-grid-selection ui-grid-pagination class="grid" ng-hide="hojasDeVidaSeleccion.estado"></div>
-						<center><loading load="hojasDeVidaSeleccion.estado" tam="5"></loading><center>
+						<center><loading load="hojasDeVidaSeleccion.estado" tam="5" style="position: absolute; z-index: 10; top:50%;"></loading><center>
+						<div ui-grid="hojasDeVidaSeleccion.precontratados" ui-grid-selection ui-grid-pagination ui-grid-selection ui-grid-pagination class="grid"></div>
+						<input type="submit" class="btn btn-danger" ng-disabled="hojasDeVidaSeleccion.personasSeleccionadasBorrar.length == 0" value="{{'DESVINCULAR_DOCENTES' | translate }}" ng-click="verCancelarInscripcionDocentes(hojasDeVidaSeleccion.personasSeleccionadasBorrar)">
 						</div>
 
 					</div>
@@ -76,8 +78,8 @@
 
 									<div class="col-md-7">
 										<div ui-grid="hojasDeVidaSeleccion.Disponibilidades" ui-grid-selection ui-grid-pagination ui-grid-auto-resize class="grid" ng-model-options="{ updateOn: 'keyup', debounce : 1000 }"></div>
-										<div class="col-md-4 col-md-offset-4">
-											<center><input type="submit" class="form-control btn btn-success" value="{{'VINCULAR_DOCENTES_SELECCIONADOS' | translate }}" ng-click="hojasDeVidaSeleccion.agregarPrecontratos()"></center>
+										<div ng-hide="hojasDeVidaSeleccion.esconderBoton" class="col-md-4 col-md-offset-4">
+											<center><input type="submit" class="form-control btn btn-success" value="{{'VINCULAR_DOCENTES' | translate }}" ng-click="hojasDeVidaSeleccion.agregarPrecontratos()"></center>
 										</div>
 									</div>
 

@@ -19,15 +19,9 @@
 
             <div class="modal-body" ng-if="necesidades.g_necesidad!=undefined">
               <visualizar-necesidad  vigencia="necesidades.vigencia" numero="necesidades.numero_el" />
-              <!--<div ng-include="necesidades.templateUrl" ng-controller="VerNecesidadCtrl as verNecesidad" ng-repeat="data in necesidades.parametros"></div>-->
             </div>
 
-            <!--<div class="modal-body" ng-if="necesidades.mod_ver">
-              <div ng-include="necesidades.templateUrl" ng-controller="VerNecesidadCtrl as verNecesidad" ng-repeat="data in necesidades.parametros"></div>
-            </div>
-            <div class="modal-body" ng-if="necesidades.mod_aprobar">
-              <div ng-include="necesidades.templateUrl" ng-controller="AprobarNecesidadCtrl as aprobarNecesidad" ng-repeat="data in necesidades.parametros"></div>
-            </div>-->
+
             <div class="modal-footer" ng-show="necesidades.mod_aprobar">
               <center>
                 <button class="btn btn-success btn-outline" type="button" name="button" ng-click="necesidades.aprobar_necesidad()">{{"APROBAR" | translate}}</button>
@@ -44,7 +38,4 @@
       </div>
 
   </div>
-  <!--<div class="panel-footer">
-    <pre>{{necesidades.necesidad | json}}</pre>
-  </div>-->
 </div>

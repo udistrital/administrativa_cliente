@@ -37,14 +37,7 @@ angular.module('contractualClienteApp')
             cellTooltip: function(row) {
               return row.entity.FuenteFinanciamiento.Nombre;
             }
-          }/*,
-          {
-             field: 'Valor',
-             displayName: $translate.instant('VALOR'),
-             cellTemplate: '<div align="right">{{row.entity.Valor | currency}}</div>',
-             headerCellClass: $scope.highlightFilteredHeader + 'text-center text-info',
-             //cellTemplate: '<div align="right">{{row.entity.Valor | currency }}</div>',
-           }*/
+          }
         ]
       };
 

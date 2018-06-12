@@ -54,13 +54,33 @@
 										<label>{{ 'LABEL_HORAS_A_ADICIONAR' | translate }}</label>
 									</div>
 									<div class="col-md-1">
-										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionAdicion.horas_a_adicionar" ng-change="resolucionAdicion.Calcular_horas_totales()" required="">
+										<input type="number" pattern="[0-9]*" class="form-control" ng-model="resolucionAdicion.horas_a_adicionar" ng-change="resolucionAdicion.Calcular_horas_totales()" min=0 required="">
 									</div>
 									<div class="col-md-2">
 										<label>{{ 'LABEL_HORAS_TOTALES' | translate }}</label>
 									</div>
 									<div class="col-md-1">
 										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionAdicion.horas_totales" readonly>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="col-md-2 col-md-offset-1">
+										<label>{{ 'LABEL_SEMANAS_ACTUALES' | translate }}</label>
+									</div>
+									<div class="col-md-1">
+										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionAdicion.semanas_actuales" readonly>
+									</div>
+									<div class="col-md-2">
+										<label>{{ 'LABEL_SEMANAS_A_ADICIONAR' | translate }}</label>
+									</div>
+									<div class="col-md-1">
+										<input type="number" pattern="[0-9]*" class="form-control" ng-model="resolucionAdicion.semanas_a_adicionar" ng-change="resolucionAdicion.Calcular_semanas_totales()" min=0 required="">
+									</div>
+									<div class="col-md-2">
+										<label>{{ 'LABEL_SEMANAS_TOTALES' | translate }}</label>
+									</div>
+									<div class="col-md-1">
+										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionAdicion.semanas_totales" readonly>
 									</div>
 								</div>
 								<div class="col-md-12">

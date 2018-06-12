@@ -166,6 +166,7 @@ angular.module('contractualClienteApp')
 
         $scope.mostrar_modal_adicion = function(row) {
             self.horas_actuales = row.entity.NumeroHorasSemanales;
+            self.semanas_actuales = row.entity.NumeroSemanas;
             self.disponibilidad_actual = row.entity.NumeroDisponibilidad;
             self.persona_a_modificar = row.entity;
             self.disponibilidad_actual_id = row.entity.Disponibilidad;
@@ -195,6 +196,8 @@ angular.module('contractualClienteApp')
                 IdPersona: self.persona_a_modificar.IdPersona,
                 NumeroHorasSemanales: parseInt(self.horas_actuales),
                 NumeroHorasNuevas: parseInt(self.horas_totales),
+                NumeroHSemanas: parseInt(self.semanas_actuales),
+                NumeroSemanasNuevas: parseInt(self.semanas_totales),
                 NumeroSemanas: parseInt(self.persona_a_modificar.NumeroSemanas),
                 IdResolucion: { Id: parseInt(self.resolucion.Id) },
                 IdDedicacion: { Id: parseInt(self.persona_a_modificar.IdDedicacion.Id) },
@@ -247,75 +250,88 @@ angular.module('contractualClienteApp')
             self.horas_totales = parseInt(self.horas_actuales) + parseInt(self.horas_a_adicionar);
 
         };
+        
+        self.Calcular_semanas_totales = function() {
+            self.semanas_totales = parseInt(self.semanas_actuales) + parseInt(self.semanas_a_adicionar);
+
+        };
 
         self.cambiar_disponibilidad = function() {
             self.cambio_disp = true;
         };
 
         self.realizar_nueva_vinculacion = function() {
-            if (self.saldo_disponible) {
-
-                var vinculacionDocente = {
-                    Id: self.persona_a_modificar.Id,
-                    FechaRegistro: self.persona_a_modificar.FechaRegistro,
-                    IdPersona: self.persona_a_modificar.IdPersona,
-                    NumeroHorasSemanales: parseInt(self.horas_actuales),
-                    NumeroHorasNuevas: parseInt(self.horas_totales),
-                    NumeroSemanas: parseInt(self.persona_a_modificar.NumeroSemanas),
-                    IdResolucion: { Id: parseInt(self.resolucion.Id) },
-                    IdDedicacion: { Id: parseInt(self.persona_a_modificar.IdDedicacion.Id) },
-                    IdProyectoCurricular: parseInt(self.persona_a_modificar.IdProyectoCurricular),
-                    Categoria: self.persona_a_modificar.Categoria.toUpperCase(),
-                    ValorContrato: self.persona_a_modificar.ValorContrato,
-                    Dedicacion: self.persona_a_modificar.IdDedicacion.NombreDedicacion.toUpperCase(),
-                    NivelAcademico: self.resolucion.NivelAcademico_nombre,
-                    Disponibilidad: parseInt(self.disponibilidad_actual_id),
-                    Vigencia: { Int64: parseInt(self.resolucion.Vigencia), valid: true },
-                    NumeroContrato: self.persona_a_modificar.NumeroContrato,
-
-                };
-
-                desvinculacionesData.push(vinculacionDocente);
-
-                var objeto_a_enviar = {
-                    IdModificacionResolucion: self.id_modificacion_resolucion,
-                    IdNuevaResolucion: self.resolucion_id_nueva,
-                    DisponibilidadNueva: self.disponibilidad_nueva_id,
-                    DocentesDesvincular: desvinculacionesData
-                };
-
-                adminMidRequest.post("gestion_desvinculaciones/adicionar_horas", objeto_a_enviar).then(function(response) {
-
-                    if (response.data === "OK") {
-                        swal({
-                            text: $translate.instant('ALERTA_ADICION_EXITOSA'),
-                            type: 'success',
-                            confirmButtonText: $translate.instant('ACEPTAR')
-
+            if(self.semanas_a_adicionar!=0 || self.horas_a_adicionar!=0){
+                
+                    if (self.saldo_disponible) {
+        
+                        var vinculacionDocente = {
+                            Id: self.persona_a_modificar.Id,
+                            FechaRegistro: self.persona_a_modificar.FechaRegistro,
+                            IdPersona: self.persona_a_modificar.IdPersona,
+                            NumeroHorasSemanales: parseInt(self.horas_actuales),
+                            NumeroHorasNuevas: parseInt(self.horas_totales),
+                            NumeroSemanas: parseInt(self.semanas_actuales),
+                            NumeroSemanasNuevas: parseInt(self.semanas_totales),
+                            IdResolucion: { Id: parseInt(self.resolucion.Id) },
+                            IdDedicacion: { Id: parseInt(self.persona_a_modificar.IdDedicacion.Id) },
+                            IdProyectoCurricular: parseInt(self.persona_a_modificar.IdProyectoCurricular),
+                            Categoria: self.persona_a_modificar.Categoria.toUpperCase(),
+                            ValorContrato: self.persona_a_modificar.ValorContrato,
+                            Dedicacion: self.persona_a_modificar.IdDedicacion.NombreDedicacion.toUpperCase(),
+                            NivelAcademico: self.resolucion.NivelAcademico_nombre,
+                            Disponibilidad: parseInt(self.disponibilidad_actual_id),
+                            Vigencia: { Int64: parseInt(self.resolucion.Vigencia), valid: true },
+                            NumeroContrato: self.persona_a_modificar.NumeroContrato,
+        
+                        };
+        
+                        desvinculacionesData.push(vinculacionDocente);
+        
+                        var objeto_a_enviar = {
+                            IdModificacionResolucion: self.id_modificacion_resolucion,
+                            IdNuevaResolucion: self.resolucion_id_nueva,
+                            DisponibilidadNueva: self.disponibilidad_nueva_id,
+                            DocentesDesvincular: desvinculacionesData
+                        };
+        
+                        adminMidRequest.post("gestion_desvinculaciones/adicionar_horas", objeto_a_enviar).then(function(response) {
+        
+                            if (response.data === "OK") {
+                                swal({
+                                    text: $translate.instant('ALERTA_ADICION_EXITOSA'),
+                                    type: 'success',
+                                    confirmButtonText: $translate.instant('ACEPTAR')
+        
+                                });
+                                //LIMPIAR GRID
+                                desvinculacionesData = [];
+                                $window.location.reload();
+                            } else {
+                                swal({
+                                    title: $translate.instant('ERROR'),
+                                    text: $translate.instant('ALERTA_ERROR_ADICION'),
+                                    type: 'info',
+                                    confirmButtonText: $translate.instant('ACEPTAR')
+                                });
+                                //LIMPIAR GRID
+                                desvinculacionesData = [];
+                                $window.location.reload();
+                            }
                         });
-                        //LIMPIAR GRID
-                        desvinculacionesData = [];
-                        $window.location.reload();
-                        //  $('#modal_adicion').modal('hide');
                     } else {
                         swal({
                             title: $translate.instant('ERROR'),
-                            text: $translate.instant('ALERTA_ERROR_ADICION'),
+                            text: $translate.instant('ERROR_DISP'),
                             type: 'info',
                             confirmButtonText: $translate.instant('ACEPTAR')
                         });
-                        //LIMPIAR GRID
-                        desvinculacionesData = [];
-                        $window.location.reload();
-                        //  $('#modal_adicion').modal('hide');
                     }
-                });
+                
             } else {
                 swal({
-                    title: $translate.instant('ERROR'),
-                    text: $translate.instant('ERROR_DISP'),
-                    type: 'info',
-                    confirmButtonText: $translate.instant('ACEPTAR')
+                    text: $translate.instant('COMPLETE_CAMPOS_DIFERENTE_0'),
+                    type: 'warning'
                 });
             }
         };

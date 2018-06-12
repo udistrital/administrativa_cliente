@@ -71,22 +71,7 @@ angular.module('contractualClienteApp')
                 }
               },
               width: '20%'
-            }/*,
-            {
-              field: 'Saldo',
-              displayName: $translate.instant('SALDO'),
-              cellFilter: 'currency',
-              cellTemplate: '<div align="right">{{row.entity.Saldo | currency}}</div>',
-              headerCellClass: $scope.highlightFilteredHeader + 'text-right ',
-              cellClass: function(row, col) {
-                if (col.treeNode.children.length === 0) {
-                  return "unbold";
-                }else {
-                  return "text-info";
-                }
-              },
-              width: '20%'
-            }*/
+            }
           ]
 
         };
@@ -104,48 +89,14 @@ angular.module('contractualClienteApp')
                     }
                     self.actualiza_rubros();
                     if($scope.tipo!=="3-0-0"){
-                    //self.cargarSaldos();
+                    
                   }
                   }
                 }, true);
 
-      /*  self.cargarSaldos = function() {
-          angular.forEach(self.gridOptions.data, function(data) {
-            financieraRequest.get('apropiacion/SaldoApropiacion/' + data.Id, '').then(function(response) {
-              data.Saldo = response.data;
-            });
-          });
-        };*/
-
-    /*    financieraRequest.get('apropiacion', 'limit=0&query=Vigencia:' + $scope.vigencia + ',Rubro.Codigo__startswith:' + $scope.tipo).then(function(response) {
-
-          self.gridOptions.data = response.data.sort(function(a, b) {
-            if (a.Rubro.Codigo < b.Rubro.Codigo) {return -1;}
-            if (a.Rubro.Codigo > b.Rubro.Codigo) {return 1;}
-            return 0;
-          });
-          self.max_level = 0;
-          var level = 0;
-          for (var i = 0; i < self.gridOptions.data.length; i++) {
-            level = (self.gridOptions.data[i].Rubro.Codigo.match(/-/g) || []).length;
-            if (level > self.max_level) {
-              self.max_level = level;
-            }
-          }
-
-          for (var h = 0; h < self.gridOptions.data.length; h++) {
-            level = (self.gridOptions.data[h].Rubro.Codigo.match(/-/g) || []).length;
-            if (level < self.max_level) {
-              self.gridOptions.data[h].$$treeLevel = level;
-            }
-          }
-          self.cargarSaldos();
-        });*/
-
-        //self.gridApi.core.refresh();
+      
         self.actualiza_rubros = function() {
           financieraRequest.get('apropiacion', 'limit=-1&query=Vigencia:' + $scope.vigencia + ",Rubro.Codigo__startswith:" + $scope.tipo + ",Rubro.UnidadEjecutora:" + $scope.unidadejecutora + ",Estado.Id:" + 2).then(function(response) {
-            console.log("Vigencia: ",$scope.vigencia, " start: ",$scope.tipo, " unidadEjecutora: ",$scope.unidadejecutora)
             if(response.data!==null){
             self.gridOptions.data = response.data.sort(function(a, b) {
               if (a.Rubro.Codigo < b.Rubro.Codigo) {return -1;}
@@ -198,9 +149,6 @@ angular.module('contractualClienteApp')
 
         self.gridOptions.multiSelect = false;
 
-        //self.setSelectable();
-
-        //self.setSelectable();
 
       },
       controllerAs:'d_listaApropiaciones'

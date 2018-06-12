@@ -10,7 +10,6 @@
 angular.module('contractualClienteApp')
     .controller('NecesidadesCtrl', function($scope, administrativaRequest, $translate) {
         var self = this;
-        //self.g_necesidad = {};
 
 
 

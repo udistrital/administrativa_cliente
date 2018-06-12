@@ -32,7 +32,6 @@ angular.module('contractualClienteApp')
                     width: '80%',
                 },
                 {
-                    //<button class="btn primary" ng-click="grid.appScope.deleteRow(row)">Delete</button>
                     name: $translate.instant('OPCIONES'),
                     enableFiltering: false,
                     width: '10%',

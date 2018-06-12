@@ -5,7 +5,7 @@
 		<div class="col-md-12">
 			<div class="panel panel-default">
 				<div class="panel-heading">
-					<h4 class="intro-text">{{ 'TITULO_DOC_A_MODIFICAR_HORAS' | translate }} </h4>
+					<h4 class="intro-text">{{ 'TITULO_DOC_A_MODIFICAR_HORAS' | translate }}  </h4>
 				</div>
 				<br>
 				<div class="col-md-2">
@@ -38,7 +38,7 @@
 			<div class="modal-body">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<h3 class="panel-title">{{ 'TITULO_REDUCCION_HORAS' | translate }}</h3>
+						<h3 class="panel-title">{{ 'TITULO_ADICION_HORAS' | translate }}</h3>
 					</div>
 					<div class="panel-body">
 						<form name="formplan" ng-submit="formplan.$valid">
@@ -51,10 +51,10 @@
 										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.horas_actuales" readonly>
 									</div>
 									<div class="col-md-2">
-										<label>{{ 'LABEL_HORAS_A_REDUCIR' | translate }}</label>
+										<label>{{ 'LABEL_HORAS_A_ADICIONAR' | translate }}</label>
 									</div>
 									<div class="col-md-1">
-										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.horas_a_modificar" ng-change="resolucionReduccion.Calcular_horas_totales()" required="">
+										<input type="number" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.horas_a_adicionar" ng-change="resolucionReduccion.Calcular_horas_totales()" min=0 max={{resolucionReduccion.horas_actuales-1}} required="">
 									</div>
 									<div class="col-md-2">
 										<label>{{ 'LABEL_HORAS_TOTALES' | translate }}</label>
@@ -64,22 +64,53 @@
 									</div>
 								</div>
 								<div class="col-md-12">
+									<div class="col-md-2 col-md-offset-1">
+										<label>{{ 'LABEL_SEMANAS_ACTUALES' | translate }}</label>
+									</div>
+									<div class="col-md-1">
+										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.semanas_actuales" readonly>
+									</div>
+									<div class="col-md-2">
+										<label>{{ 'LABEL_SEMANAS_A_REDUCIR' | translate }}</label>
+									</div>
+									<div class="col-md-1">
+										<input type="number" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.semanas_a_adicionar" ng-change="resolucionReduccion.Calcular_semanas_totales()" min=0 max={{resolucionReduccion.semanas_actuales-1}} required="">
+									</div>
+									<div class="col-md-2">
+										<label>{{ 'LABEL_SEMANAS_TOTALES' | translate }}</label>
+									</div>
+									<div class="col-md-1">
+										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.semanas_totales" readonly>
+									</div>
+								</div>
+								<div class="col-md-12">
 									<br>
 									<div class="col-md-2 col-md-offset 3">
-										<label>{{ 'LABEL_DISP_ACTUAL' | translate}}</label>
+										<label>{{'LABEL_DISP_ACTUAL' | translate}}</label>
 									</div>
 									<div class="col-md-2">
 										<input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionReduccion.disponibilidad_actual" readonly>
+									</div>
+									<div class="col-md-4">
+										<input type="submit" class="form-control btn btn-success" value="{{'BTN_CAMBIAR_DISP' | translate }}" ng-click="resolucionReduccion.cambiar_disponibilidad()">
 									</div>
 									<div class="col-md-2">
 										<input type="submit" class="form-control btn btn-success" value="{{'BTN_MODIFICAR_HORAS' | translate }}" ng-click="resolucionReduccion.realizar_nueva_vinculacion()">
 									</div>
 								</div>
 								<br>
-								</form>
+								<div ng-show="resolucionReduccion.cambio_disp">
+									<div class="col-md-7">
+										<div ui-grid="resolucionReduccion.Disponibilidades" ui-grid-selection ui-grid-pagination ui-grid-auto-resize class="grid"></div>
+									</div>
+									<div class="col-md-5">
+										<div ui-grid="resolucionReduccion.Apropiaciones" ui-grid-selection ui-grid-pagination ui-grid-auto-resize class="grid"></div>
+									</div>
+									<br>
+									</div>
+							</form>
 						</div>
 					</div>
 					</div>
 			</div>
 		</div>
-</div>

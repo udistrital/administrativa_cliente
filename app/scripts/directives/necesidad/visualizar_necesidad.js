@@ -37,8 +37,6 @@ angular.module('contractualClienteApp')
                             query: "Necesidad:" + response.data[0].Id,
                             fields: "FuenteFinanciamiento,Apropiacion,MontoParcial"
                         })).then(function(response) {
-                            //self.f_necesidad=response.data;
-                            //------------
                             var dateArrKeyHolder = [];
                             var dateArr = [];
                             angular.forEach(response.data, function(item) {
@@ -55,7 +53,6 @@ angular.module('contractualClienteApp')
                                     obj.Apropiacion = response.data[0];
                                 });
 
-                                //obj.Apropiacion = item.Apropiacion;
                                 obj.Fuentes = obj.Fuentes || [];
 
                                 var i_fuente = {};
@@ -68,11 +65,9 @@ angular.module('contractualClienteApp')
                                     i_fuente.MontoParcial = item.MontoParcial;
                                     obj.Fuentes.push(i_fuente);
                                 }
-                                //obj.fuentes.push({FuenteFinanciamiento:item.FuenteFinanciamiento, MontoParcial: item.MontoParcial });
                             });
                             self.ff_necesidad = dateArr;
 
-                            //-----------
                         });
 
                         administrativaRequest.get('dependencia_necesidad', $.param({

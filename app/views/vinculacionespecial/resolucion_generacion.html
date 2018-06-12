@@ -4,11 +4,9 @@
     <div class="col-md-2 col-md-offset-4">
       <center><label> {{ 'SELECCIONE_TIPO_RES' | translate }} </label></center>
     </div>
-    <div class="col-md-6">
-    <select ng-model="resolucionGeneracion.tipo_resolucion_elegida">
-      <option value="">{{'SELECCIONE' | translate }}</option>
-      <option value=1>{{'VINCULACION' | translate }}</option>
-      <!--option ng-repeat="tipos in resolucionGeneracion.tipos_resolucion" value="{{tipos.Id}}">{{tipos.NombreTipoResolucion}}</option-->
+    <div class="col-md-2">
+    <select class="form-control" ng-model="resolucionGeneracion.tipo_resolucion_elegida" >
+        <option ng-selected="{{tipoResolucion.Id == resolucionGeneracion.tipoResolucionDefecto}}" ng-repeat="tipoResolucion in resolucionGeneracion.tipos_resolucion" value="{{tipoResolucion.Id}}">{{tipoResolucion.NombreTipoResolucion}}</option>
     </select>
   </div>
   </div>
@@ -57,7 +55,9 @@
                 <select class="form-control" ng-model="resolucionGeneracion.resolucion.Periodo" required>
                   <option value="">--{{ 'SELECCIONE' | translate }}--</option>
                   <option value="1">1</option>
+
                   <option value="2">2</option>
+
                   <option value="3">3</option>
                 </select>
 
@@ -87,7 +87,7 @@
         <input type="tel" pattern="[0-9]*" class="form-control" ng-model="resolucionGeneracion.resolucion.numero" required>
       </div>
 
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-12 col-md-offset-0">
           <br>
           <div class="panel panel-default">
             <div class="panel-heading">

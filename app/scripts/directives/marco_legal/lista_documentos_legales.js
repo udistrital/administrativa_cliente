@@ -50,20 +50,12 @@ angular.module('contractualClienteApp')
         self.gridOptions.onRegisterApi = function(gridApi) {
           self.gridApi = gridApi;
           gridApi.selection.on.rowSelectionChanged($scope, function() {
-            //if(self.tipo_fuente.Id==1){
             $scope.documentos = self.gridApi.selection.getSelectedRows();
-            //}
           });
-          /*self.gridApi.pagination.on.paginationChanged($scope,function(){
-        //$scope.gridOptions.virtualizationThreshold =  $scope.gridOptions.paginationPageSize;
-        $scope.gridHeight = self.gridOptions.rowHeight * 2 + (self.gridOptions.paginationPageSize * self.gridOptions.rowHeight);
-      })*/
+          
         };
 
-        /*  self.busqueda = function() {
-            self.gridOptions.enableFiltering = !self.gridOptions.enableFiltering;
-            self.gridApi.core.notifyDataChange(uiGridConstants.dataChange.COLUMN);
-          };*/
+        
 
         administrativaRequest.get('marco_legal', 'limit=0').then(function(response) {
           self.gridOptions.data = response.data;
@@ -84,7 +76,6 @@ angular.module('contractualClienteApp')
 
         self.gridOptions.multiSelect = true;
 
-        //
       },
       controllerAs: 'd_listaDocumentosLegales'
     };

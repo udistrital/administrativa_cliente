@@ -25,16 +25,16 @@ angular.module('contractualClienteApp')
     enableSelectAll: false,
     columnDefs : [
       {field: 'Id', visible : false},
-      {field: 'FechaRegistr', visible : false},
+      {field: 'FechaRegistro', visible : false},
       {field: 'NombreCompleto', width: '15%', displayName: $translate.instant('NOMBRE')},
       {field: 'IdPersona', width: '10%',displayName: $translate.instant('DOCUMENTO_DOCENTES')},
       {field: 'Categoria', width: '10%',displayName: $translate.instant('CATEGORIA')},
-      {field: 'IdDedicacion.NombreDedicacion', width: '10%',displayName: $translate.instant('DEDICACION')},
+      {field: 'Dedicacion', width: '15%',displayName: $translate.instant('DEDICACION')},
       {field: 'IdDedicacion.Id',visible:false},
       {field: 'Disponibilidad', visible : false},
       {field: 'NumeroHorasSemanales', width: '8%',displayName: $translate.instant('HORAS_SEMANALES')},
       {field: 'NumeroSemanas', width: '7%',displayName: $translate.instant('SEMANAS')},
-      {field: 'NumeroDisponibilidad', width: '15%',displayName: $translate.instant('NUM_DISPO_DOCENTE') },
+      {field: 'NumeroDisponibilidad', width: '10%',displayName: $translate.instant('NUM_DISPO_DOCENTE') },
       {field: 'ValorContrato', width: '15%',displayName: $translate.instant('VALOR_CONTRATO'), cellClass:"valorEfectivo", cellFilter:"currency"},
       {field: 'IdProyectoCurricular', visible:false,filter: {
         term: self.term
@@ -46,7 +46,7 @@ angular.module('contractualClienteApp')
         width: '15%',
         displayName:  $translate.instant('OPCIONES'),
         cellTemplate: '<center>' +
-        '<a class="borrar" ng-click="grid.appScope.verAnularReduccion(row)">' +
+        '<a class="borrar" ng-click="grid.appScope.verAnularAdicion(row)">' +
         '<i title="{{\'ANULAR_BTN\' | translate }}" class="fa fa-times-circle-o fa-lg  faa-shake animated-hover"></i></a></div>' +
         '</center>'
       }
@@ -75,12 +75,10 @@ angular.module('contractualClienteApp')
 
   });
   //Función para visualizar docentes ya vinculados a resolución
-
-
   self.get_docentes_vinculados_adicion=function(){
 
     self.estado = true;
-    adminMidRequest.get("gestion_previnculacion/docentes_previnculados", "id_resolucion="+self.resolucion_id_nueva).then(function(response){
+    adminMidRequest.get("gestion_desvinculaciones/docentes_cancelados", "id_resolucion="+self.resolucion_id_nueva).then(function(response){
       self.precontratados_adicion.data=response.data;
       self.estado = false;
 
@@ -91,21 +89,21 @@ angular.module('contractualClienteApp')
 
   };
 
-  $scope.verAnularReduccion=function(row){
+  $scope.verAnularAdicion=function(row){
     swal({
       title: $translate.instant('PREGUNTA_SEGURO'),
-      text: $translate.instant('PREGUNTA_SEGURO_ANULAR_RED'),
+      text: $translate.instant('ALERTA_SEGURO_ANULACION_ADICION'),
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: $translate.instant('CONFIRMAR_ANULAR_REDUCCION'),
+      confirmButtonText: $translate.instant('CONFIRMACION_ANULACION_ADICION'),
       cancelButtonText: $translate.instant('CANCELAR'),
       confirmButtonClass: 'btn btn-success',
       cancelButtonClass: 'btn btn-danger',
       buttonsStyling: false
     }).then(function () {
-      self.AnularReducciónDocente(row);
+      self.buscarNuevaVinc(row,row.entity.Id,self.id_modificacion_resolucion);
     }, function (dismiss) {
       if (dismiss === 'cancel') {
         swal(
@@ -116,12 +114,19 @@ angular.module('contractualClienteApp')
       }
     });
   };
+  
+  self.buscarNuevaVinc = function(row,id,modRes){
+        administrativaRequest.get("modificacion_vinculacion/", "query=VinculacionDocenteCancelada.Id:"+id+",ModificacionResolucion.Id:"+modRes).then(function(response){
+      self.idVinc=response.data[0].VinculacionDocenteRegistrada.Id;
+      self.AnularAdicionDocente(row);
+    });
+  }
 
-  self.AnularReducciónDocente = function(row){
+  self.AnularAdicionDocente = function(row){
 
 
     var docente_a_anular = {
-      Id :              row.entity.Id,
+      Id :              self.idVinc,
       IdPersona :           row.entity.IdPersona,
       NumeroHorasSemanales : row.entity.NumeroHorasSemanales,
       NumeroSemanas  :     row.entity.NumeroSemanas,
@@ -149,7 +154,7 @@ angular.module('contractualClienteApp')
 
 
       swal({
-          text: $translate.instant('ALERTA_ANULACION_EXITOSA'),
+          text:$translate.instant('ALERTA_ANULACION_EXITOSA'),
           type: 'success',
           confirmButtonText: $translate.instant('ACEPTAR')
 
@@ -168,7 +173,5 @@ angular.module('contractualClienteApp')
     });
 
   };
-
-
 
 });

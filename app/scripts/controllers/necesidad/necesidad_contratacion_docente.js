@@ -106,27 +106,11 @@ angular.module('contractualClienteApp')
           break;
       }
     };
-  /*
-    $scope.$watch('necesidadContratacionDocente.dependencia_destino',function(){
-      coreAmazonRequest.get('jefe_dependencia', $.param({
-        query: "DependenciaId:"+self.dependencia_destino,
-        limit: -1
-      })).then(function(response2) {
-        agoraRequest.get('informacion_persona_natural', $.param({
-          query: 'Id:'+response2.data[0].TerceroId,
-          limit: -1
-        })).then(function(response) {
-          self.jefe_destino = response.data[0];
-          self.dep_ned.JefeDependenciaDestino=response2.data[0].Id;
-        });
-      });
-    },true);
-    */
+
 
   
   $scope.$watchGroup([/*'necesidadContratacionDocente.necesidad.UnidadEjecutora', */'necesidadContratacionDocente.necesidad.TipoFinanciacionNecesidad'],function(){
     self.f_apropiacion_fun=[];
-    //self.f_apropiacion_inv=[];
   },true);
   
   $scope.$watch('necesidadContratacionDocente.rol_ordenador_gasto',function(){
@@ -139,7 +123,7 @@ angular.module('contractualClienteApp')
         limit: -1
       })).then(function(response) {
         self.ordenador_gasto = response.data[0];
-        self.dep_ned.OrdenadorGasto=strconv.Atoi(response.data[0].Id);
+        self.dep_ned.OrdenadorGasto=parseInt(response.data[0].Id);
       });
     });
   },true);
@@ -193,7 +177,6 @@ angular.module('contractualClienteApp')
     Id : 3
   }; 
   self.variable={};
-  //self.necesidad.PlanAnualAdquisiciones = 20171;
   self.necesidad.UnicoPago = true;
   self.necesidad.AgotarPresupuesto = false;
   self.necesidad.Valor = 0;
@@ -209,21 +192,7 @@ angular.module('contractualClienteApp')
     Nombre: "Necesidad1 -2017"
   }];
   
-  /*financieraRequest.get('unidad_ejecutora', $.param({
-    limit: -1,
-    sortby:"Nombre",
-    order:"asc",
-  })).then(function(response) {
-    self.unidad_ejecutora_data = response.data;
-  });*/
-  
- /* administrativaRequest.get('tipo_necesidad', $.param({
-    limit: -1,
-    sortby:"NumeroOrden",
-    order:"asc",
-  })).then(function(response) {
-    self.tipo_necesidad_data = response.data;
-  });*/
+
   
   // function
   self.duracionEspecial = function(especial) {
@@ -243,7 +212,7 @@ angular.module('contractualClienteApp')
       self.ver_duracion_fecha = true;
     }
   };
-  //
+  
   
   self.calculo_total_dias = function() {
     if (self.anos === undefined) {
@@ -257,17 +226,7 @@ angular.module('contractualClienteApp')
     }
     self.necesidad.DiasDuracion = ((parseInt(self.anos) * 360) + (parseInt(self.meses) * 30) + parseInt(self.dias));
   };
-  //
-  
-  //Temporal viene dado por un servicio de javier
-  /*agoraRequest.get('informacion_persona_natural', $.param({
-    limit: -1,
-    sortby:"PrimerNombre",
-    order:"asc",
-  })).then(function(response) {
-    self.persona_data = response.data;
-  });
-  */
+
   
   administrativaRequest.get('estado_necesidad', $.param({
     query: "Nombre:Solicitada"
@@ -284,11 +243,7 @@ angular.module('contractualClienteApp')
     self.modalidad_data = response.data;
   });
   
- /* administrativaRequest.get('tipo_financiacion_necesidad', $.param({
-    limit: -1
-  })).then(function(response) {
-    self.tipo_financiacion_data = response.data;
-  });*/
+
 
   
   self.agregar_ffapropiacion = function(apropiacion) {
@@ -298,7 +253,7 @@ angular.module('contractualClienteApp')
       MontoParcial: 0,
     };
   
-    //if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
+
       // Busca si en f_apropiacion_fun ya existe el elemento que intenta agregarse, comparandolo con su id
       // si lo que devuelve filter es un arreglo mayor que 0, significa que el elemento a agregar ya existe
       // por lo tanto devuelve un mensaje de alerta
@@ -315,53 +270,20 @@ angular.module('contractualClienteApp')
       } else {
         self.f_apropiacion_fun.push(Fap);
       }
-  
-    /*} else {
-      // lo mismo que el if anterior pero con f_apropiacion_inv
-      if (self.f_apropiacion_inv.filter(function(element) {
-        return element.Apropiacion === apropiacion.Id;
-      }).length > 0) {
-        swal(
-          'Apropiación ya agregada',
-          'El rubro: <b>' + Fap.aprop.Rubro.Nombre + '</b> ya ha sido agregado',
-          'warning'
-        );
-      } else {
-        self.f_apropiacion_inv.push(Fap);
-      }
-    }*/
+
   };
   
   self.eliminarRubro = function(rubro) {
-    //if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'Funcionamiento') {
       for (var i = 0; i < self.f_apropiacion_fun.length; i++) {
         if (self.f_apropiacion_fun[i] === rubro) {
           self.f_apropiacion_fun.splice(i,1);
         }
       }
-    /*} else {
-      for (var i = 0; i < self.f_apropiacion_inv.length; i++) {
-        if (self.f_apropiacion_fun[i] === rubro) {
-          self.f_apropiacion_inv.splice(i,1);
-        }
-      }
-    }*/
+
   };
   
 
-  
- /* $scope.$watch('necesidadContratacionDocente.f_apropiacion_inv', function() {
-    self.valor_inv = 0;
-    for (var i = 0; i < self.f_apropiacion_inv.length; i++) {
-      self.f_apropiacion_inv[i].MontoParcial = 0;
-      if (self.f_apropiacion_inv[i].fuentes !== undefined) {
-        for (var k = 0; k < self.f_apropiacion_inv[i].fuentes.length; k++) {
-          self.f_apropiacion_inv[i].MontoParcial += self.f_apropiacion_inv[i].fuentes[k].Monto;
-        }
-      }
-      self.valor_inv += self.f_apropiacion_inv[i].MontoParcial;
-    }
-  }, true);*/
+
   
   $scope.$watch('necesidadContratacionDocente.f_apropiacion_fun', function() {
     self.valor_fun = 0;
@@ -395,24 +317,10 @@ angular.module('contractualClienteApp')
         self.marcos_legales.push(marco);
       }
     }
-  
-    /*if (self.necesidad.TipoFinanciacionNecesidad.Nombre === "Inversión") {
-      for (var h = 0; h < self.f_apropiacion_inv.length; h++) {
-        if (self.f_apropiacion_inv[h].fuentes !== undefined) {
-          for (var k = 0; k < self.f_apropiacion_inv[h].fuentes.length; k++) {
-            var f_ap = {};
-            f_ap.Apropiacion = self.f_apropiacion_inv[h].Apropiacion;
-            f_ap.MontoParcial = self.f_apropiacion_inv[h].fuentes[k].Monto;
-            f_ap.FuenteFinanciamiento = self.f_apropiacion_inv[h].fuentes[k].FuenteFinanciamiento.Id;
-            self.f_apropiaciones.push(f_ap);
-          }
-        }
-      }
-      self.necesidad.Valor = self.valor_inv;
-    } else {*/
+
       self.f_apropiaciones = self.f_apropiacion_fun;
       self.necesidad.Valor = self.valor_fun;
-    //}
+
   
     self.tr_necesidad = {
       Necesidad: self.necesidad,
@@ -427,7 +335,6 @@ angular.module('contractualClienteApp')
       for (var i = 1; i < response.data.length; i++) {
         self.alerta = self.alerta + response.data[i] + "\n";
       }
-      //swal("", self.alerta, response.data[0]);
       swal({
         text: self.alerta,
         type: response.data[0],

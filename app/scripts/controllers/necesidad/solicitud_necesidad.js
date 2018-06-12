@@ -166,7 +166,7 @@ angular.module('contractualClienteApp')
                     limit: -1
                 })).then(function(response) {
                     self.ordenador_gasto = response.data[0];
-                    self.dep_ned.OrdenadorGasto = strconv.Atoi(response.data[0].Id);
+                    self.dep_ned.OrdenadorGasto = parseInt(response.data[0].Id);
                 });
             });
         }, true);
@@ -239,7 +239,6 @@ angular.module('contractualClienteApp')
             Id: 1
         };
         self.variable = {};
-        //self.necesidad.PlanAnualAdquisiciones = 20171;
         self.necesidad.UnicoPago = true;
         self.necesidad.AgotarPresupuesto = false;
         self.necesidad.Valor = 0;
@@ -499,25 +498,10 @@ angular.module('contractualClienteApp')
             for (var j = 0; j < self.requisitos_minimos.length; j++) {
                 for (var h = 0; h < self.productos.length; h++) {
                     if (self.requisitos_minimos[j].reqi === self.productos[h].i) {
-                        //self.productos[h].Iva.push(self.requisitos_minimos[j]);
-                        //    self.requisitos_minimos.splice(j,1);
                     }
                 }
             }
         };
-
-        /*self.agregar_ffapropiacion = function(apropiacion) {
-        var Fap = {
-        aprop: apropiacion,
-        Apropiacion: apropiacion.Id,
-        MontoParcial: 0,
-        };
-        if (self.necesidad.TipoFinanciacionNecesidad.Nombre === 'funcionamiento') {
-        self.f_apropiacion_fun.push(Fap);
-        } else {
-        self.f_apropiacion_inv.push(Fap);
-        }
-        };*/
 
         self.quitar_act_esp = function(i) {
             self.ActividadEspecifica.splice(i, 1);
@@ -592,11 +576,9 @@ angular.module('contractualClienteApp')
 
             self.agregarReq();
 
-            //self.variable.EspecificacionTecnica = self.productos;
 
             self.tr_necesidad = {
                 Necesidad: self.necesidad,
-                //Especificacion: self.variable,
                 ActividadEspecifica: self.ActividadEspecifica,
                 ActividadEconomicaNecesidad: self.actividades_economicas_id,
                 MarcoLegalNecesidad: self.marcos_legales,
@@ -611,7 +593,6 @@ angular.module('contractualClienteApp')
                 for (var i = 1; i < response.data.length; i++) {
                     self.alerta = self.alerta + response.data[i] + "\n";
                 }
-                //swal("", self.alerta, response.data[0]);
                 swal({
                     text: self.alerta,
                     type: response.data[0],

@@ -62,7 +62,6 @@ angular.module('contractualClienteApp')
                             var gridOptions_rubros;
                             gridOptions_rubros.data = response.data;
                             angular.forEach($scope.rubros, function(data) {
-                                //var saldo;
                                 var rp = {
                                     Disponibilidad: data.Disponibilidad, // se construye rp auxiliar para obtener el saldo del CDP para la apropiacion seleccionada
                                     Apropiacion: data.Apropiacion
