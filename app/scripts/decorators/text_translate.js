@@ -120,7 +120,7 @@ var text_es = {
   CREAR_NOVEDAD_LIQUIDACION: "Crear Novedad de Liquidación",
   FECHA_TERMINACION_ANTICIPADA: "Fecha Terminación Anticipada",
   CREAR_NOVEDAD_TERMINACION_ANTICIPADA: "Crear Novedad de Terminación Anticipada",
-  CREAR_NOVEDAD_TERMINACION_BILATERAL: "Crear Novedad de Terminación Bilateral",
+  CREAR_NOVEDAD_TERMINACION_BILATERAL: "Crear Novedad de Terminación Anticipada",
   CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO: "Crear Otro Sí Modificatorio",
   CREAR_NOVEDAD_OTRO_SI_ACLARATORIO: "Crear Otro Sí Aclaratorio",
 
@@ -380,7 +380,7 @@ var text_en = {
   CREAR_NOVEDAD_LIQUIDACION: "Create Novelty Clearance",
   FECHA_TERMINACION_ANTICIPADA: "Date Early Termination",
   CREAR_NOVEDAD_TERMINACION_ANTICIPADA: "Create Novelty Early Termination",
-  CREAR_NOVEDAD_TERMINACION_BILATERAL: "Create Novelty Bilateral Termination",
+  CREAR_NOVEDAD_TERMINACION_BILATERAL: "Create Novelty of Early Termination",
   SELECCIONAR_CONTRATO:"Choose contract",
   CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO: "Create Other Yes Modification",
   CREAR_NOVEDAD_OTRO_SI_ACLARATORIO: "Create Other Yes Clear",

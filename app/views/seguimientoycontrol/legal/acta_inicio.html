@@ -17,12 +17,7 @@
                 <div class="col-md-6"><b>{{'VALOR_TOTAL_CONTRATO' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.valor | currency}}</p></div>
                 <div class="col-md-6"><b>{{'DATOS_CONTRATISTA' | translate}}</b></div>
-                <div class="col-md-6" ng-if="sLactaInicio.contrato_obj.contratista_nombre != null">
-                  <p>{{sLactaInicio.contrato_obj.contratista_nombre}}</p>
-                </div>
-                <div class="col-md-6" ng-if="sLactaInicio.contrato_obj.contratista_nombre == null">
-                  <p>{{'NO_REGISTRA' | translate}}</p>
-                </div>
+                <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.contratista_nombre}}</p></div>
                 <div class="col-md-6"><b>{{'PLAZO_MESES' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaInicio.contrato_obj.plazo}}</p></div>
                 <div class="col-md-6"><b>{{'SUPERVISOR' | translate}}</b></div>
@@ -36,8 +31,8 @@
                 <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.numero_poliza}}</p></div>
                 <div class="col-md-6"><b>{{'FECHA_APROBACION_POLIZA' | translate}}</b></div>
                 <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.fecha_aprobacion | date : format : timezone}}</p></div>
-                <div class="col-md-6"><b>{{'FECHA_EXPEDICION_POLIZA' | translate}}</b></div>
-                <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.fecha_expedicion | date : format : timezone}}</p></div>
+                <!-- <div class="col-md-6"><b>{{'FECHA_EXPEDICION_POLIZA' | translate}}</b></div>
+                <div class="col-md-6"><p>{{sLactaInicio.poliza_obj.fecha_expedicion | date : format : timezone}}</p></div> -->
               </div>
             </div>
           </div>
