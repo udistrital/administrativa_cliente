@@ -446,7 +446,7 @@ angular.module('contractualClienteApp')
             {         
                 style:['general_font'],         
                 text:[
-                //{text: 'Para constancia de lo anterior, se firma la presente Acta bajo la responsabilidad expresa de los que intervienen en ella:'},'\n\n\n\n','_______________________','\n','Firma','\n',self.contrato_obj.supervisor,'\n','Supervisor','\n\n\n\n','________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','Contratista'
+                {text: 'Para constancia de lo anterior, se firma la presente Acta bajo la responsabilidad expresa de los que intervienen en ella:'},'\n\n\n\n','_______________________','\n','Firma','\n',self.contrato_obj.supervisor,'\n','Supervisor','\n\n\n\n','________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','Contratista'
                 ]       
             }                
             ],
