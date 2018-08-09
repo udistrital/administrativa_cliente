@@ -327,14 +327,16 @@ angular.module('contractualClienteApp')
             style:['general_font'],
             text:[
               '\n\n_____________________________________ \n',
-              'Supervisor \n\n\n'
+                'Nombre: ' + self.contrato_obj.supervisor + '\n',
+                'CC: '+ self.contrato_obj.supervisor_documento +'\n' ,'Supervisor \n\n\n'
             ]
           },
           {
             style:['general_font'],
             text:[
               '\n\n_____________________________________ \n',
-              'Contratista \n\n\n'
+                'Nombre: ' + self.contrato_obj.contratista_nombre + '\n',
+                'CC: '+ self.contrato_obj.contratista_documento +'\n' ,'Contratista \n\n\n'
             ]
           }
         ],

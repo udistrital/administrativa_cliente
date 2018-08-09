@@ -58,7 +58,7 @@
               <div class="col-md-6">
                 <label for="perido">{{'PERIODO_SUSPENSION' | translate}}</label><br>
                 <md-input-container style="margin:0;">
-                  <input type="number" name="diff_dias" ng-model="sLactaReinicio.diff_dias" required id="periodo">
+                  <input type="number" name="diff_dias" ng-model="sLactaReinicio.diff_dias" required id="periodo" ng-disabled="true" min="0">
                   <div ng-messages="formReinicio.diff_dias.$error">
                     <div ng-message="required">
                       {{'CAMPO_REQUERIDO' | translate}}

@@ -20,6 +20,7 @@ angular.module('contractualClienteApp')
     self.num_oficio = null;
     self.f_oficio = new Date();
     self.f_cesion = new Date();
+    self.f_hoy = new Date();
     self.observaciones = "";
     self.n_solicitud = null;
 
@@ -256,7 +257,7 @@ angular.module('contractualClienteApp')
             //console.log(docDefinition);
             var output = self.get_plantilla();
             pdfMake.createPdf(output).download('acta_cesion.pdf');
-            // $location.path('/seguimientoycontrol/legal');
+            $location.path('/seguimientoycontrol/legal');
         });
     }
 
@@ -340,7 +341,9 @@ angular.module('contractualClienteApp')
                 style:['general_font'],
                 text:[
                     '_____________________________________ \n',
+                    'Nombre: ' + self.contrato_obj.contratista_nombre + '\n',
                     'CC. ' + self.contrato_obj.contratista_documento + '\n', 'Cedente \n\n\n'
+                    
                 ]
             },
             {
@@ -348,6 +351,7 @@ angular.module('contractualClienteApp')
                 text:[
                 {text:'ACEPTO: \n\n\n', bold:true},
                 '_____________________________________ \n',
+                'Nombre. ' + self.cesionario_obj.nombre + ' ' + self.cesionario_obj.apellidos + '\n',
                 'CC. ' + self.cesionario_obj.identificacion + '\n', 'Cesionario'
                 ]
             }
@@ -378,6 +382,10 @@ angular.module('contractualClienteApp')
             }
         }
     }
+}).config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+        return date ? moment(date).format('DD/MM/YYYY') : '';
+    };
 });
 
 

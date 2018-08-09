@@ -799,4 +799,8 @@ angular.module('contractualClienteApp')
     }
     // document.write(""+numberFormat("-123456789.12"));
     // document.write(""+numberFormat("-1100000.23"));
+}).config(function($mdDateLocaleProvider) {
+    $mdDateLocaleProvider.formatDate = function(date) {
+        return date ? moment(date).format('DD/MM/YYYY') : '';
+    };
 });

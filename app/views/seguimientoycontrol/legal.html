@@ -27,6 +27,7 @@
                                 <md-option value="2016" selected="selected">2016</md-option>
                                 <md-option value="2017">2017</md-option>
                                 <md-option value="2018">2018</md-option>
+                                <md-option value="2019">2019</md-option>
                             </md-select>
                         </div>
                         <div class="col-md-12 form-group">
@@ -52,7 +53,7 @@
                                         <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_suspension/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_SUSPENSION' | translate}}</a></li>
                                         <li ng-if="sLegal.estado_contrato_obj.estado == 2"><a href="#/seguimientoycontrol/legal/acta_reinicio/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_REINICIO' | translate}}</a></li>
                                         <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_cesion/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_CESION' | translate}}</a></li>
-                                        <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_liquidacion">{{'CREAR_NOVEDAD_LIQUIDACION' | translate}}</a></li>
+                                        <!-- <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_liquidacion">{{'CREAR_NOVEDAD_LIQUIDACION' | translate}}</a></li> -->
                                         <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral/{{sLegal.contrato_id}}/{{sLegal.contrato_vigencia}}">{{'CREAR_NOVEDAD_TERMINACION_BILATERAL' | translate}}</a></li>
                                         <!-- <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/novedad_otro_si_modificatorio">{{'CREAR_NOVEDAD_OTRO_SI_MODIFICATORIO' | translate}}</a></li>
                                         <li ng-if="sLegal.estado_contrato_obj.estado == 4"><a href="#/seguimientoycontrol/legal/novedad_otro_si_aclaratorio">{{'CREAR_NOVEDAD_OTRO_SI_ACLARATORIO' | translate}}</a></li> -->

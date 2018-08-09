@@ -263,7 +263,7 @@ angular.module('contractualClienteApp')
                 {text:'Contratista: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',
                 {text:'Objeto: ', bold: true}, self.contrato_obj.objeto, '\n',
                 {text:'Valor: ', bold: true}, '$'+parseInt(self.contrato_obj.valor).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,'), '\n',
-                {text:'Plazo: ', bold: true}, self.contrato_obj.plazo, '\n',
+                {text:'Plazo: ', bold: true}, parseInt(self.contrato_obj.plazo) + parseInt(self.reinicio_nov.periodosuspension), '\n',
                 {text:'Fecha de inicio: ', bold: true}, self.format_date(self.reinicio_nov.fechasuspension), '\n',
                 {text:'Periodo de suspensión: ', bold: true}, self.reinicio_nov.periodosuspension, '\n',
                 {text:'Fecha de reinicio: ', bold: true}, self.format_date(self.reinicio_nov.fechareinicio), '\n\n',
@@ -281,15 +281,17 @@ angular.module('contractualClienteApp')
             {
                 style:['general_font'],
                 text:[
-                    '\n\n_____________________________________ \n',
-                    'Interventor y/o supervisor \n\n'
+                  '\n\n_____________________________________ \n',
+                    'Nombre: ' + self.contrato_obj.supervisor_nombre + '\n',
+                    'CC: '+ self.contrato_obj.supervisor_cedula +'\n' ,'Supervisor \n\n\n'
                 ]
             },
             {
                 style:['general_font'],
                 text:[
-                    '\n\n_____________________________________ \n',
-                    'Contratista \n\n\n'
+                  '\n\n_____________________________________ \n',
+                    'Nombre: ' + self.contrato_obj.contratista_nombre + '\n',
+                    'CC: '+ self.contrato_obj.contratista_documento +'\n' ,'Contratista \n\n\n'
                 ]
             },
             ],

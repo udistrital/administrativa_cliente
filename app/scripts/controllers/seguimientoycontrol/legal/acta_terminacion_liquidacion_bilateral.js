@@ -20,6 +20,13 @@ angular.module('contractualClienteApp')
     self.contrato_id = $routeParams.contrato_id;
     self.contrato_vigencia = $routeParams.contrato_vigencia;
     self.contrato_obj = {};
+    self.numero_solicitud = 0;
+    self.numero_oficio_estado_cuentas = 0;
+    self.valor_desembolsado = 0;
+    self.saldo_contratista = 0;
+    self.saldo_universidad = 0;
+    self.fecha_solicitud = new Date();
+    self.fecha_terminacion_anticipada = new Date();
 
     self.estados= [];
 
@@ -73,11 +80,12 @@ angular.module('contractualClienteApp')
     });
 
     self.generarActa = function(){
-      swal(
-        'Buen trabajo!',
-        'Se ha generado el acta, se iniciará la descarga',
-        'success'
-      );
+        $location.path('/seguimientoycontrol/legal');
+        swal(
+            'Buen trabajo!',
+            'Se ha generado el acta, se iniciará la descarga',
+            'success'
+        );
     };
 
   });
