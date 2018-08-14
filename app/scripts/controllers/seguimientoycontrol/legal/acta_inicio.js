@@ -80,32 +80,31 @@ angular.module('contractualClienteApp')
         argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.VigenciaContrato).then(function(response_nosql){
             var elementos_cesion = response_nosql.data;
             if(elementos_cesion != null){
-                console.log(response_nosql.data[response_nosql.data.length - 1]);
-                var last_cesion = response_nosql.data[response_nosql.data.length - 1];
+                console.log(response_nosql.data);
+                var last_cesion = response_nosql.data[response_nosql.data.length-1];
                 self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
                 if (self.contrato_obj.tipo_novedad == '59d79683867ee188e42d8c97') {
                     self.contrato_obj.contratista = last_cesion.cesionario;
                     self.contrato_obj.cesion = 1;
                 }
             }
+            /*
+            * Obtencion de datos del contratista
+            */
+            administrativaAmazonRequest.get('informacion_proveedor', $.param({
+                query: "Id:" + self.contrato_obj.contratista
+            })).then(function(ip_response) {
+                var elementos_contratista = Object.keys(ip_response.data[0]).length;
+                if (elementos_contratista > 0) {
+                    //console.log('Datos contratista : ' + JSON.stringify(ip_response));
+                    self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
+                    self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
+                }else{
+                    self.contrato_obj.contratista_documento = $translate.instant('NO_REGISTRA');
+                    self.contrato_obj.contratista_nombre = $translate.instant('NO_REGISTRA');
+                }
+            }); 
         });
-
-        /*
-        * Obtencion de datos del contratista
-        */
-        administrativaAmazonRequest.get('informacion_proveedor', $.param({
-            query: "Id:" + self.contrato_obj.contratista
-        })).then(function(ip_response) {
-            var elementos_contratista = Object.keys(ip_response.data[0]).length;
-            if (elementos_contratista > 0) {
-                //console.log('Datos contratista : ' + JSON.stringify(ip_response));
-                self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
-                self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
-            }else{
-                self.contrato_obj.contratista_documento = $translate.instant('NO_REGISTRA');
-                self.contrato_obj.contratista_nombre = $translate.instant('NO_REGISTRA');
-            }
-        }); 
 
         /*
          * Obtencion tipo de contrato
@@ -189,7 +188,7 @@ angular.module('contractualClienteApp')
                 camposmodificacion: null,
                 camposmodificados: null,
                 cedente: 0,
-                cesionario: 0,
+                cesionario: self.contrato_obj.contratista,
                 contrato: self.contrato_obj.id,
                 fechaadicion: "0001-01-01T00:00:00Z",
                 fechacesion: "0001-01-01T00:00:00Z",

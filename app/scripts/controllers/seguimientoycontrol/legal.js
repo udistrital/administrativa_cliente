@@ -47,7 +47,6 @@ angular.module('contractualClienteApp')
 
                 administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
                     self.estado_contrato_obj.estado = ce_response.data.contratoEstado.estado.id; 
-                    console.log(self.estado_contrato_obj.estado);
                     if (self.estado_contrato_obj.estado == 7) {
                         swal('Contrato Cancelado!');
                     }
@@ -63,7 +62,7 @@ angular.module('contractualClienteApp')
                     })).then(function(tc_response){
                         self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
                         argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.vigencia).then(function(response_nosql){
-                            //console.log(response_nosql.data[response_nosql.data.length - 1]);
+                            //console.log(response_nosql.data);
                             var elementos_cesion = response_nosql.data;
                             if(elementos_cesion != null){
                                 var last_cesion = response_nosql.data[response_nosql.data.length - 1];
@@ -71,12 +70,19 @@ angular.module('contractualClienteApp')
                                 self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
                                 if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c97") {
                                     self.contrato_obj.contratista = last_cesion.cesionario;
-                                    self.contrato_obj.cesion = 1;
+                                    self.estado_contrato_obj.estado = 1;
                                     swal(
                                             'Información',
                                             'Acta de inicio para cesionario del contrato',
                                             'info'
                                         );
+                                }else if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c98") {
+                                    self.contrato_obj.contratista = last_cesion.cesionario;
+                                    self.contrato_obj.estado_contrato_obj = 0;
+                                }else if (self.contrato_obj.tipo_novedad == "59d7965e867ee188e42d8c72") {
+                                    self.contrato_obj.contratista = last_cesion.cesionario;
+                                }else if (self.contrato_obj.tipo_novedad == "59d796ac867ee188e42d8cbf") {
+                                    self.contrato_obj.contratista = last_cesion.cesionario;
                                 }
                             }
                             administrativaAmazonRequest.get('informacion_proveedor', $.param({
@@ -106,6 +112,7 @@ angular.module('contractualClienteApp')
                     );
             }
         });
+        console.log('Estado_contrato : ' + self.estado_contrato_obj.estado);
     }
 
 
@@ -137,7 +144,7 @@ angular.module('contractualClienteApp')
 
                 administrativaWsoRequest.get('contrato_estado', '/'+self.row_c.contrato.numero_contrato_suscrito+'/'+self.row_c.contrato.vigencia).then(function(response) {
                     var estado = response.data.contratoEstado.estado;
-                    console.log(self.row_c.contrato.numero_contrato_suscrito, estado)
+                    //console.log(self.row_c.contrato.numero_contrato_suscrito, estado)
                         if (estado.id != 8) {
                             self.estado_contrato_obj.estado = estado.id; //guardamos el id del estado del contrato
                             self.estado_resultado_response = response.status; //guardamos el status del resultado del response
