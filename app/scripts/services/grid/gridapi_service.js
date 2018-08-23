@@ -18,7 +18,40 @@ angular.module('gridApiService', [])
     .factory('gridApiService', function ($timeout) {
         //var path = CONF.GENERAL.ACADEMICA_SERVICE;
         // Public API here
+        var filter = function (grid) {
+            var query = [];
+            angular.forEach(grid.columns, function (value, key) {
+                if (value.filters[0].term) {
+                    var formtstr = value.colDef.name.replace('[0]', '');
+                    //console.log("change ", value.filters[0].term);
+                    query.push(formtstr + '__icontains:' + value.filters[0].term);
+                };
+            });
+            return query;
+        };
+
         return {
+            /**
+            * @ngdoc function
+            * @name gridApiService.service:gridApiService#filter
+            * @methodOf gridApiService.service:gridApiService
+            * @param {object} gridApi gridApi de uigrid para poner filtrado externo
+            * @return {object} gridApi con filtrado externa
+            * @description Metodo gridApi del servicio
+            */
+            filter: function (gridApi, consulFunc, $scope) {
+                var self = this;
+                gridApi.core.on.filterChanged($scope, function () {
+                    var self = this;
+                    $scope.offset = 0;
+                    //self.grid.paginationCurrentPage = 1;
+                    if (angular.isDefined($scope.filterTimeout)) {
+                        $timeout.cancel($scope.filterTimeout);
+                    }
+                    $scope.filterTimeout = $timeout(function () { consulFunc($scope.offset, filter(self.grid)) }, 500);
+                });
+                return gridApi;
+            },
             /**
              * @ngdoc function
              * @name gridApiService.service:gridApiService#pagination
@@ -29,35 +62,15 @@ angular.module('gridApiService', [])
              */
             pagination: function (gridApi, consulFunc, $scope) {
                 var self = this;
-                var filter = function (grid) {
-                    var query = [];
-                    angular.forEach(grid.columns, function (value, key) {
-                        if (value.filters[0].term) {
-                            var formtstr = value.colDef.name.replace('[0]', '');
-                            //console.log("change ", value.filters[0].term);
-                            query.push(formtstr + '__icontains:' + value.filters[0].term);
 
-                        };
-                    });
-                    return query;
-                };
-                gridApi.core.on.filterChanged($scope, function () {
-                    var self = this;
-                    $scope.offset = 0;
-                    //self.grid.paginationCurrentPage = 1;
-                    if(angular.isDefined($scope.filterTimeout)) {
-                        $timeout.cancel($scope.filterTimeout);
-                    }
-                    $scope.filterTimeout = $timeout(function() {consulFunc($scope.offset, filter(self.grid))}, 500);
-                });
                 gridApi.pagination.on.paginationChanged($scope, function (newPage, pageSize) {
                     var self = this;
                     $scope.offset = (newPage - 1) * pageSize;
                     consulFunc($scope.offset, filter(self.grid));
- 
+
                 });
                 return gridApi;
-            },  
+            },
             paginationFunc: function (table, offset) {
                 return function (response) {
                     if (response.data === null) {

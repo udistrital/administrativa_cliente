@@ -197,6 +197,7 @@ angular.module('contractualClienteApp')
       onRegisterApi: function (gridApi) {
         self.gridApi = gridApi;
         self.gridApi = gridApiService.pagination(self.gridApi, self.cargarDatosResolucion, $scope);
+        self.gridApi = gridApiService.filter(self.gridApi, self.cargarDatosResolucion, $scope);
       }
     };
 
