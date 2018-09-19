@@ -25,14 +25,12 @@ angular.module('contractualClienteApp')
 
     self.estados= [];
 
-    // Obtiene el estado al cual se quiere pasar el contrato
     administrativaAmazonRequest.get('estado_contrato', $.param({
       query: "NombreEstado:" + "Suspendido"
     })).then(function(ec_response){
       self.estados[1] = ec_response.data[0];
     });
 
-    // Obtiene todos los datos relacionados con el contrato
     administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
       self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
       self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
@@ -242,6 +240,13 @@ angular.module('contractualClienteApp')
       });
     }
 
+    /**
+     * @ngdoc method
+     * @name get_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaSuspensionCtrl
+     * @description
+     * Funcion que retorna la plantilla del pdf en formato json
+     */
     self.get_pdf = function(){
       return {
         content: [
@@ -371,5 +376,4 @@ angular.module('contractualClienteApp')
         }
       }
     }
-
 });

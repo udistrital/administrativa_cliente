@@ -27,7 +27,6 @@ angular.module('contractualClienteApp')
 
     self.estados = [];
 
-    // verificacion del estado del contrato
     administrativaAmazonRequest.get('estado_contrato', $.param({
         query: "NombreEstado:" + "En ejecucion"
     })).then(function(ec_response){
@@ -232,6 +231,13 @@ angular.module('contractualClienteApp')
         }
     };
 
+    /**
+     * @ngdoc method
+     * @name formato_generacion_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaReinicioCtrl
+     * @description
+     * Funcion para la obtencion de la plantilla para la generacion del pdf del acta
+     */
     self.formato_generacion_pdf = function(){
         argoNosqlRequest.get('plantilladocumento','5a133759d9963a4c9025fbac').then(function(response){
             //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
@@ -241,6 +247,13 @@ angular.module('contractualClienteApp')
         });
     }
 
+    /**
+     * @ngdoc method
+     * @name get_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaReinicioCtrl
+     * @description
+     * Funcion que retorna la plantilla para la generacion del acta en pdf
+     */
     self.get_pdf = function(){
         return {
             content: [
@@ -328,5 +341,4 @@ angular.module('contractualClienteApp')
             }
         }
     }
-
 });

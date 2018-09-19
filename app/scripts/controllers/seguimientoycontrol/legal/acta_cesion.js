@@ -265,6 +265,13 @@ angular.module('contractualClienteApp')
         });
     }
 
+    /**
+     * @ngdoc method
+     * @name get_plantilla
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+     * @description
+     * funcion que retorna la plantilla en formato json
+     */
     self.get_plantilla = function(){
         return {
             content: [
