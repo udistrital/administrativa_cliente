@@ -263,6 +263,8 @@ var text_es = {
   DESCRIPCION_CESION:"Se registro exitosamente la novedad de cesión al contrato # ",
   DESCRIPCION_SUSPENSION:"Se registro exitosamente la novedad de suspensión al contrato # ",
   DESCRIPCION_REINICIO:"Se registro exitosamente la novedad de reinicio al contrato # ",
+  DESCRIPCION_ACTA_CESION:"Acta de inicio para cesionario del contrato",
+  DESCRIPCION_ACTA_CESION:"Acta de inicio para cesionario del contrato",
   ANIO:" vigencia "
 
 };
@@ -522,6 +524,7 @@ var text_en = {
   DESCRIPCION_CESION:"It has been succesfully registered the novelity of assignment for the contract # ",
   DESCRIPCION_SUSPENSION:"It has been succesfully registered the novelity of suspension for the contract # ",
   DESCRIPCION_REINICIO:"It has been succesfully registered the novelity of restart for the contract # ",
+  DESCRIPCION_ACTA_CESION:"Initial act for contract transferee",
   ANIO:" validity "
 };
 

@@ -22,65 +22,44 @@ angular.module('contractualClienteApp')
     self.poliza_obj = {};
     self.fecha = {};
     self.fecha_inicio_contrato = {};
-
     var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     var f = new Date();
     self.fecha.dia_mes = f.getDate();
     self.fecha.mes = meses[f.getMonth()];
     self.fecha.anio = f.getFullYear();
-
     self.fecha_inicio = new Date();
     self.fecha_fin = new Date();
-    // self.fecha_formateada = self.contrato_obj.FechaRegistro.substring(0, 10);
-    // $scope.fecha_inicio = self.fecha_formateada;
-    // $scope.fecha_fin = self.fecha_formateada;
-
-    /*
-     * Funcion para actualizar el valor de la fecha de inicio seleccionada del datepicker
-     */
     self.actualizar_fecha_inicio_seleccionada = function(){
         self.fecha_inicio_contrato.dia_mes = self.fecha_inicio.getDate();
         self.fecha_inicio_contrato.mes = meses[self.fecha_inicio.getMonth()];
         self.fecha_inicio_contrato.anio = self.fecha_inicio.getFullYear();
     }
 
-    /*
-     * Obtencion de datos del contrato del servicio
-     */
     administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response) {
-        console.log(wso_response.data);
         self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
         self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
         self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
         self.contrato_obj.plazo = wso_response.data.contrato.plazo_ejecucion;
         self.contrato_obj.supervisor = wso_response.data.contrato.supervisor.nombre;
+        self.contrato_obj.supervisor_cedula = wso_response.data.contrato.supervisor.documento_identificacion;
         self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
         self.contrato_obj.FechaRegistro = wso_response.data.contrato.FechaRegistro;
         self.contrato_obj.contratista = String(wso_response.data.contrato.contratista);
-        self.contrato_obj.cesion = 0; //Variable para cotrolar si el contrato tiene cesion
-
+        self.contrato_obj.cesion = 0;
         self.estados= [];
-
-        // Obtiene el estado al cual se quiere pasar el contrato
         administrativaAmazonRequest.get('estado_contrato', $.param({
             query: "NombreEstado:" + "En ejecucion"
         })).then(function(ec_response){
             var estado_temp_to = {
                 "NombreEstado": "ejecucion"
             }
-
             if(ec_response.data[0].NombreEstado == "En ejecucion"){
                 self.estados[1] = estado_temp_to;
             }
         });
-
-        /*
-         * Verificar si el contrato ha tenido cesion
-         */
         argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.VigenciaContrato).then(function(response_nosql){
             var elementos_cesion = response_nosql.data;
             if(elementos_cesion != null){
-                console.log(response_nosql.data);
                 var last_cesion = response_nosql.data[response_nosql.data.length-1];
                 self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
                 if (self.contrato_obj.tipo_novedad == '59d79683867ee188e42d8c97') {
@@ -88,15 +67,11 @@ angular.module('contractualClienteApp')
                     self.contrato_obj.cesion = 1;
                 }
             }
-            /*
-            * Obtencion de datos del contratista
-            */
             administrativaAmazonRequest.get('informacion_proveedor', $.param({
                 query: "Id:" + self.contrato_obj.contratista
             })).then(function(ip_response) {
                 var elementos_contratista = Object.keys(ip_response.data[0]).length;
                 if (elementos_contratista > 0) {
-                    //console.log('Datos contratista : ' + JSON.stringify(ip_response));
                     self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
                     self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
                 }else{
@@ -105,34 +80,31 @@ angular.module('contractualClienteApp')
                 }
             }); 
         });
-
-        /*
-         * Obtencion tipo de contrato
-         */
         administrativaAmazonRequest.get('tipo_contrato', $.param({
             query:"Id:"+wso_response.data.contrato.tipo_contrato
         })).then(function(tc_response){
             self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
-            //console.log("Tipo Contrato --> " + self.contrato_obj.tipo_contrato);
         });
     });
 
-    /*
-     * Obtencion de datos de la poliza
-     */
     administrativaWsoRequest.get('poliza_suscrito', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response) {
-        //$log.log('Póliza : ' + JSON.stringify(wso_response.data));
-        var cantidad_elementos = Object.keys(wso_response.data["poliza_contrato"]).length; // Obtiene la cantidad de atributos que tiene el objeto poliza_contrato
+        var cantidad_elementos = Object.keys(wso_response.data["poliza_contrato"]).length;
         if (cantidad_elementos > 0) {
             self.poliza_obj.numero_poliza = wso_response.data.poliza_contrato.numero_poliza;
             self.poliza_obj.fecha_aprobacion = wso_response.data.poliza_contrato.fecha_aprobacion;
-            // self.poliza_obj.fecha_expedicion = response.data[0].FechaRegistro;
         }else{
             self.poliza_obj.numero_poliza = $translate.instant('NO_REGISTRA');
             self.poliza_obj.fecha_aprobacion = $translate.instant('NO_REGISTRA');
         }
     });
 
+    /**
+     * @ngdoc method
+     * @name gridOptions
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion para crear una tabla de datos
+     */
     self.gridOptions = {
         enableFiltering : true,
         enableSorting : true,
@@ -152,21 +124,32 @@ angular.module('contractualClienteApp')
         }
     };
 
+    /**
+     * @ngdoc method
+     * @name gridOptions_data
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion para insertar data en una tabla
+     */
     self.gridOptions.data = [
-    {"TipoBien": "Bien de Consumo", "Placa":"1234556666","Descripcion":"Teclado LED", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""},
-    {"TipoBien": "Bien de Consumo", "Placa":"1234556667","Descripcion":"CPU X", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""}
+        {"TipoBien": "Bien de Consumo", "Placa":"1234556666","Descripcion":"Teclado LED", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""},
+        {"TipoBien": "Bien de Consumo", "Placa":"1234556667","Descripcion":"CPU X", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""}
     ];
 
+    /**
+     * @ngdoc method
+     * @name generarActa
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion que valida la data de la novedad
+     */
     self.generarActa = function(){
-
-        //CONDICIONALES PARA CUANDO NO TIENE DATOS DE POLIZA
         if (self.poliza_obj.numero_poliza == undefined) {
             self.poliza_obj.numero_poliza = "n/a";
         }
         if (self.poliza_obj.fecha_aprobacion == undefined) {
             self.poliza_obj.fecha_aprobacion = "n/a";
         }
-
         self.actualizar_fecha_inicio_seleccionada();
         if (self.fecha_inicio > self.fecha_fin) {
             swal(
@@ -181,7 +164,6 @@ angular.module('contractualClienteApp')
                 fechainicio: self.fecha_inicio,
                 vigencia: String(self.contrato_obj.VigenciaContrato)
             }
-
             self.cesion_nov = {
                 aclaracion: "",
                 camposaclaracion: null,
@@ -214,10 +196,7 @@ angular.module('contractualClienteApp')
                 valorfinalcontrato: 0,
                 vigencia: "2017"
             }
-
-            //Se verifica si el contrato tiene cesion (0=no tiene cesion)
             if (self.contrato_obj.cesion == 0) {
-                // alert(JSON.stringify(self.data_acta_inicio));
                 self.contrato_estado = {
                     NumeroContrato: self.contrato_obj.id,
                     Vigencia: self.contrato_obj.VigenciaContrato,
@@ -229,16 +208,9 @@ angular.module('contractualClienteApp')
                     },
                     Usuario: "prueba"
                 }
-                // alert(JSON.stringify(self.contrato_estado));
 
-
-                //primero obtenemos el estado actual - en este caso es 'En ejecucion'
-                //Se guarda en la posicion [0] del arreglo estados el estado actual
-                //Luego se valida si es posible cambiar el estado - en este caso pasar de ejecucion a suspension - devuelve si es true o false
-                //si es true guardamos la novedad - y enviamos el cambio de estado del contrato
                 administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
                     if(ce_response.data.contratoEstado.estado.nombreEstado == "Suscrito"){
-                        console.log("Estado actual --> " + ce_response.data.contratoEstado.estado.nombreEstado);
                         var estado_temp_from = {
                             "NombreEstado": "suscrito"
                         }
@@ -252,10 +224,8 @@ angular.module('contractualClienteApp')
                         }
 
                         self.estados[0] = estado_temp_from;
-                        console.log(self.estados)
                         adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
                             self.validacion = vc_response.data;
-                            console.log("validacion --> " + self.validacion);
                             if(self.validacion == "true"){
                                 argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(response_nosql){
                                     if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
@@ -267,10 +237,7 @@ angular.module('contractualClienteApp')
                                                 "vigencia":parseInt(self.contrato_vigencia)
                                             }
                                         };
-
-                                        console.log(cambio_estado_contrato);
                                         administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
-                                            console.log("POST WSO: ", response);
                                             if (response.status == 200 || response.statusText == "OK") {
                                                 self.crearActa();
                                             }
@@ -282,7 +249,6 @@ angular.module('contractualClienteApp')
                     });
                 });
             }else{
-                console.log(self.cesion_nov);
                 argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response_nosql){
                     if(response_nosql.status == 200  || response_nosql.statusText == "OK"){
                         self.crearActa();
@@ -292,6 +258,13 @@ angular.module('contractualClienteApp')
         }
     };
 
+    /**
+     * @ngdoc method
+     * @name crearActa
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion que valida la generacion del acta de novedad
+     */
     self.crearActa = function(){
         self.formato_generacion_pdf();
         swal({
@@ -310,7 +283,7 @@ angular.module('contractualClienteApp')
     /**
      * @ngdoc method
      * @name format_date
-     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
      * @description
      * funcion para el formateo de objetos tipo fecha a formato dd/mm/yyyy
      * @param {date} param
@@ -330,20 +303,25 @@ angular.module('contractualClienteApp')
         return today;
     };
 
+    /**
+     * @ngdoc method
+     * @name formato_generacion_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion que permite generar el PDF del acta
+     */
     self.formato_generacion_pdf = function(){
         var docDefinition = self.formato_pdf();
-        //console.log(docDefinition);
         pdfMake.createPdf(docDefinition).download('acta_inicio.pdf');
-        //$location.path('/seguimientoycontrol/legal');
-        //argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
-        //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
-        //console.log(docDefinition);
-        //var output = JSON.parse(docDefinition);
-        //pdfMake.createPdf(output).download('acta_cesion.pdf');
-        //$location.path('/seguimientoycontrol/legal');
-        //});
     }
 
+    /**
+     * @ngdoc method
+     * @name formato_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion que crea el PDF de la novedad
+     */
     self.formato_pdf = function(){
         return {
             content: [       
@@ -378,74 +356,22 @@ angular.module('contractualClienteApp')
                 text:[           
                 {text: ' CONTRATO No: ', bold: true}, self.contrato_id + ' - ' + self.contrato_vigencia, '\n', 
                 {text: ' TIPO DE CONTRATO: ', bold: true}, self.contrato_obj.tipo_contrato, '\n',         
-                {text: ' OBJETO: ', bold: true}, self.contrato_obj.objeto, '\n',         
+                {text: ' OBJETO: ', bold: true}, self.contrato_obj.objeto, '\n', 
                 {text: ' VALOR: ', bold: true}, '$ ', numberFormat(self.contrato_obj.valor), '\n',         
                 {text: ' CONTRATISTA: ', bold: true}, self.contrato_obj.contratista_nombre, '\n',         
                 {text: ' PLAZO: ', bold: true}, self.contrato_obj.plazo, ' meses', '\n',         
                 {text: ' FECHA DE INICIO: ', bold: true}, self.format_date(self.fecha_inicio), '\n',         
                 {text: ' FECHA DE TERMINACIÓN: ', bold: true}, self.format_date(self.fecha_fin), '\n',         
                 {text: ' SUPERVISOR UNIVERSIDAD \n DISTRITAL FRANCISCO JOSE DE CALDAS: ', bold: true}, self.contrato_obj.supervisor, '\n',         
-                {text: ' No. POLIZA: ', bold: true}, self.poliza_obj.numero_poliza, '\n',         
+                {text: ' No. POLIZA: ', bold: true}, self.poliza_obj.numero_poliza, '\n','\n',         
                 // {text: ' FECHA DE EXPEDICIÓN DE PÓLIZA: ', bold: true}, self.format_date(self.poliza_obj.fecha_expedicion), '\n',         
                 //{text: ' FECHA DE APROBACIÓN DE PÓLIZA: ', bold: true}, self.poliza_obj.fecha_aprobacion, '\n\n', 'En Bogotá a los '+self.fecha.dia_mes+' días del mes de '+self.fecha.mes+' del año '+self.fecha.anio+', se reunieron: '+self.contrato_obj.contratista_nombre+' quien ejerce como contratista No. '+self.contrato_obj.contratista_documento+' y '+self.contrato_obj.supervisor+' en calidad de Supervisor del Contrato por parte de la Universidad Distrital Francisco José de Caldas con el objeto de dejar constancia del inicio real y efectivo del contrato anteriormente citado, previo cumplimiento de los requisitos de legalización del contrato. En consecuencia, se procede a la iniciación del contrato a partir del día '+self.fecha_inicio_contrato.dia_mes+' del mes de '+self.fecha_inicio_contrato.mes+' del año '+self.fecha_inicio_contrato.anio+'.','\n\n','El supervisor puso en conocimiento del contratista lo siguiente: 1. Que para la firma de la presente Acta de Iniciación, el contratista ha presentado y reposa en la respectiva carpeta, toda la documentación exigida por la Universidad para estos casos. 2. Que para el desarrollo del contrato es indispensable mantener el plan individual de trabajo elaborado y cualquier modificación debe convenirse entre las partes. 3. Que en todo momento debe acatarse las instrucciones o exigencias que presente la supervisión en lo referente a los procesos y procedimientos de la dependencia.','\n\n','A partir de la firma de la presente Acta, el contratista se hace responsable del siguiente inventario:','\n\n',                    
                 ]       
             },
             {         
-                style: ['bottom_space'], pageBreak: 'after',        
-                table:{
-                    widths:['*', '*', '*', '*','*','*'],
-                    body:[
-                        [
-                        {text: 'INVENTARIO ASIGNADO', alignment: 'center', bold: true,fontSize: 9, colSpan: 6}, 
-                        {}, 
-                        {},
-                        {},
-                        {},
-                        {}
-                        ],
-                        [
-                        {text: 'Tipo de Bien', alignment: 'center',bold: true, fontSize: 9},
-                        {text: 'Placa', alignment: 'center',bold: true, fontSize: 9},
-                        {text: 'Descripción', alignment: 'center',bold: true, fontSize: 9},
-                        {text: 'Sede', alignment: 'center',bold: true, fontSize: 9},
-                        {text: 'Dependencia', alignment: 'center',bold: true, fontSize: 9},
-                        {text: 'Estado del bien', alignment: 'center',bold: true, fontSize: 9}
-                        ],
-                        [' ','','','','',' '],
-                        [' ','','','','',' ']
-                    ]
-                }
-            },
-            {         
-                style: ['bottom_space'],         
-                table: {           
-                    widths:[65, '*', 120, 65],           
-                    body:[             
-                        [               
-                        {image: 'logo_ud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10},               
-                        {text: 'ACTA DE INICIO DE CONTRATO DE CPS', alignment: 'center', fontSize: 12},               
-                        {text: 'Código: GJ-PR-001-FR-004', fontSize: 9},               
-                        {image: 'logo_sigud', fit:[65,120], rowSpan: 3, alignment: 'center', fontSize: 10, margin: [0, 30]}             
-                        ],             
-                        [ 
-                            ' ',               
-                            {text: 'Macroproceso: Gestión administrativa y contratación', alignment: 'center', fontSize: 12},               
-                            {text: 'Versión: 04', fontSize: 9, margin: [0, 6]},               
-                            ' '             
-                        ],             
-                        [ 
-                            ' ',               
-                            {text: 'Proceso: Gestión Jurídica', alignment: 'center', fontSize: 12, margin: [0, 3]},               
-                            {text: 'Fecha de Aprobación: 21/10/16', fontSize: 9},               
-                            ' '             
-                        ],           
-                    ]         
-                }       
-            },
-            {         
                 style:['general_font'],         
                 text:[
-                {text: 'Para constancia de lo anterior, se firma la presente Acta bajo la responsabilidad expresa de los que intervienen en ella:'},'\n\n\n\n','_______________________','\n','Firma','\n',self.contrato_obj.supervisor,'\n','Supervisor','\n\n\n\n','________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','Contratista'
+                {text: 'Para constancia de lo anterior, se firma la presente Acta bajo la responsabilidad expresa de los que intervienen en ella:'},'\n\n\n\n','______________________________________','\n','Firma','\n',self.contrato_obj.supervisor,'\n','CC. ',self.contrato_obj.supervisor_cedula,'\n','Supervisor','\n\n\n\n','______________________________________','\n','Firma','\n',self.contrato_obj.contratista_nombre,'\n','CC. ',self.contrato_obj.contratista_documento,'\n','Contratista' 
                 ]       
             }                
             ],
@@ -468,50 +394,35 @@ angular.module('contractualClienteApp')
         }
     }
 
-    /* =========================================================
-     * FUNCION QUE DEVUELVE UN NUMERO SEPARANDO LOS SEPARADORES DE MILES
-     * PUEDE RECIBIR VALORES NEGATIVOS Y CON DECIMALES
-     * ========================================================== */
+    /**
+     * @ngdoc method
+     * @name numberFormat
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaInicioCtrl
+     * @description
+     * funcion que formatea los valores de la fecha
+     */
     function numberFormat(numero){
-        // Variable que contendra el resultado final
         var resultado = "";
         var nuevoNumero = 0;
-
-        // Si el numero empieza por el valor "-" (numero negativo)
         if(numero[0]=="-")
         {
-            // Cogemos el numero eliminando las posibles comas que tenga, y sin
-            // el signo negativo
             nuevoNumero=numero.replace(/\,/g,'').substring(1);
         }else{
-            // Cogemos el numero eliminando las posibles comas que tenga
             nuevoNumero=numero.replace(/\,/g,'');
         }
-
-        // Si tiene decimales, se los quitamos al numero
         if(numero.indexOf(".")>=0)
             nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
-
-        // Ponemos un punto cada 3 caracteres
         for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
             resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
-
-        // Si tiene decimales, se lo añadimos al numero una vez forateado con 
-        // los separadores de miles
         if(numero.indexOf(".")>=0)
             resultado+=numero.substring(numero.indexOf("."));
-
         if(numero[0]=="-")
         {
-            // Devolvemos el valor añadiendo al inicio el signo negativo
             return "-"+resultado;
         }else{
             return resultado;
         }
     }
-
-    // document.write(""+numberFormat("123456789.12"));
-    // document.write(""+numberFormat("-1100000.23"));
 }).config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {
         return date ? moment(date).format('DD/MM/YYYY') : '';

@@ -72,16 +72,22 @@ angular.module('contractualClienteApp')
                                     self.contrato_obj.contratista = last_cesion.cesionario;
                                     self.estado_contrato_obj.estado = 1;
                                     swal(
-                                            'Información',
-                                            'Acta de inicio para cesionario del contrato',
-                                            'info'
-                                        );
+                                        $translate.instant('INFORMACION'),
+                                        $translate.instant('DESCRIPCION_ACTA_CESION'),
+                                        'info'
+                                    );
                                 }else if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c98") {
                                     self.contrato_obj.contratista = last_cesion.cesionario;
                                     self.contrato_obj.estado_contrato_obj = 0;
                                 }else if (self.contrato_obj.tipo_novedad == "59d7965e867ee188e42d8c72") {
                                     self.contrato_obj.contratista = last_cesion.cesionario;
                                 }else if (self.contrato_obj.tipo_novedad == "59d796ac867ee188e42d8cbf") {
+                                    self.contrato_obj.contratista = last_cesion.cesionario;
+                                }else if (self.contrato_obj.tipo_novedad == "59d7985e867ee188e42d8e64") {
+                                    self.contrato_obj.contratista = last_cesion.cesionario;
+                                }else if (self.contrato_obj.tipo_novedad == "59d79894867ee188e42d8e9b") {
+                                    self.contrato_obj.contratista = last_cesion.cesionario;
+                                }else if (self.contrato_obj.tipo_novedad == "59d79904867ee188e42d8f02") {
                                     self.contrato_obj.contratista = last_cesion.cesionario;
                                 }
                             }
@@ -115,7 +121,6 @@ angular.module('contractualClienteApp')
         console.log('Estado_contrato : ' + self.estado_contrato_obj.estado);
     }
 
-
     /**
      * @ngdoc method
      * @name gridOptions
@@ -144,10 +149,9 @@ angular.module('contractualClienteApp')
 
                 administrativaWsoRequest.get('contrato_estado', '/'+self.row_c.contrato.numero_contrato_suscrito+'/'+self.row_c.contrato.vigencia).then(function(response) {
                     var estado = response.data.contratoEstado.estado;
-                    //console.log(self.row_c.contrato.numero_contrato_suscrito, estado)
                         if (estado.id != 8) {
-                            self.estado_contrato_obj.estado = estado.id; //guardamos el id del estado del contrato
-                            self.estado_resultado_response = response.status; //guardamos el status del resultado del response
+                            self.estado_contrato_obj.estado = estado.id;
+                            self.estado_resultado_response = response.status;
                         }else{
                             self.estado_resultado_response = 0;
                         }

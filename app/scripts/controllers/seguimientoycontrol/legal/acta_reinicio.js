@@ -72,6 +72,12 @@ angular.module('contractualClienteApp')
                         self.contrato_obj.contratista = last_cesion.cesionario;
                     }else if (self.contrato_obj.tipo_novedad == "59d7965e867ee188e42d8c72") {
                         self.contrato_obj.contratista = last_cesion.cesionario;
+                    }else if (self.contrato_obj.tipo_novedad == "59d7985e867ee188e42d8e64") {
+                        self.contrato_obj.contratista = last_cesion.cesionario;
+                    }else if (self.contrato_obj.tipo_novedad == "59d79894867ee188e42d8e9b") {
+                        self.contrato_obj.contratista = last_cesion.cesionario;
+                    }else if (self.contrato_obj.tipo_novedad == "59d79904867ee188e42d8f02") {
+                        self.contrato_obj.contratista = last_cesion.cesionario;
                     }
                 }
                 

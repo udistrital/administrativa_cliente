@@ -20,16 +20,12 @@ angular.module('contractualClienteApp')
     self.contrato_vigencia = $routeParams.contrato_vigencia;
     self.contrato_obj = {};
     self.fecha = {};
-
     var meses = new Array ("Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre");
     var f = new Date();
     self.fecha.dia_mes = f.getDate();
     self.fecha.mes = meses[f.getMonth()];
     self.fecha.anio = f.getFullYear();
 
-    /*
-     * Obtencion de datos del contrato del servicio
-     */
     administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response) {
         $scope.response_contrato = wso_response;
         self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
@@ -37,38 +33,21 @@ angular.module('contractualClienteApp')
         self.contrato_obj.ObjetoContrato = wso_response.data.contrato.objeto_contrato;
         self.contrato_obj.ValorContrato = wso_response.data.contrato.valor_contrato;
         self.contrato_obj.PlazoEjecucion = wso_response.data.contrato.plazo_ejecucion;
-
         self.contrato_obj.supervisor_nombre = wso_response.data.contrato.supervisor.nombre;
         self.contrato_obj.supervisor_rol = wso_response.data.contrato.supervisor.cargo;
         self.contrato_obj.supervisor_cedula = wso_response.data.contrato.supervisor.documento_identificacion;
-
-        // self.contrato_obj.fecha_inicio = response.data[0].fecha_inicio;
         self.contrato_obj.FechaRegistro = wso_response.data.contrato.fecha_registro;
         self.fecha_inicio = new Date();
-        // self.fecha_inicio = self.contrato_obj.fecha_inicio.substring(0, 10);
         self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
-
         self.contrato_obj.OrdenadorGasto = wso_response.data.contrato.ordenador_gasto.nombre_ordenador;
         self.contrato_obj.RolOrdenadorGasto = wso_response.data.contrato.ordenador_gasto.rol_ordenador;
         self.contrato_obj.contratista = wso_response.data.contrato.contratista;
-
-        $log.log(wso_response.data);
-
-        $log.log("Probando --> "+self.contrato_obj.OrdenadorGasto);
-
-        /*
-         * Fecha de registro dividida
-         */
         var fecha_reg = self.contrato_obj.FechaRegistro;
         var res = fecha_reg.split("-");
         self.fecha_reg_dia = res[2];
         self.fecha_reg_mes = meses[parseInt(res[1]-1)];
         self.fecha_reg_ano = res[0];
-        $log.log(self.fecha_reg_mes);
 
-        /*
-         * Obtencion de datos del supervisor del contrato (Ordenador del gasto)
-         */
         administrativaAmazonRequest.get('informacion_persona_natural', $.param({
             query:"Id:"+self.contrato_obj.supervisor_cedula
         })).then(function(ipn_response) {
@@ -78,36 +57,37 @@ angular.module('contractualClienteApp')
             });
         });
 
-        /*
-         * Verificar si el contrato ha tenido cesion
-         */
         argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.VigenciaContrato).then(function(response_nosql){
             var elementos_cesion = response_nosql.data;
             if(elementos_cesion != null){
-                //console.log(response_nosql.data);
                 var last_cesion = response_nosql.data[response_nosql.data.length-1];
                 self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
                 if (self.contrato_obj.tipo_novedad == '59d79683867ee188e42d8c97') {
                     self.contrato_obj.contratista = last_cesion.cesionario;
-                    self.contrato_obj.cesion = 1;
-                    
+                    self.contrato_obj.cesion = 1;                    
                 }else if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c98") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
                     self.contrato_obj.cesion = 0;
                 }else if (self.contrato_obj.tipo_novedad == "59d796ac867ee188e42d8cbf") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
                     self.contrato_obj.cesion = 0;
+                }else if (self.contrato_obj.tipo_novedad == "59d7985e867ee188e42d8e64") {
+                    self.contrato_obj.contratista = last_cesion.cesionario;
+                    self.contrato_obj.cesion = 0;
+                }else if (self.contrato_obj.tipo_novedad == "59d79894867ee188e42d8e9b") {
+                    self.contrato_obj.contratista = last_cesion.cesionario;
+                    self.contrato_obj.cesion = 0;
+                }else if (self.contrato_obj.tipo_novedad == "59d79904867ee188e42d8f02") {
+                    self.contrato_obj.contratista = last_cesion.cesionario;
+                    self.contrato_obj.cesion = 0;
                 }
             }
-            /*
-            * Obtencion de datos del contratista
-            */
+            
             administrativaAmazonRequest.get('informacion_proveedor', $.param({
                 query: "Id:" + self.contrato_obj.contratista
             })).then(function(ip_response) {
                 var elementos_contratista = Object.keys(ip_response.data[0]).length;
                 if (elementos_contratista > 0) {
-                    //console.log('Datos contratista : ' + JSON.stringify(ip_response));
                     self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
                     self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
                 }else{
@@ -117,49 +97,41 @@ angular.module('contractualClienteApp')
             }); 
         });
 
-        /*
-        * Obtencion tipo de contrato
-        */
         administrativaAmazonRequest.get('tipo_contrato', $.param({
             query:"Id:"+wso_response.data.contrato.tipo_contrato
         })).then(function(tc_response){
             self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
-            console.log("Tipo Contrato --> " + self.contrato_obj.tipo_contrato);
         });
     });
 
-
-    //CONSULTAR LOS DATOS NoSQL
-    // argoNosqlRequest.get('novedad/8/2017').then(function(response) {     
-    //   $log.log(response.data[0].motivo);
-    // });
-
+    /**
+     * @ngdoc method
+     * @name total_valor_contrato
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion para obtener el valor final del contrato
+     */
     $scope.total_valor_contrato = function(evento) {
-        // var valor_adicion = (evento.target.value).replace(/\,/g,''); //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL ELIMINANDO LAS COMAS QUE TENGA
-        var valor_adicion = (evento.target.value).replace(/[^0-9\.]/g,''); //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL ELIMINANDO OTROS CARACTERES DEJANDO SOLO NUMEROS Y EL PTO DECIMAL
+        var valor_adicion = (evento.target.value).replace(/[^0-9\.]/g,'');
         var valor_contrato = parseFloat(valor_adicion) + parseFloat(self.contrato_obj.ValorContrato);
-        var valor_valido_adicion = self.contrato_obj.ValorContrato * 0.5; //No permitir que el valor de adición sea superior al 50% del mismo
-
+        var valor_valido_adicion = self.contrato_obj.ValorContrato * 0.5;
         if (valor_adicion <= valor_valido_adicion) {
             $scope.nuevo_valor_contrato = numberFormat(String(valor_contrato));
-            // alert(valor_adicion);
             $scope.valor_adicion_letras = numeroALetras(valor_adicion, {
                 plural: $translate.instant('PESOS'),
                 singular: $translate.instant('PESO'),
                 centPlural: $translate.instant('CENTAVOS'),
                 centSingular: $translate.instant('CENTAVO')
             });
-
             $scope.nuevo_valor_contrato_letras = numeroALetras(valor_contrato, {
                 plural: $translate.instant('PESOS'),
                 singular: $translate.instant('PESO'),
                 centPlural: $translate.instant('CENTAVOS'),
                 centSingular: $translate.instant('CENTAVO')
             });
-
             $scope.valor_adicion = numberFormat(valor_adicion);
         }else{
-            $scope.valor_adicion = undefined; //SE COLOCA UNDEFINED PARA REINICIAR LOS LABEL QUE MUESTRAN EL VALOR EN LETRAS
+            $scope.valor_adicion = undefined;
             $scope.nuevo_valor_contrato = "";
             swal($translate.instant('TITULO_ADVERTENCIA'),
                     $translate.instant('DESCRIPCION_ADVERTENCIA_ADICION'),
@@ -167,31 +139,33 @@ angular.module('contractualClienteApp')
         }
     }
 
+    /**
+     * @ngdoc method
+     * @name total_plazo_contrato
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion para obtener el plazo del contrato
+     */
     $scope.total_plazo_contrato = function(evento) {
-        var valor_prorroga = evento.target.value; //SE CAPTURA EL VALOR DEL INPUT POR MEDIO DEL TARGET DEL CONTROL
+        var valor_prorroga = evento.target.value;
         var plazo_actual_dias = parseInt(self.contrato_obj.PlazoEjecucion) * (30);
         var valor_valido_prorroga = plazo_actual_dias * 0.5;
-
         $scope.valor_prorroga_final = valor_prorroga;
-
         if (valor_prorroga <= valor_valido_prorroga) {
             var valor_plazo_dias = parseInt(valor_prorroga) + plazo_actual_dias;
             var valor_plazo_meses = valor_plazo_dias / (30);
             var res = String(valor_plazo_meses).split(".");
             var cantidad_meses = res[0];
-            var decimal_cantidad_dias = "0."+res[1]; //COMPLETAMOS EL NUMERO DECIMAL CON UN CERO INICIAL
-            var cantidad_dias = Math.ceil(parseFloat(decimal_cantidad_dias) / 0.03333333333336); //0.03333333333336 <- equivale al valor de un dia || SE UTILIZA LA FUNCION CEIL PARA REDONDEAR POR ARRIBA
-
+            var decimal_cantidad_dias = "0."+res[1];
+            var cantidad_dias = Math.ceil(parseFloat(decimal_cantidad_dias) / 0.03333333333336);
             $scope.cantidad_meses_letras = numeroALetras(cantidad_meses, {
                 plural: $translate.instant('('),
                 singular: $translate.instant('(')
             });
-
             $scope.cantidad_dias_letras = numeroALetras(cantidad_dias, {
                 plural: $translate.instant('('),
                 singular: $translate.instant('(')
             });
-
             $scope.nuevo_plazo_contrato = $scope.cantidad_meses_letras + cantidad_meses + " ) " + $translate.instant('MENSAJE_MESES') + " " + $scope.cantidad_dias_letras + cantidad_dias + " ) " + $translate.instant('DIAS');
         }else{
             $scope.tiempo_prorroga = undefined;
@@ -201,37 +175,59 @@ angular.module('contractualClienteApp')
         }
     }
 
+    /**
+     * @ngdoc method
+     * @name click_check_adicion
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion para validar si se selecciono la novedad de adicion
+     */
     $scope.click_check_adicion = function(){
         if( $('.panel_adicion').is(":visible") ){
-            //si esta visible
             $('.panel_adicion').hide("fast");
             self.contrato_obj.NumeroCdp = "";
             $scope.valor_adicion = "";
             $scope.fecha_adicion = "";
             $scope.nuevo_valor_contrato = "";
         }else{
-            //si no esta visible
             $('.panel_adicion').show("fast");
-            //self.contrato_obj.NumeroCdp = $scope.response_contrato.data[0].NumeroCdp;
+
+            administrativaAmazonRequest.get('contrato_disponibilidad', $.param({
+                query:"NumeroContrato:" + self.contrato_id
+            })).then(function(response) {
+                self.contrato_obj.NumeroCdp = response.data[0].NumeroCdp;
+            });
             $scope.fecha_adicion = new Date();
         }
     }
 
+    /**
+     * @ngdoc method
+     * @name click_check_prorroga
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion para validar si se selecciono la novedad de prorroga
+     */
     $scope.click_check_prorroga = function(){
         if( $('.panel_prorroga').is(":visible") ){
-            //si esta visible
             $('.panel_prorroga').hide("fast");
             $scope.tiempo_prorroga = "";
             $scope.fecha_prorroga = "";
             $scope.nuevo_plazo_contrato = "";
         }else{
-            //si no esta visible
             $('.panel_prorroga').show("fast");
             $scope.fecha_prorroga = new Date();
         }
     }
 
     $scope.estado_novedad = false;
+    /**
+     * @ngdoc method
+     * @name comprobar_seleccion_novedad
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion para validar si se selecciono la novedad de adicion - prorroga
+     */
     self.comprobar_seleccion_novedad = function(){
         if ($scope.adicion == true || $scope.prorroga == true){
             $scope.estado_novedad = true;
@@ -253,7 +249,6 @@ angular.module('contractualClienteApp')
                     $translate.instant('DESCRIPCION_ADVERTENCIA'),
                     'info');
         }
-
         var valor_contrato_inicial = self.contrato_obj.ValorContrato;
         $scope.valor_contrato_letras = numeroALetras(valor_contrato_inicial, {
             plural: $translate.instant('PESOS'),
@@ -261,35 +256,41 @@ angular.module('contractualClienteApp')
             centPlural: $translate.instant('CENTAVOS'),
             centSingular: $translate.instant('CENTAVO')
         });
-
         $scope.cantidad_salarios_minimos = (valor_contrato_inicial / 737717).toFixed(2);
-
         $scope.contrato_plazo_letras = numeroALetras(self.contrato_obj.PlazoEjecucion, {
             plural: $translate.instant('('),
             singular: $translate.instant('(')
         });
-
         $scope.contrato_prorroga_letras = numeroALetras($scope.valor_prorroga_final, {
             plural: $translate.instant('('),
             singular: $translate.instant('(')
         });
-        console.log("Cantidad de salarios -> "+$scope.cantidad_salarios_minimos);
     }
 
+    /**
+     * @ngdoc method
+     * @name generarActa
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion que valida la data de la novedad
+     */
     self.generarActa = function(){
         if ($scope.adicion) {
             $scope.estado_novedad = "Adición";
             $scope.alert = 'DESCRIPCION_ADICION';
+            $scope.tiponovedad = '59d7985e867ee188e42d8e64';
         }
         if ($scope.prorroga) {
             $scope.estado_novedad = "Prorroga";
             $scope.alert = 'DESCRIPCION_PRORROGA';
+            $scope.tiponovedad = '59d79894867ee188e42d8e9b';
             if ($scope.adicion != true && $scope.prorroga == true){
                 $scope.valor_adicion = "0";
             }
         }if ($scope.adicion == true && $scope.prorroga == true){
             $scope.estado_novedad = "Adición y Prorroga";
             $scope.alert = 'DESCRIPCION_ADICION_PRORROGA';
+            $scope.tiponovedad = '59d79904867ee188e42d8f02';
         }
         if ($scope.estado_novedad != false) {
             self.data_acta_adicion_prorroga = {
@@ -302,14 +303,13 @@ angular.module('contractualClienteApp')
                 tiempoprorroga: $scope.tiempo_prorroga,
                 fechaprorroga: $scope.fecha_prorroga,
                 vigencia: String(self.contrato_obj.VigenciaContrato),
-                motivo: $scope.motivo
+                motivo: $scope.motivo,
+                tiponovedad: $scope.tiponovedad,
+                cesionario: parseInt(self.contrato_obj.contratista)
             }
-            // alert(JSON.stringify(self.data_acta_adicion_prorroga));
             argoNosqlRequest.post('novedad', self.data_acta_adicion_prorroga).then(function(request){
-                console.log(request);
                 if (request.status == 200) {
                     self.formato_generacion_pdf();
-
                     swal({
                         title: $translate.instant('TITULO_BUEN_TRABAJO'),
                         type: 'success',
@@ -330,7 +330,7 @@ angular.module('contractualClienteApp')
     /**
      * @ngdoc method
      * @name format_date
-     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaCesionCtrl
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
      * @description
      * funcion para el formateo de objetos tipo fecha a formato dd/mm/yyyy
      * @param {date} param
@@ -350,20 +350,25 @@ angular.module('contractualClienteApp')
         return today;
     };
 
+    /**
+     * @ngdoc method
+     * @name formato_generacion_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion que permite generar el PDF del acta
+     */
     self.formato_generacion_pdf = function(){
         var docDefinition = self.formato_pdf();
-        console.log(docDefinition);
         pdfMake.createPdf(docDefinition).download('acta_adicion_prorroga.pdf');
-        //$location.path('/seguimientoycontrol/legal');
-        //argoNosqlRequest.get('plantilladocumento','59ad7043b43bd107a6dca324').then(function(response){
-        //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
-        //console.log(docDefinition);
-        //var output = JSON.parse(docDefinition);
-        //pdfMake.createPdf(output).download('acta_cesion.pdf');
-        //$location.path('/seguimientoycontrol/legal');
-        //});
     }
 
+    /**
+     * @ngdoc method
+     * @name formato_pdf
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+     * @description
+     * funcion que crea el PDF de la novedad
+     */
     self.formato_pdf = function(){
         return {
             content: [       
@@ -614,11 +619,14 @@ angular.module('contractualClienteApp')
         }
     }
 
-    /* =========================================================
-     * FUNCION PARA CONVERTIR VALORES NUMERICOS EN LETRAS
-     * ========================================================== */
+    /**
+    * @ngdoc method
+    * @name formato_pdf
+    * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+    * @description
+    * funcion para convertir valores numericos en letras
+    */
     var numeroALetras = (function() {
-        //Código basado en https://gist.github.com/alfchee/e563340276f89b22042a
         function Unidades(num){
             switch(num)
             {
@@ -633,192 +641,168 @@ angular.module('contractualClienteApp')
                 case 9: return $translate.instant('NUEVE');
             }
             return '';
-        }//Unidades()
-
-    function Decenas(num){
-        var decena = Math.floor(num/10);
-        var unidad = num - (decena * 10);
-
-        switch(decena)
-        {
-            case 1:
-                switch(unidad)
-                {
-                    case 0: return $translate.instant('DIEZ');
-                    case 1: return $translate.instant('ONCE');
-                    case 2: return $translate.instant('DOCE');
-                    case 3: return $translate.instant('TRECE');
-                    case 4: return $translate.instant('CATORCE');
-                    case 5: return $translate.instant('QUINCE');
-                    case 6: return $translate.instant('DIECISEIS');
-                    case 7: return $translate.instant('DIECISIETE');
-                    case 8: return $translate.instant('DIECIOCHO');
-                    case 9: return $translate.instant('DIECINUEVE');
-                    default: return $translate.instant('DIECI') + Unidades(unidad);
-                }
-            case 2:
-                switch(unidad)
-                {
-                    case 0: return $translate.instant('VEINTE');
-                    default: return $translate.instant('VEINTI') + Unidades(unidad);
-                }
-            case 3: return DecenasY($translate.instant('TREINTA'), unidad);
-            case 4: return DecenasY($translate.instant('CUARENTA'), unidad);
-            case 5: return DecenasY($translate.instant('CINCUENTA'), unidad);
-            case 6: return DecenasY($translate.instant('SESENTA'), unidad);
-            case 7: return DecenasY($translate.instant('SETENTA'), unidad);
-            case 8: return DecenasY($translate.instant('OCHENTA'), unidad);
-            case 9: return DecenasY($translate.instant('NOVENTA'), unidad);
-            case 0: return Unidades(unidad);
         }
-    }//Unidades()
 
-    function DecenasY(strSin, numUnidades) {
-        if (numUnidades > 0)
-            return strSin + $translate.instant('Y') + Unidades(numUnidades)
-                return strSin;
-    }//DecenasY()
-
-    function Centenas(num) {
-        var centenas = Math.floor(num / 100);
-        var decenas = num - (centenas * 100);
-
-        switch(centenas)
-        {
-            case 1:
-                if (decenas > 0)
-                    return $translate.instant('CIENTO') + Decenas(decenas);
-                return $translate.instant('CIEN');
-            case 2: return $translate.instant('DOSCIENTOS') + Decenas(decenas);
-            case 3: return $translate.instant('TRESCIENTOS') + Decenas(decenas);
-            case 4: return $translate.instant('CUATROCIENTOS') + Decenas(decenas);
-            case 5: return $translate.instant('QUINIENTOS') + Decenas(decenas);
-            case 6: return $translate.instant('SEISCIENTOS') + Decenas(decenas);
-            case 7: return $translate.instant('SETECIENTOS') + Decenas(decenas);
-            case 8: return $translate.instant('OCHOCIENTOS') + Decenas(decenas);
-            case 9: return $translate.instant('NOVECIENTOS') + Decenas(decenas);
+        function Decenas(num){
+            var decena = Math.floor(num/10);
+            var unidad = num - (decena * 10);
+            switch(decena)
+            {
+                case 1:
+                    switch(unidad)
+                    {
+                        case 0: return $translate.instant('DIEZ');
+                        case 1: return $translate.instant('ONCE');
+                        case 2: return $translate.instant('DOCE');
+                        case 3: return $translate.instant('TRECE');
+                        case 4: return $translate.instant('CATORCE');
+                        case 5: return $translate.instant('QUINCE');
+                        case 6: return $translate.instant('DIECISEIS');
+                        case 7: return $translate.instant('DIECISIETE');
+                        case 8: return $translate.instant('DIECIOCHO');
+                        case 9: return $translate.instant('DIECINUEVE');
+                        default: return $translate.instant('DIECI') + Unidades(unidad);
+                    }
+                case 2:
+                    switch(unidad)
+                    {
+                        case 0: return $translate.instant('VEINTE');
+                        default: return $translate.instant('VEINTI') + Unidades(unidad);
+                    }
+                case 3: return DecenasY($translate.instant('TREINTA'), unidad);
+                case 4: return DecenasY($translate.instant('CUARENTA'), unidad);
+                case 5: return DecenasY($translate.instant('CINCUENTA'), unidad);
+                case 6: return DecenasY($translate.instant('SESENTA'), unidad);
+                case 7: return DecenasY($translate.instant('SETENTA'), unidad);
+                case 8: return DecenasY($translate.instant('OCHENTA'), unidad);
+                case 9: return DecenasY($translate.instant('NOVENTA'), unidad);
+                case 0: return Unidades(unidad);
+            }
         }
-        return Decenas(decenas);
-    }//Centenas()
 
-    function Seccion(num, divisor, strSingular, strPlural) {
-        var cientos = Math.floor(num / divisor)
-            var resto = num - (cientos * divisor)
+        function DecenasY(strSin, numUnidades) {
+            if (numUnidades > 0)
+                return strSin + $translate.instant('Y') + Unidades(numUnidades)
+            return strSin;
+        }
 
-            var letras = '';
+        function Centenas(num) {
+            var centenas = Math.floor(num / 100);
+            var decenas = num - (centenas * 100);
+            switch(centenas)
+            {
+                case 1:
+                    if (decenas > 0)
+                        return $translate.instant('CIENTO') + Decenas(decenas);
+                    return $translate.instant('CIEN');
+                case 2: return $translate.instant('DOSCIENTOS') + Decenas(decenas);
+                case 3: return $translate.instant('TRESCIENTOS') + Decenas(decenas);
+                case 4: return $translate.instant('CUATROCIENTOS') + Decenas(decenas);
+                case 5: return $translate.instant('QUINIENTOS') + Decenas(decenas);
+                case 6: return $translate.instant('SEISCIENTOS') + Decenas(decenas);
+                case 7: return $translate.instant('SETECIENTOS') + Decenas(decenas);
+                case 8: return $translate.instant('OCHOCIENTOS') + Decenas(decenas);
+                case 9: return $translate.instant('NOVECIENTOS') + Decenas(decenas);
+            }
+            return Decenas(decenas);
+        }
 
-        if (cientos > 0)
-            if (cientos > 1)
-                letras = Centenas(cientos) + ' ' + strPlural;
-            else
-                letras = strSingular;
-        if (resto > 0)
-            letras += '';
-        return letras;
-    }//Seccion()
-
-    function Miles(num) {
-        var divisor = 1000;
-        var cientos = Math.floor(num / divisor)
-            var resto = num - (cientos * divisor)
-
-            var strMiles = Seccion(num, divisor, $translate.instant('UNMIL'), $translate.instant('MIL'));
-        var strCentenas = Centenas(resto);
-
-        if(strMiles == '')
-            return strCentenas;
-
-        return strMiles + ' ' + strCentenas;
-    }//Miles()
-
-    function Millones(num) {
-        var divisor = 1000000;
-        var cientos = Math.floor(num / divisor)
-            var resto = num - (cientos * divisor)
-
-            var strMillones = Seccion(num, divisor, $translate.instant('UNMILLON'), $translate.instant('MILLONES'));
-        var strMiles = Miles(resto);
-
-        if(strMillones == '')
-            return strMiles;
-
-        return strMillones + ' ' + strMiles;
-    }//Millones()
-
-    return function NumeroALetras(num, currency) {
-        currency = currency || {};
-        var data = {
-            numero: num,
-            enteros: Math.floor(num),
-            centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
-            letrasCentavos: '',
-            letrasMonedaPlural: currency.plural || $translate.instant('PESOS'),
-            letrasMonedaSingular: currency.singular || $translate.instant('PESO'),
-            letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS',
-            letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO'
-        };
-
-        if (data.centavos > 0) {
-            data.letrasCentavos = $translate.instant('CON') + (function () {
-                if (data.centavos == 1)
-                    return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoSingular;
+        function Seccion(num, divisor, strSingular, strPlural) {
+            var cientos = Math.floor(num / divisor)
+                var resto = num - (cientos * divisor)
+                var letras = '';
+            if (cientos > 0)
+                if (cientos > 1)
+                    letras = Centenas(cientos) + ' ' + strPlural;
                 else
-                    return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoPlural;
-            })();
-        };
+                    letras = strSingular;
+            if (resto > 0)
+                letras += '';
+            return letras;
+        }
 
-        if(data.enteros == 0)
-            return $translate.instant('CERO') + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
-        if (data.enteros == 1)
-            return Millones(data.enteros) + ' ' + data.letrasMonedaSingular + ' ' + data.letrasCentavos;
-        else
-            return Millones(data.enteros) + ' ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
-    };
+        function Miles(num) {
+            var divisor = 1000;
+            var cientos = Math.floor(num / divisor)
+                var resto = num - (cientos * divisor)
+                var strMiles = Seccion(num, divisor, $translate.instant('UNMIL'), $translate.instant('MIL'));
+            var strCentenas = Centenas(resto);
+            if(strMiles == '')
+                return strCentenas;
+            return strMiles + ' ' + strCentenas;
+        }
+
+        function Millones(num) {
+            var divisor = 1000000;
+            var cientos = Math.floor(num / divisor)
+            var resto = num - (cientos * divisor)
+            var strMillones = Seccion(num, divisor, $translate.instant('UNMILLON'), $translate.instant('MILLONES'));
+            var strMiles = Miles(resto);
+            if(strMillones == '')
+                return strMiles;
+            return strMillones + ' ' + strMiles;
+        }
+
+        return function NumeroALetras(num, currency) {
+            currency = currency || {};
+            var data = {
+                numero: num,
+                enteros: Math.floor(num),
+                centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
+                letrasCentavos: '',
+                letrasMonedaPlural: currency.plural || $translate.instant('PESOS'),
+                letrasMonedaSingular: currency.singular || $translate.instant('PESO'),
+                letrasMonedaCentavoPlural: currency.centPlural || 'CHIQUI PESOS',
+                letrasMonedaCentavoSingular: currency.centSingular || 'CHIQUI PESO'
+            };
+
+            if (data.centavos > 0) {
+                data.letrasCentavos = $translate.instant('CON') + (function () {
+                    if (data.centavos == 1)
+                        return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoSingular;
+                    else
+                        return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoPlural;
+                })();
+            };
+
+            if(data.enteros == 0)
+                return $translate.instant('CERO') + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+            if (data.enteros == 1)
+                return Millones(data.enteros) + ' ' + data.letrasMonedaSingular + ' ' + data.letrasCentavos;
+            else
+                return Millones(data.enteros) + ' ' + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
+        };
     })();
 
-    /* =========================================================
-     * FUNCION QUE DEVUELVE UN NUMERO SEPARANDO LOS SEPARADORES DE MILES
-     * PUEDE RECIBIR VALORES NEGATIVOS Y CON DECIMALES
-     * ========================================================== */
+    /**
+    * @ngdoc method
+    * @name numberFormat
+    * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
+    * @description
+    * funcion que formatea los valores de la fecha
+    */
     function numberFormat(numero){
-        // Variable que contendra el resultado final
         var resultado = "";
         var nuevoNumero = 0;
-
-        // Si el numero empieza por el valor "-" (numero negativo)
         if(numero[0]=="-")
         {
-            // Cogemos el numero eliminando las posibles comas que tenga, y sin
-            // el signo negativo
             nuevoNumero=numero.replace(/\,/g,'').substring(1);
         }else{
-            // Cogemos el numero eliminando las posibles comas que tenga
             nuevoNumero=numero.replace(/\,/g,'');
         }
-
-        // Si tiene decimales, se los quitamos al numero
         if(numero.indexOf(".")>=0)
             nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
-
-        // Ponemos un punto cada 3 caracteres
         for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
             resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
-
-        // Si tiene decimales, se lo añadimos al numero una vez forateado con 
-        // los separadores de miles
         if(numero.indexOf(".")>=0)
             resultado+=numero.substring(numero.indexOf("."));
-
         if(numero[0]=="-")
         {
-            // Devolvemos el valor añadiendo al inicio el signo negativo
             return "-"+resultado;
         }else{
             return resultado;
         }
     }
-    // document.write(""+numberFormat("-123456789.12"));
-    // document.write(""+numberFormat("-1100000.23"));
 }).config(function($mdDateLocaleProvider) {
     $mdDateLocaleProvider.formatDate = function(date) {
         return date ? moment(date).format('DD/MM/YYYY') : '';

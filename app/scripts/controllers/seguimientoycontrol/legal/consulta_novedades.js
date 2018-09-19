@@ -15,7 +15,6 @@ angular.module('contractualClienteApp')
       'Karma'
     ];
 
-
     var self = this;
     self.gridOptions = {
       enableFiltering : true,
@@ -59,6 +58,4 @@ angular.module('contractualClienteApp')
                                                         "motivo":"PRUEBA"}
 
                             ];
-
-
   });
