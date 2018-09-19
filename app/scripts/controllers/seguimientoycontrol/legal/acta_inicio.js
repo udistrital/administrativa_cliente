@@ -16,6 +16,7 @@ angular.module('contractualClienteApp')
     ];
 
     var self = this;
+    self.diff_dias = null;
     self.contrato_id = $routeParams.contrato_id;
     self.contrato_vigencia = $routeParams.contrato_vigencia;
     self.contrato_obj = {};
@@ -135,6 +136,30 @@ angular.module('contractualClienteApp')
         {"TipoBien": "Bien de Consumo", "Placa":"1234556666","Descripcion":"Teclado LED", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""},
         {"TipoBien": "Bien de Consumo", "Placa":"1234556667","Descripcion":"CPU X", "Sede":"Macarena A", "Dependencia": "Bienestar", "Estado":""}
     ];
+
+    /**
+     * @ngdoc method
+     * @name calculoTiempo
+     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaSuspensionCtrl
+     * @description
+     * Funcion que observa el cambio de fechas y calcula el periodo de suspension
+     * @param {date} Fecha de reinicio
+     */
+    $scope.$watch('sLactaInicio.fecha_fin', function(){
+      var dt1 = self.fecha_inicio;
+      var dt2 = self.fecha_fin;
+      var timeDiff = 0;
+
+      if(dt2 != null){
+        timeDiff = Math.abs(dt2.getTime() - dt1.getTime());
+      }
+      var last_time = Math.ceil(timeDiff / (1000 * 3600 * 24))
+      if (last_time == 0){
+        self.diff_dias = null;
+      }else{
+        self.diff_dias = last_time;
+      }
+    });
 
     /**
      * @ngdoc method

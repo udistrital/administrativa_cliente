@@ -42,13 +42,23 @@
             <div class="panel-body">
               <div class="row" style="border: 0px solid;">
                 <hr>
-                <div class="col-xs-12 col-md-12">
-                  <label for="fechainicio">{{'FECHA_INICIO' | translate}}</label><br>
-                  <md-datepicker ng-model="sLactaInicio.fecha_inicio"></md-datepicker>
+                <div class="form-group col-md-6">
+                  <p>
+                    <b>{{'TIEMPO_CONTRATO' | translate}} *</b>
+                  </p>
+                  <md-input-container style="margin:0;">
+                    <input type="number" name="diff_dias" id="periodo" required ng-model="sLactaInicio.diff_dias" ng-disabled="true" min="0">
+                    <div ng-messages="diff_dias.$error">
+                      <div ng-message="required">Este campo es requerido.</div>
+                    </div>
+                  </md-input-container>
                 </div>
-                <div class="col-xs-12 col-md-12">
-                  <hr>
-                  <label for="fechafin">{{'FECHA_FIN' | translate}}</label><br>
+                <div class="form-group col-md-6" >
+                  <label for="fechainicio">{{'FECHA_INICIO' | translate}}:</label> <br>
+                  <md-datepicker ng-model="sLactaInicio.fecha_inicio"> </md-datepicker>
+                </div>
+                <div class="form-group col-md-6" >
+                  <label for="fechareinicio">{{'FECHA_FIN' | translate}}:</label> <br>
                   <md-datepicker ng-model="sLactaInicio.fecha_fin" md-min-date="sLactaInicio.fecha_inicio"></md-datepicker>
                 </div>
               </div>
