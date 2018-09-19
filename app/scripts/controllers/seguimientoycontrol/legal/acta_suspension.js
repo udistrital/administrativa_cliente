@@ -45,17 +45,14 @@ angular.module('contractualClienteApp')
       self.contrato_obj.supervisor_documento = wso_response.data.contrato.supervisor.documento_identificacion;
       self.contrato_obj.contratista = wso_response.data.contrato.contratista;
 
-      console.log(wso_response.data.contrato);
       administrativaAmazonRequest.get('tipo_contrato', $.param({
         query: "Id:" + wso_response.data.contrato.tipo_contrato
       })).then(function(tc_response){
         self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
         argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.vigencia).then(function(response_nosql){
-          //console.log(response_nosql.data);
           var elementos_cesion = response_nosql.data;
           if(elementos_cesion != null){
               var last_cesion = response_nosql.data[response_nosql.data.length - 1];
-              console.log(last_cesion.tiponovedad);
               self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
               if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c97") {
                 self.contrato_obj.contratista = last_cesion.cesionario;
@@ -94,7 +91,6 @@ angular.module('contractualClienteApp')
                     })).then(function(ispn_response){
                         coreAmazonRequest.get('ciudad','query=Id:' + ipn_response.data[0].IdCiudadExpedicionDocumento).then(function(sc_response){
                             self.contrato_obj.supervisor_ciudad_documento = sc_response.data[0].Nombre;
-                            console.log(self.contrato_obj)
                         });
                     });
                 });
@@ -184,9 +180,7 @@ angular.module('contractualClienteApp')
                     }
                   };
 
-                  console.log(cambio_estado_contrato);
                   administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
-                    console.log("POST WSO: ", response);
                     if (response.status == 200 || response.statusText == "OK") {
                       swal(
                         $translate.instant('TITULO_BUEN_TRABAJO'),
@@ -242,11 +236,7 @@ angular.module('contractualClienteApp')
      */
     self.formato_generacion_pdf = function(){
       argoNosqlRequest.get('plantilladocumento','5a133759d9963a4c9025fbac').then(function(response){
-        console.log(response.data)
-        //var docDefinition = JSON.stringify(eval("(" + response.data[0].plantilla + ")" ));
         var docDefinition = self.get_pdf();
-        console.log(docDefinition);
-        //var output = JSON.parse(docDefinition);
         pdfMake.createPdf(docDefinition).download('acta_suspension.pdf');
         $location.path('/seguimientoycontrol/legal');
       });

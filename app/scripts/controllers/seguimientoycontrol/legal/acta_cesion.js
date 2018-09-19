@@ -32,7 +32,6 @@ angular.module('contractualClienteApp')
      * Funcion para la carga de toda la informacion de un contrato especifico
      */
     administrativaWsoRequest.get('contrato', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response){
-        console.log(wso_response);
         self.contrato_obj.id = wso_response.data.contrato.numero_contrato_suscrito;
         self.contrato_obj.valor = wso_response.data.contrato.valor_contrato;
         self.contrato_obj.objeto = wso_response.data.contrato.objeto_contrato;
@@ -56,7 +55,6 @@ angular.module('contractualClienteApp')
                 argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.vigencia).then(function(response_nosql){
                     var elementos_cesion = response_nosql.data;
                     if(elementos_cesion != null){
-                        //console.log(response_nosql.data[response_nosql.data.length - 1]);
                         var last_cesion = response_nosql.data[response_nosql.data.length - 1];
                         self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
                         if (self.contrato_obj.tipo_novedad == '59d79683867ee188e42d8c97') {
@@ -88,7 +86,6 @@ angular.module('contractualClienteApp')
                                 self.contrato_obj.supervisor_ciudad_cedula = c_response.data[0].Nombre;
                                 self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
                                 self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
-                                console.log(self.contrato_obj);
                             });
                         });
                     });
@@ -141,10 +138,8 @@ angular.module('contractualClienteApp')
             self.cesionario_obj.fecha_expedicion_documento = val.FechaExpedicionDocumento;
             self.cesionario_obj.tipo_documento = val.TipoDocumento.ValorParametro;
             self.cesionario_obj.tipo_persona = "Natural";
-            console.log(val);
             coreAmazonRequest.get('ciudad','query=Id:' + val.IdCiudadExpedicionDocumento).then(function(c_response){
                 self.cesionario_obj.ciudad = c_response.data[0].Nombre;
-                console.log(self.cesionario_obj);
             });
         }
     }
@@ -198,7 +193,6 @@ angular.module('contractualClienteApp')
                     self.cesion_nov.fechaoficio = new Date(self.f_oficio);
                     self.cesion_nov.fecharegistro = self.contrato_obj.fecha_registro;
 
-                    console.log(self.cesion_nov);
                     argoNosqlRequest.post('novedad', self.cesion_nov).then(function(response_nosql){
                         if(response_nosql.status == 200  || response_nosql.statusText == "OK"){
                             swal(
@@ -235,12 +229,10 @@ angular.module('contractualClienteApp')
         date = new Date(param);
 
         if(date == "Invalid Date"){
-            console.log(param);
             var temp_arr = param.split("-");
             temp_arr.pop();
             today = temp_arr[2] + '/' + temp_arr[1] + '/' + temp_arr[0]
         }else{
-            console.log(date, date.getDate());
             var dd = date.getDate();
             var mm = date.getMonth()+1;
             var yyyy = date.getFullYear();
@@ -267,7 +259,6 @@ angular.module('contractualClienteApp')
         argoNosqlRequest.get('plantilladocumento','59d79414867ee188e42d8a59').then(function(response){
             var str_plantilla = response.data[0].plantilla;
             var docDefinition = JSON.parse(JSON.stringify(str_plantilla));
-            //console.log(docDefinition);
             var output = self.get_plantilla();
             pdfMake.createPdf(output).download('acta_cesion.pdf');
             $location.path('/seguimientoycontrol/legal');

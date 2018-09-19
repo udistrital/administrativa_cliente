@@ -59,11 +59,9 @@ angular.module('contractualClienteApp')
             self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
 
             argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.vigencia).then(function(response_nosql){
-                console.log(response_nosql.data);
                 var elementos_cesion = response_nosql.data;
                 if(elementos_cesion != null){
                     var last_cesion = response_nosql.data[response_nosql.data.length - 1];
-                    console.log(last_cesion.tiponovedad);
                     self.contrato_obj.tipo_novedad = last_cesion.tiponovedad;
                     if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c97") {
                         self.contrato_obj.contratista = last_cesion.cesionario;
@@ -92,7 +90,6 @@ angular.module('contractualClienteApp')
                     })).then(function(ipn_response){
                         self.contrato_obj.contratista_ciudad_documento = ipn_response.data[0].IdCiudadExpedicionDocumento;
                         argoNosqlRequest.get('novedad', self.contrato_id + '/' + self.contrato_obj.vigencia).then(function(response){
-                            console.log(response)
                                 for(var i = 0 ; i < response.data.length ; i++){
                                     if(response.data[i].tiponovedad == "59d7965e867ee188e42d8c72"){
                                         self.suspension_id_nov = response.data[i]._id;
@@ -101,7 +98,6 @@ angular.module('contractualClienteApp')
                                         self.motivo_suspension = response.data[i].motivo;
                                     }
                                 }
-                            console.log(self.contrato_obj);
                         });
                     });
                 });
@@ -197,7 +193,6 @@ angular.module('contractualClienteApp')
                 }
 
                 self.estados[0] = estado_temp_from;
-                console.log(self.estados)
                     adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
                         self.validacion = vc_response.data;
                         if(self.validacion == "true"){
@@ -212,9 +207,7 @@ angular.module('contractualClienteApp')
                                         }
                                     };
 
-                                    console.log(cambio_estado_contrato);
                                     administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
-                                        console.log("POST WSO: ", response);
                                         if (response.status == 200 || response.statusText == "OK") {
                                             swal(
                                                     $translate.instant('TITULO_BUEN_TRABAJO'),
