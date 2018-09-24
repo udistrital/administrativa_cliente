@@ -46,8 +46,9 @@ angular.module('contractualClienteApp')
         self.contrato_obj.VigenciaContrato = wso_response.data.contrato.vigencia;
         self.contrato_obj.FechaRegistro = wso_response.data.contrato.FechaRegistro;
         self.contrato_obj.contratista = String(wso_response.data.contrato.contratista);
-        self.contrato_obj.cesion = 0;
+        self.contrato_obj.cesion = 0; //Variable para cotrolar si el contrato tiene cesion
         self.estados= [];
+        // Obtiene el estado al cual se quiere pasar el contrato
         administrativaAmazonRequest.get('estado_contrato', $.param({
             query: "NombreEstado:" + "En ejecucion"
         })).then(function(ec_response){
@@ -58,6 +59,7 @@ angular.module('contractualClienteApp')
                 self.estados[1] = estado_temp_to;
             }
         });
+        //Verificar si el contrato ha tenido cesion
         argoNosqlRequest.get('novedad', self.contrato_obj.id + "/" + self.contrato_obj.VigenciaContrato).then(function(response_nosql){
             var elementos_cesion = response_nosql.data;
             if(elementos_cesion != null){
@@ -68,6 +70,7 @@ angular.module('contractualClienteApp')
                     self.contrato_obj.cesion = 1;
                 }
             }
+            //Obtencion de datos del contratista
             administrativaAmazonRequest.get('informacion_proveedor', $.param({
                 query: "Id:" + self.contrato_obj.contratista
             })).then(function(ip_response) {
@@ -81,13 +84,14 @@ angular.module('contractualClienteApp')
                 }
             }); 
         });
+        //Obtencion tipo de contrato
         administrativaAmazonRequest.get('tipo_contrato', $.param({
             query:"Id:"+wso_response.data.contrato.tipo_contrato
         })).then(function(tc_response){
             self.contrato_obj.tipo_contrato = tc_response.data[0].TipoContrato;
         });
     });
-
+    //Obtencion de datos de la poliza
     administrativaWsoRequest.get('poliza_suscrito', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(wso_response) {
         var cantidad_elementos = Object.keys(wso_response.data["poliza_contrato"]).length;
         if (cantidad_elementos > 0) {
@@ -169,6 +173,7 @@ angular.module('contractualClienteApp')
      * funcion que valida la data de la novedad
      */
     self.generarActa = function(){
+        //CONDICIONALES PARA CUANDO NO TIENE DATOS DE POLIZA
         if (self.poliza_obj.numero_poliza == undefined) {
             self.poliza_obj.numero_poliza = "n/a";
         }
@@ -221,6 +226,7 @@ angular.module('contractualClienteApp')
                 valorfinalcontrato: 0,
                 vigencia: "2017"
             }
+            //Se verifica si el contrato tiene cesion (0=no tiene cesion)
             if (self.contrato_obj.cesion == 0) {
                 self.contrato_estado = {
                     NumeroContrato: self.contrato_obj.id,
@@ -427,22 +433,30 @@ angular.module('contractualClienteApp')
      * funcion que formatea los valores de la fecha
      */
     function numberFormat(numero){
+        // Variable que contendra el resultado final
         var resultado = "";
         var nuevoNumero = 0;
+        // Si el numero empieza por el valor "-" (numero negativo)
         if(numero[0]=="-")
         {
+            // Cogemos el numero eliminando las posibles comas que tenga, y sin el signo negativo
             nuevoNumero=numero.replace(/\,/g,'').substring(1);
         }else{
+            // Cogemos el numero eliminando las posibles comas que tenga
             nuevoNumero=numero.replace(/\,/g,'');
         }
+        // Si tiene decimales, se los quitamos al numero
         if(numero.indexOf(".")>=0)
             nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
+        // Ponemos un punto cada 3 caracteres
         for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
             resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
+        // Si tiene decimales, se lo añadimos al numero una vez forateado con los separadores de miles
         if(numero.indexOf(".")>=0)
             resultado+=numero.substring(numero.indexOf("."));
         if(numero[0]=="-")
         {
+            // Devolvemos el valor añadiendo al inicio el signo negativo
             return "-"+resultado;
         }else{
             return resultado;
