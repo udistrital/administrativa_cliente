@@ -59,7 +59,6 @@ var text_es = {
   NOMBRE_CONTRATISTA: "Nombre",
   DOCUMENTO_CONTRATISTA: "No Documento",
   NOMBRE: "Nombre",
-  CONTRATO: "Contrato",
   FUENTE_FINANCIAMIENTO: "Fuente Financiamiento",
   VALOR: "Valor",
   VALOR_DESEMBOLSADO: "Valor desembolsado",
@@ -128,10 +127,10 @@ var text_es = {
 
   //ACTA INICIO
   ACTA_INICIO: "ACTA DE INICIO",
-  INFORMACION: "INFORMACIÓN",
+  INFORMACION_ACTA_INICIO: "INFORMACIÓN",
   PLAZO_MESES: "Plazo (en meses)",
   SUPERVISOR: "Supervisor",
-  NO_REGISTRA: "No registra",
+  NO_REGISTRA_ACTA_INICIO: "No registra",
   NUMERO_POLIZA: "Número de poliza",
   FECHA_EXPEDICION_POLIZA: "Fecha Expedición de Póliza",
   FECHA_APROBACION_POLIZA: "Fecha Aprobación de Póliza",
@@ -159,7 +158,7 @@ var text_es = {
   VALOR_ADICION: "Valor Adición",
   FECHA_ADICION: "Fecha Adición",
   NUEVO_VALOR_CONTRATO: "Nuevo Valor del Contrato",
-  VALOR_ADICION: "Valor Adición en Letras",
+  VALOR_ADICION_TEXTO: "Valor Adición en Letras",
   NUEVO_VALOR_ADICION: "Nuevo Valor en Letras",
   INFORMACION_NOVEDAD_PRORROGA: "INFORMACIÓN DE PRÓRROGA",
   TIEMPO_PRORROGA: "Tiempo Prórroga (Días)",
@@ -267,7 +266,6 @@ var text_es = {
   DESCRIPCION_SUSPENSION:"Se registro exitosamente la novedad de suspensión al contrato # ",
   DESCRIPCION_REINICIO:"Se registro exitosamente la novedad de reinicio al contrato # ",
   DESCRIPCION_ACTA_CESION:"Acta de inicio para cesionario del contrato",
-  DESCRIPCION_ACTA_CESION:"Acta de inicio para cesionario del contrato",
   ANIO:" vigencia "
 
 };
@@ -324,7 +322,6 @@ var text_en = {
   NOMBRE_CONTRATISTA: "Name",
   DOCUMENTO_CONTRATISTA: "Identification",
   NOMBRE: "Name",
-  CONTRATO: "Contract",
   FUENTE_FINANCIAMIENTO: "Funding source",
   VALOR: "Value",
   COMPROMISO: "Agreement",
@@ -394,10 +391,10 @@ var text_en = {
 
   //ACTA INICIO
   ACTA_INICIO: "HOME ACT",
-  INFORMACION: "INFORMATION",
+  INFORMACION_ACTA_INICIO: "INFORMATION",
   PLAZO_MESES: "Term (in months)",
   SUPERVISOR: "Supervisor",
-  NO_REGISTRA: "Not register",
+  NO_REGISTRA_ACTA_INICIO: "Not register",
   NUMERO_POLIZA: "Policy number",
   FECHA_EXPEDICION_POLIZA: "Date Policy Issue",
   FECHA_APROBACION_POLIZA: "Date Policy Approval",
@@ -426,7 +423,7 @@ var text_en = {
   VALOR_DESEMBOLSADO: "Value disbursed",
   FECHA_ADICION: "Date Addition",
   NUEVO_VALOR_CONTRATO: "New Contract Value",
-  VALOR_ADICION: "Value Addition in Letters",
+  VALOR_ADICION_TEXTO: "Value Addition in Letters",
   NUEVO_VALOR_ADICION: "New Value in Letters",
   INFORMACION_NOVEDAD_PRORROGA: "INFORMATION OF EXTENSION",
   TIEMPO_PRORROGA: "Time Extension (Days)",

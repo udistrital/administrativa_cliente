@@ -67,19 +67,14 @@ angular.module('contractualClienteApp')
                     self.contrato_obj.cesion = 1;                    
                 }else if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c98") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
-                    self.contrato_obj.cesion = 0;
                 }else if (self.contrato_obj.tipo_novedad == "59d796ac867ee188e42d8cbf") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
-                    self.contrato_obj.cesion = 0;
                 }else if (self.contrato_obj.tipo_novedad == "59d7985e867ee188e42d8e64") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
-                    self.contrato_obj.cesion = 0;
                 }else if (self.contrato_obj.tipo_novedad == "59d79894867ee188e42d8e9b") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
-                    self.contrato_obj.cesion = 0;
                 }else if (self.contrato_obj.tipo_novedad == "59d79904867ee188e42d8f02") {
                     self.contrato_obj.contratista = last_cesion.cesionario;
-                    self.contrato_obj.cesion = 0;
                 }
             }
             
@@ -287,7 +282,8 @@ angular.module('contractualClienteApp')
             if ($scope.adicion != true && $scope.prorroga == true){
                 $scope.valor_adicion = "0";
             }
-        }if ($scope.adicion == true && $scope.prorroga == true){
+        }
+        if ($scope.adicion == true && $scope.prorroga == true){
             $scope.estado_novedad = "Adición y Prorroga";
             $scope.alert = 'DESCRIPCION_ADICION_PRORROGA';
             $scope.tiponovedad = '59d79904867ee188e42d8f02';
@@ -374,8 +370,7 @@ angular.module('contractualClienteApp')
             content: [       
             {
                 style: ['bottom_space'],
-                image: 'logo_ud', fit:[80,110], rowSpan: 3, alignment: 'center', fontSize: 12,
-                alignment: 'center'
+                image: 'logo_ud', fit:[80,110], rowSpan: 3, alignment: 'center', fontSize: 12
             }, 
             {         
                 style:['general_font'],         
@@ -465,8 +460,7 @@ angular.module('contractualClienteApp')
             },
             {
                 style: ['bottom_space'],
-                image: 'logo_ud', fit:[80,110], rowSpan: 3, alignment: 'center', fontSize: 12,
-                alignment: 'center'
+                image: 'logo_ud', fit:[80,110], rowSpan: 3, alignment: 'center', fontSize: 12
             },   
             {         
                 style:['general_font'],         
@@ -664,10 +658,10 @@ angular.module('contractualClienteApp')
                         default: return $translate.instant('DIECI') + Unidades(unidad);
                     }
                 case 2:
-                    switch(unidad)
-                    {
-                        case 0: return $translate.instant('VEINTE');
-                        default: return $translate.instant('VEINTI') + Unidades(unidad);
+                    if (unidad == 0) {
+                        return $translate.instant('VEINTE');
+                    }else{
+                        return $translate.instant('VEINTI') + Unidades(unidad);
                     }
                 case 3: return DecenasY($translate.instant('TREINTA'), unidad);
                 case 4: return DecenasY($translate.instant('CUARENTA'), unidad);
@@ -748,7 +742,7 @@ angular.module('contractualClienteApp')
             var data = {
                 numero: num,
                 enteros: Math.floor(num),
-                centavos: (((Math.round(num * 100)) - (Math.floor(num) * 100))),
+                centavos: ((Math.round(num * 100)) - (Math.floor(num) * 100)),
                 letrasCentavos: '',
                 letrasMonedaPlural: currency.plural || $translate.instant('PESOS'),
                 letrasMonedaSingular: currency.singular || $translate.instant('PESO'),
@@ -763,7 +757,7 @@ angular.module('contractualClienteApp')
                     else
                         return Millones(data.centavos) + ' ' + data.letrasMonedaCentavoPlural;
                 })();
-            };
+            }
 
             if(data.enteros == 0)
                 return $translate.instant('CERO') + data.letrasMonedaPlural + ' ' + data.letrasCentavos;
@@ -779,7 +773,7 @@ angular.module('contractualClienteApp')
     * @name numberFormat
     * @methodOf contractualClienteApp.controller:SeguimientoycontrolLegalActaAdicionProrrogaCtrl
     * @description
-    * funcion que formatea los valores de la fecha
+    * funcion que formatea los valores con sus respectivos separadores de miles
     */
     function numberFormat(numero){
         var resultado = "";
@@ -792,7 +786,7 @@ angular.module('contractualClienteApp')
         }
         if(numero.indexOf(".")>=0)
             nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
-        for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        for (var j = 0, i = nuevoNumero.length - 1; i >= 0; i--, j++)
             resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
         if(numero.indexOf(".")>=0)
             resultado+=numero.substring(numero.indexOf("."));

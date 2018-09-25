@@ -58,16 +58,12 @@ angular.module('contractualClienteApp')
                 self.contrato_obj.cesion = 1;
               }else if (self.contrato_obj.tipo_novedad == "59d79683867ee188e42d8c98") {
                 self.contrato_obj.contratista = last_cesion.cesionario;
-                self.contrato_obj.cesion = 0;
               }else if (self.contrato_obj.tipo_novedad == "59d7985e867ee188e42d8e64") {
                 self.contrato_obj.contratista = last_cesion.cesionario;
-                self.contrato_obj.cesion = 0;
               }else if (self.contrato_obj.tipo_novedad == "59d79894867ee188e42d8e9b") {
                 self.contrato_obj.contratista = last_cesion.cesionario;
-                self.contrato_obj.cesion = 0;
               }else if (self.contrato_obj.tipo_novedad == "59d79904867ee188e42d8f02") {
                 self.contrato_obj.contratista = last_cesion.cesionario;
-                self.contrato_obj.cesion = 0;
               }
           }
           administrativaAmazonRequest.get('informacion_proveedor', $.param({

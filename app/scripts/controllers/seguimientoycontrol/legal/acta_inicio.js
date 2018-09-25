@@ -79,8 +79,8 @@ angular.module('contractualClienteApp')
                     self.contrato_obj.contratista_documento = ip_response.data[0].NumDocumento;
                     self.contrato_obj.contratista_nombre = ip_response.data[0].NomProveedor;
                 }else{
-                    self.contrato_obj.contratista_documento = $translate.instant('NO_REGISTRA');
-                    self.contrato_obj.contratista_nombre = $translate.instant('NO_REGISTRA');
+                    self.contrato_obj.contratista_documento = $translate.instant('NO_REGISTRA_ACTA_INICIO');
+                    self.contrato_obj.contratista_nombre = $translate.instant('NO_REGISTRA_ACTA_INICIO');
                 }
             }); 
         });
@@ -98,8 +98,8 @@ angular.module('contractualClienteApp')
             self.poliza_obj.numero_poliza = wso_response.data.poliza_contrato.numero_poliza;
             self.poliza_obj.fecha_aprobacion = wso_response.data.poliza_contrato.fecha_aprobacion;
         }else{
-            self.poliza_obj.numero_poliza = $translate.instant('NO_REGISTRA');
-            self.poliza_obj.fecha_aprobacion = $translate.instant('NO_REGISTRA');
+            self.poliza_obj.numero_poliza = $translate.instant('NO_REGISTRA_ACTA_INICIO');
+            self.poliza_obj.fecha_aprobacion = $translate.instant('NO_REGISTRA_ACTA_INICIO');
         }
     });
 
@@ -240,6 +240,8 @@ angular.module('contractualClienteApp')
                     Usuario: "prueba"
                 }
 
+                
+
                 administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
                     if(ce_response.data.contratoEstado.estado.nombreEstado == "Suscrito"){
                         var estado_temp_from = {
@@ -247,36 +249,28 @@ angular.module('contractualClienteApp')
                         }
                     }
 
-                    administrativaWsoRequest.get('contrato_estado', '/'+self.contrato_id+'/'+self.contrato_vigencia).then(function(ce_response){
-                        if(ce_response.data.contratoEstado.estado.nombreEstado == "Suscrito"){
-                            var estado_temp_from = {
-                                "NombreEstado": "suscrito"
-                            }
+                    self.estados[0] = estado_temp_from;
+                    adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
+                        self.validacion = vc_response.data;
+                        if(self.validacion == "true"){
+                            argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(response_nosql){
+                                if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
+                                    var cambio_estado_contrato = {
+                                        "_postcontrato_estado":{
+                                            "estado":4,
+                                            "usuario":"CC123456",
+                                            "numero_contrato_suscrito":self.contrato_id,
+                                            "vigencia":parseInt(self.contrato_vigencia)
+                                        }
+                                    };
+                                    administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
+                                        if (response.status == 200 || response.statusText == "OK") {
+                                            self.crearActa();
+                                        }
+                                    });
+                                }
+                            });
                         }
-
-                        self.estados[0] = estado_temp_from;
-                        adminMidRequest.post('validarCambioEstado', self.estados).then(function (vc_response) {
-                            self.validacion = vc_response.data;
-                            if(self.validacion == "true"){
-                                argoNosqlRequest.post('actainicio', self.data_acta_inicio).then(function(response_nosql){
-                                    if(response_nosql.status == 200 || response_nosql.statusText == "OK"){
-                                        var cambio_estado_contrato = {
-                                            "_postcontrato_estado":{
-                                                "estado":4,
-                                                "usuario":"CC123456",
-                                                "numero_contrato_suscrito":self.contrato_id,
-                                                "vigencia":parseInt(self.contrato_vigencia)
-                                            }
-                                        };
-                                        administrativaWsoRequest.post('contrato_estado', cambio_estado_contrato).then(function (response) {
-                                            if (response.status == 200 || response.statusText == "OK") {
-                                                self.crearActa();
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-                        });
                     });
                 });
             }else{
@@ -449,7 +443,7 @@ angular.module('contractualClienteApp')
         if(numero.indexOf(".")>=0)
             nuevoNumero=nuevoNumero.substring(0,nuevoNumero.indexOf("."));
         // Ponemos un punto cada 3 caracteres
-        for (var j, i = nuevoNumero.length - 1, j = 0; i >= 0; i--, j++)
+        for (var j= 0, i = nuevoNumero.length - 1; i >= 0; i--, j++)
             resultado = nuevoNumero.charAt(i) + ((j > 0) && (j % 3 == 0)? ",": "") + resultado;
         // Si tiene decimales, se lo añadimos al numero una vez forateado con los separadores de miles
         if(numero.indexOf(".")>=0)
