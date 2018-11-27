@@ -307,7 +307,8 @@ angular.module('contractualClienteApp')
         query: "NumeroContrato:" + self.contrato.NumeroContratoSuscrito +
           ",VigenciaContrato:" + self.contrato.Vigencia +
           ",Mes:" + self.mes +
-          ",Ano:" + self.anio,
+          ",Ano:" + self.anio +
+          ",Persona:" + self.Documento,
         limit: 0
       })).then(function(responsePago) {
           //SweetAlert si la solicitud ya esta creada
@@ -371,7 +372,7 @@ angular.module('contractualClienteApp')
       self.contrato = contrato;
       //self.obtener_informacion_coordinador(self.contrato.IdDependencia);
       administrativaRequest.get('pago_mensual', $.param({
-        query: "NumeroContrato:" + self.contrato.NumeroContratoSuscrito + ",VigenciaContrato:" + self.contrato.Vigencia,
+        query: "NumeroContrato:" + self.contrato.NumeroContratoSuscrito + ",VigenciaContrato:" + self.contrato.Vigencia + ",Persona:"+self.Documento,
         limit: 0
       })).then(function(response) {
 

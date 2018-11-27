@@ -8,6 +8,19 @@ module.exports = function(config) {
     // enable / disable watching file and executing tests whenever any file changes
     autoWatch: true,
 
+
+    reporters: ['progress', 'html'],
+
+    htmlReporter: {
+      outputFile: 'test/units.html',
+			
+      // Optional
+      pageTitle: 'Unit Tests',
+      subPageTitle: 'A sample project description',
+	  groupSuites: true,
+	  useCompactStyle: true,
+      useLegacyStyle: true
+    },
     // base path, that will be used to resolve files and exclude
     basePath: '../',
 
@@ -63,7 +76,9 @@ module.exports = function(config) {
       // endbower
       'app/scripts/**/*.js',
       //'test/mock/**/*.js',
-      'test/spec/controllers/seguimientoycontrol/tecnico/carga_documentos_contratista.js'
+      'test/spec/controllers/seguimientoycontrol/tecnico/carga_documentos_contratista.js',
+      'test/spec/controllers/aprobacion_supervisor.js'
+
     ],
 
     // list of files / patterns to exclude
@@ -88,7 +103,8 @@ module.exports = function(config) {
     // Which plugins to enable
     plugins: [
       'karma-chrome-launcher',
-      'karma-jasmine'
+      'karma-jasmine',
+      'karma-html-reporter'
     ],
 
     // Continuous Integration mode
