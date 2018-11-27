@@ -58,7 +58,7 @@ var conf_cloud = {
     {
       id: "arka",
       title: "ARKA",
-      url: "https://pruebasfuncionarios.intranetoas.udistrital.edu.co/arka"f0zmi1cih0yKrLwEsoJdqI1vASQa
+      url: "https://pruebasfuncionarios.intranetoas.udistrital.edu.co/arka"
     },
     {
       id: "temis",
@@ -252,7 +252,7 @@ var conf_pruebas = {
 
 var conf_local =  {
     WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services",
-    ACADEMICA_SERVIC E: "http://10.20.0.127/urano/index.php?data=B-7djBQWvIdLAEEycbH1n6e-3dACi5eLUOb63vMYhGq0kPBs7NGLYWFCL0RSTCu1yTlE5hH854MOgmjuVfPWyvdpaJDUOyByX-ksEPFIrrQQ7t1p4BkZcBuGD2cgJXeD",
+    ACADEMICA_SERVICE: "http://10.20.0.127/urano/index.php?data=B-7djBQWvIdLAEEycbH1n6e-3dACi5eLUOb63vMYhGq0kPBs7NGLYWFCL0RSTCu1yTlE5hH854MOgmjuVfPWyvdpaJDUOyByX-ksEPFIrrQQ7t1p4BkZcBuGD2cgJXeD",
     ADMINISTRATIVA_MID_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/api/administrativa_mid_api/v1/",
     ADMINISTRATIVA_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/api/administrativa_crud_api/v1/",
     ADMINISTRATIVA_PRUEBAS_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/api/administrativa_amazon_api/v1/",
@@ -333,5 +333,5 @@ var conf_local =  {
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_preproduccion
+        GENERAL: conf_cloud
     });
