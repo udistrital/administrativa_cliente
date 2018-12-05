@@ -241,6 +241,56 @@ angular
                 controller: 'NecesidadContratacionDocenteCtrl',
                 controllerAs: 'necesidadContratacionDocente'
             })
+            .when('/seguimientoycontrol/legal', {
+              templateUrl: 'views/seguimientoycontrol/legal.html',
+              controller: 'SeguimientoycontrolLegalCtrl',
+              controllerAs: 'sLegal'
+            })
+            .when('/seguimientoycontrol/legal/acta_inicio/:contrato_id/:contrato_vigencia', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_inicio.html',
+              controller: 'SeguimientoycontrolLegalActaInicioCtrl',
+              controllerAs: 'sLactaInicio'
+            })
+            .when('/seguimientoycontrol/legal/acta_suspension/:contrato_id/:contrato_vigencia', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_suspension.html',
+              controller: 'SeguimientoycontrolLegalActaSuspensionCtrl',
+              controllerAs: 'sLactaSuspension'
+            })
+            .when('/seguimientoycontrol/legal/acta_reinicio/:contrato_id/:contrato_vigencia', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_reinicio.html',
+              controller: 'SeguimientoycontrolLegalActaReinicioCtrl',
+              controllerAs: 'sLactaReinicio'
+            })
+            .when('/seguimientoycontrol/legal/acta_cesion/:contrato_id/:contrato_vigencia', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_cesion.html',
+              controller: 'SeguimientoycontrolLegalActaCesionCtrl',
+              controllerAs: 'sLactaCesion'
+            })
+            .when('/seguimientoycontrol/legal/acta_adicion_prorroga/:contrato_id/:contrato_vigencia', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_adicion_prorroga.html',
+              controller: 'SeguimientoycontrolLegalActaAdicionProrrogaCtrl',
+              controllerAs: 'sLactaAdicionProrroga'
+            })
+            .when('/seguimientoycontrol/legal/acta_liquidacion', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_liquidacion.html',
+              controller: 'SeguimientoycontrolLegalActaLiquidacionCtrl',
+              controllerAs: 'sLactaLiquidacion'
+            })
+            .when('/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral/:contrato_id/:contrato_vigencia', {
+              templateUrl: 'views/seguimientoycontrol/legal/acta_terminacion_liquidacion_bilateral.html',
+              controller: 'SeguimientoycontrolLegalActaTerminacionLiquidacionBilateralCtrl',
+              controllerAs: 'sLactaTerminacionAnticipada'
+            })
+            .when('/seguimientoycontrol/legal/novedad_otro_si_aclaratorio', {
+              templateUrl: 'views/seguimientoycontrol/legal/novedad_otro_si_aclaratorio.html',
+              controller: 'SeguimientoycontrolLegalNovedadOtroSiAclaratorioCtrl',
+              controllerAs: 'sLotroSiAclaratorio'
+            })
+            .when('/seguimientoycontrol/legal/novedad_otro_si_modificatorio', {
+              templateUrl: 'views/seguimientoycontrol/legal/novedad_otro_si_modificatorio.html',
+              controller: 'SeguimientoycontrolLegalNovedadOtroSiModificatorioCtrl',
+              controllerAs: 'sLotroSiModificatorio'
+            })
             .when('/seguimientoycontrol/tecnico/aprobacion_coordinador/:docid', {
               templateUrl: 'views/seguimientoycontrol/tecnico/aprobacion_coordinador.html',
               controller: 'AprobacionCoordinadorCtrl',
