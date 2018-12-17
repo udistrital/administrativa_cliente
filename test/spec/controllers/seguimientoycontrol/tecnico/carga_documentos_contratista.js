@@ -99,7 +99,7 @@ describe('Controller: CargaDocumentosContratistaCtrl', function () {
 
   it('Debe obtener una lista con los meses desde el inicio de año hasta el actual', function () {
     cargaDocumentosContratistaCtrl.getMeses(2018);
-    expect(cargaDocumentosContratistaCtrl.meses.length).toBe(10);
+    expect(cargaDocumentosContratistaCtrl.meses.length).toBe(12);
   });
 
   it('Debe obtener un arreglo de objetos con la información del contratista', function () {

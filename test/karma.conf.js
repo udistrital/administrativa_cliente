@@ -77,7 +77,8 @@ module.exports = function(config) {
       'app/scripts/**/*.js',
       //'test/mock/**/*.js',
       'test/spec/controllers/seguimientoycontrol/tecnico/carga_documentos_contratista.js',
-      'test/spec/controllers/aprobacion_supervisor.js'
+      'test/spec/controllers/aprobacion_supervisor.js',
+      'test/spec/controllers/aprobacion_ordenador.js'
 
     ],
 

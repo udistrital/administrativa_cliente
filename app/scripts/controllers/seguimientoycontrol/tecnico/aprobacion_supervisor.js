@@ -17,7 +17,7 @@ angular.module('contractualClienteApp')
     self.Documento = token_service.getPayload().documento;
     self.objeto_docente = [];
     self.nombres_docentes_incumplidos = '';
-    self.mes = '';
+    self.mes = {};
     self.dependencias_supervisor = {};
 
     self.meses = [{
