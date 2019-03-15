@@ -8,7 +8,7 @@
  * Controller of the contractualClienteApp
  */
 angular.module('contractualClienteApp')
-  .controller('AprobacionOrdenadorCtrl', function (token_service, cookie, $sessionStorage, $scope, oikosRequest, $http, uiGridConstants, contratoRequest, $translate, administrativaRequest, $routeParams, adminMidRequest, coreRequest, nuxeo, $q, $sce, $window, gridApiService) {
+  .controller('AprobacionOrdenadorCtrl', function (token_service, cookie, $sessionStorage, $scope, oikosRequest, $http, uiGridConstants, contratoRequest, $translate, wso2GeneralService, administrativaRequest, $routeParams, adminMidRequest, coreRequest, nuxeo, $q, $sce, $window, gridApiService) {
     //Variable de template que permite la edición de las filas de acuerdo a la condición ng-if
     var tmpl = '<div ng-if="!row.entity.editable">{{COL_FIELD}}</div><div ng-if="row.entity.editable"><input ng-model="MODEL_COL_FIELD"</div>';
 
@@ -16,6 +16,9 @@ angular.module('contractualClienteApp')
     var self = this;
     self.Documento = token_service.getPayload().documento;
     self.contratistas = [];
+    self.dependencias_contratos = {};
+    self.dependencia = {};
+    self.validador =  1;
 
     self.offset = 0;
 
@@ -102,7 +105,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
-          width: "15%"
+          width: "18%"
         },
         {
           field: 'Rubro',
@@ -112,6 +115,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
+          width: "8%"
         },
         {
           field: 'PagoMensual.Persona',
@@ -121,7 +125,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
-          width: "15%"
+          width: "8%"
         },
         {
           field: 'NombrePersona',
@@ -131,16 +135,19 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
+          width: "20%"
         },
 
         {
           field: 'PagoMensual.NumeroContrato',
           cellTemplate: tmpl,
+          cellRenderer: null,
           displayName: 'NUMERO CONTRATO',
           sort: {
             direction: uiGridConstants.ASC,
             priority: 1
           },
+          width: "12%"
         },
         {
           field: 'PagoMensual.VigenciaContrato',
@@ -150,6 +157,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
+          width: "7%"
         },
         {
           field: 'PagoMensual.Mes',
@@ -159,6 +167,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
+          width: "9%"
         },
         {
           field: 'PagoMensual.Ano',
@@ -168,6 +177,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
+          width: "9%"
         }
         ,
         {
@@ -178,11 +188,10 @@ angular.module('contractualClienteApp')
             ' <a type="button" title="Aprobar pago" type="button" class="fa fa-check fa-lg  faa-shake animated-hover"  ng-click="grid.appScope.aprobacionOrdenador.aprobarPago(row.entity.PagoMensual)">' +
             '<a type="button" title="Rechazar" type="button" class="fa fa-close fa-lg  faa-shake animated-hover"' +
             'ng-click="grid.appScope.aprobacionOrdenador.rechazarPago(row.entity.PagoMensual)"></a>',
-          width: "10%"
+          width: "7%"
         }
       ]
     };
-
 
 
     self.gridOptions1.onRegisterApi = function (gridApi) {
@@ -196,11 +205,18 @@ angular.module('contractualClienteApp')
 
       });
 
+      
       self.gridApi = gridApiService.pagination(self.gridApi, self.obtener_informacion_ordenador, $scope);
-
+      
     };
 
-
+    $(document).ready(function() {
+      $("form").keydown(function(e) {
+          if (e.which == 8 || e.which == 46 || e.which == 13) {
+              return false;
+          }
+      });
+    });
     /*
       Función para consultar los datos del ordenador del contrato y los contratistas asociados a este
     */
@@ -212,19 +228,69 @@ angular.module('contractualClienteApp')
       contratoRequest.get('ordenador', self.Documento).then(function (response) {
 
         self.ordenador = response.data.ordenador;
-
+      
         //Petición para obtener el Id de la relación de acuerdo a los campos
-        adminMidRequest.get('aprobacion_pago/solicitudes_ordenador_contratistas/' + self.Documento, $.param({
-          limit: self.gridOptions1.paginationPageSize,
-          offset: offset,
-          // query: typeof(query) === "string" ? query : query.join(",")
-        }, true)).then(gridApiService.paginationFunc(self.gridOptions1, offset));
+        if (((self.dependencia) && Object.keys(self.dependencia).length === 0)  || self.validador === 1) {
 
+            adminMidRequest.get('aprobacion_pago/solicitudes_ordenador_contratistas/' + self.Documento, $.param({
+            limit: self.gridOptions1.paginationPageSize,
+            offset: offset,
+            // query: typeof(query) === "string" ? query : query.join(",")
+             }, true)).then(gridApiService.paginationFunc(self.gridOptions1, offset));
+            self.offset=offset;
+            
+        }
+       else{ 
+
+            adminMidRequest.get('aprobacion_pago/solicitudes_ordenador_contratistas_dependencia/' + self.Documento + '/' + self.dependencia.ESFCODIGODEP, $.param({
+                limit: self.gridOptions1.paginationPageSize,
+                offset: offset,
+                // query: typeof(query) === "string" ? query : query.join(",")
+            }, true)).then(gridApiService.paginationFunc(self.gridOptions1, offset)); 
+          
+        }
 
       });
     };
 
     self.obtener_informacion_ordenador(self.offset);
+
+
+    $scope.$watch('aprobacionOrdenador.dependencia', function(offset,query) {
+        
+        self.gridOptions1.data = [];
+        self.contratistas = [];
+        
+        if (typeof self.dependencia === 'undefined') {
+
+            adminMidRequest.get('aprobacion_pago/solicitudes_ordenador_contratistas/' + self.Documento, $.param({
+            limit: self.gridOptions1.paginationPageSize,
+            offset: offset,
+            // query: typeof(query) === "string" ? query : query.join(",")
+          }, true)).then(gridApiService.paginationFunc(self.gridOptions1, offset));
+            self.offset=offset;
+            self.gridOptions1.paginationCurrentPage=1;
+            self.validador = 1;
+            
+        } else{
+
+
+            if ((Object.keys(self.dependencia).length === 0)){
+                   self.validador=1; 
+
+            }else{
+
+               self.gridApi = gridApiService.pagination(self.gridApi,adminMidRequest.get('aprobacion_pago/solicitudes_ordenador_contratistas_dependencia/' + self.Documento + '/' + self.dependencia.ESFCODIGODEP, $.param({
+                    limit: self.gridOptions1.paginationPageSize,
+                    offset: self.offset,
+                    // query: typeof(query) === "string" ? query : query.join(",")
+                 }, true)).then(gridApiService.paginationFunc(self.gridOptions1, self.offset)), $scope); 
+                  self.gridOptions1.paginationCurrentPage=1;
+                  self.validador=0;              
+            }
+       }
+
+    }, true);
 
 
 
@@ -282,8 +348,6 @@ angular.module('contractualClienteApp')
 
           var sig_estado = responseCod.data;
           self.aux_pago_mensual.EstadoPagoMensual.Id = sig_estado[0].Id;
-
-
 
           administrativaRequest.put('pago_mensual', self.aux_pago_mensual.Id, self.aux_pago_mensual)
             .then(function (response) {
@@ -388,7 +452,6 @@ angular.module('contractualClienteApp')
         query: "Nombre:" + nombre_docs + ",Activo:true",
         limit: 0
       })).then(function (response) {
-        //console.log(self.documentos);
         self.documentos = response.data;
         angular.forEach(self.documentos, function (value) {
           self.descripcion_doc = value.Descripcion;
@@ -487,5 +550,21 @@ angular.module('contractualClienteApp')
       });
     };
 
+    /*
+      Función que obtiene las dependencias que se encuentran en argo
+    */
 
-  });
+    self.obtenerDependenciasContratos = function (){
+
+        //Petición para obtener el Id de la relación de acuerdo a los campos
+    adminMidRequest.get('aprobacion_pago/dependencias_sic/' + self.Documento).
+          then(function (response) {
+          self.dependencias_contratos= response.data;
+      });
+ 
+    };
+
+
+    self.obtenerDependenciasContratos();
+
+ });
