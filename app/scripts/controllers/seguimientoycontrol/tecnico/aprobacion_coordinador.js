@@ -120,7 +120,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
-        },<<<<<<< dev
+        },
 
         {
           field: 'PagoMensual.NumeroContrato',
