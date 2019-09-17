@@ -120,7 +120,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
-        },
+        },<<<<<<< dev
 
         {
           field: 'PagoMensual.NumeroContrato',
@@ -426,8 +426,8 @@ angular.module('contractualClienteApp')
                 var contenido = [];
                 contenido.push( {text:'EL SUSCRITO COORDINADOR DEL PROYECTO CURRICULAR DE ' + self.coordinador.nombre_proyecto_condor + ' DE LA ' + self.facultad.Padre.Nombre + ' DE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
                 contenido.push({text:'CERTIFICA QUE: ', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
-
                 contenido.push({text:'Los Docentes de Vinculación Especial contratados para el periodo Académico '+self.periodo+', del Proyecto Curricular de ' + self.coordinador.nombre_proyecto_condor + ' cumplieron a cabalidad con las funciones docentes durante el mes de ' +self.mes.Nombre+ ' de ' +self.anio+ ' (según calendario académico).', style:'general_font'}, '\n\n')
+
 
                 if(self.docentes_incumplidos){
                   contenido.push({text:'A excepción de las siguientes novedades: ', style:'general_font'}, '\n')

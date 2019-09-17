@@ -27,19 +27,19 @@ angular.module('contractualClienteApp')
             encabezado = [{ text: $translate.instant('NOMBRE'), style: 'encabezado' }, { text: $translate.instant('TIPO_DOCUMENTO'), style: 'encabezado' }, { text: $translate.instant('CEDULA'), style: 'encabezado' }, { text: $translate.instant('EXPEDICION'), style: 'encabezado' }, { text: $translate.instant('CATEGORIA'), style: 'encabezado' }, { text: $translate.instant('DEDICACION'), style: 'encabezado' }, { text: $translate.instant(tituloHoras), style: 'encabezado' }, { text: $translate.instant('PERIODO_VINCULACION'), style: 'encabezado' }, { text: $translate.instant('VALOR_CONTRATO'), style: 'encabezado' }];
 
             switch (tipoResolucion) {
-                case "Vinculación": 
+                case "Vinculación":
                     columnas.push('ValorContratoFormato', 'NumeroDisponibilidad');
                     encabezado.push({ text: $translate.instant('DISPONIBILIDAD_PDF'), style: 'encabezado' });
                     if (nivelAcademico === 'POSGRADO'){
                         columnas = ['NombreCompleto', 'TipoDocumento', 'IdPersona', 'LugarExpedicionCedula', 'Categoria', 'Dedicacion', 'NumeroHorasSemanales', 'ValorContratoFormato', 'NumeroDisponibilidad'];
-                        encabezado = [{ text: $translate.instant('NOMBRE'), style: 'encabezado' }, { text: $translate.instant('TIPO_DOCUMENTO'), style: 'encabezado' }, { text: $translate.instant('CEDULA'), style: 'encabezado' }, { text: $translate.instant('EXPEDICION'), style: 'encabezado' }, { text: $translate.instant('CATEGORIA'), style: 'encabezado' }, { text: $translate.instant('DEDICACION'), style: 'encabezado' }, { text: $translate.instant('HORAS_SEMESTRALES'), style: 'encabezado' }, { text: $translate.instant('VALOR_CONTRATO'), style: 'encabezado' }, { text: $translate.instant('DISPONIBILIDAD_PDF'), style: 'encabezado' }];            
+                        encabezado = [{ text: $translate.instant('NOMBRE'), style: 'encabezado' }, { text: $translate.instant('TIPO_DOCUMENTO'), style: 'encabezado' }, { text: $translate.instant('CEDULA'), style: 'encabezado' }, { text: $translate.instant('EXPEDICION'), style: 'encabezado' }, { text: $translate.instant('CATEGORIA'), style: 'encabezado' }, { text: $translate.instant('DEDICACION'), style: 'encabezado' }, { text: $translate.instant('HORAS_SEMESTRALES'), style: 'encabezado' }, { text: $translate.instant('VALOR_CONTRATO'), style: 'encabezado' }, { text: $translate.instant('DISPONIBILIDAD_PDF'), style: 'encabezado' }];
                     }
                     modificacion = false;
                     break;
                 case "Adición":
                     columnas.push('ValorContratoInicialFormato', '', 'NumeroDisponibilidad');
                     segundaFila.push('NumeroHorasModificacion', 'NumeroMesesNuevos', '', 'ValorModificacionFormato');
-                    terceraFila.push('NumeroHorasNuevas', '', 'ValorContratoFormato', '');                    
+                    terceraFila.push('NumeroHorasNuevas', '', 'ValorContratoFormato', '');
                     encabezado.push({ text: $translate.instant('LABEL_VALOR_ADICIONAR'), style: 'encabezado' }, { text: $translate.instant('DISPONIBILIDAD_PDF'), style: 'encabezado' });
                     break;
                 case "Reducción":
@@ -55,7 +55,7 @@ angular.module('contractualClienteApp')
                     break;
                 default: break;
             }
-            
+
             cuerpo.push(encabezado);
             if (datos) {
                 datos.forEach(function (fila) {
@@ -65,14 +65,14 @@ angular.module('contractualClienteApp')
                         if (modificacion) {
                             var tablaModificacion = [];
                             if (tipoResolucion == 'Cancelación'){
-                                tablaModificacion = self.tablaCancelacion(columnas, fila, segundaFila);                            
+                                tablaModificacion = self.tablaCancelacion(columnas, fila, segundaFila);
                             } else {
                                 tablaModificacion = self.tablaModificacionHoras(columnas, fila, segundaFila, terceraFila);
                             }
                             cuerpo.push(tablaModificacion[0]);
                             cuerpo.push(tablaModificacion[1]);
                             if (tablaModificacion[2] != undefined) {
-                                cuerpo.push(tablaModificacion[2]); 
+                                cuerpo.push(tablaModificacion[2]);
                             }
                         } else {
                             var datoFila = [];
@@ -133,7 +133,7 @@ angular.module('contractualClienteApp')
             var contenido = [];
             var fechaParaPDF = "";
             var fechaExpedicion = resolucion.FechaExpedicion;
-            
+
             if (fechaExpedicion != undefined && typeof fechaExpedicion === "object") {
                 fechaExpedicion = fechaExpedicion.toJSON();
             }
@@ -205,7 +205,7 @@ angular.module('contractualClienteApp')
                 style: 'sub_titulo'
             });
             contenido.push({
-                text: $translate.instant('DADO_A_LOS'), 
+                text: $translate.instant('DADO_A_LOS'),
                 style: 'texto'
             })
             contenido.push({
@@ -243,7 +243,7 @@ angular.module('contractualClienteApp')
                                     alignment: 'center'
                                 }
                             ],
-                            [{text: resolucion.FacultadFirmaNombre, font: 'Calibri', fontSize: 8, bold: true}] 
+                            [{text: resolucion.FacultadFirmaNombre, font: 'Calibri', fontSize: 8, bold: true}]
                         ]
                 },
                     layout: 'noBorders'
@@ -269,7 +269,7 @@ angular.module('contractualClienteApp')
                         fontSize: 12,
                         margin: [30, 5],
                         alignment: 'justify',
-                    }, 
+                    },
                     titulo: {
                         font: 'MinionPro',
                         bold: true,
@@ -368,6 +368,7 @@ angular.module('contractualClienteApp')
                         [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Diana Mireya Parra Cardona', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
                         [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
                         [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],        
+
                     ]
                 }
             };
