@@ -10,7 +10,7 @@
 var conf_cloud = {
     WSO2_SERVICE: "http://jbpm.udistritaloas.edu.co:8280/services",
     ACADEMICA_SERVICE: "http://10.20.0.127/urano/index.php?data=B-7djBQWvIdLAEEycbH1n6e-3dACi5eLUOb63vMYhGq0kPBs7NGLYWFCL0RSTCu1yTlE5hH854MOgmjuVfPWyvdpaJDUOyByX-ksEPFIrrQQ7t1p4BkZcBuGD2cgJXeD",
-    ACADEMICA_WSO_SERVICE: "https://autenticacion.udistrital.edu.co:8244/academica_jbpm/v1/",
+    ACADEMICA_WSO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/academica_jbpm/v1/",
     ADMINISTRATIVA_MID_SERVICE: "https://tuleap.udistrital.edu.co/go_api/administrativa_mid_api/v1/",
     ADMINISTRATIVA_SERVICE: "https://tuleap.udistrital.edu.co/go_api/administrativa_api/v1/",
     ADMINISTRATIVA_PRUEBAS_SERVICE: "https://tuleap.udistrital.edu.co/go_api/administrativa_amazon_api/v1/",
@@ -28,9 +28,9 @@ var conf_cloud = {
     PAGOS_SERVICE: "https://tuleap.udistrital.edu.co/go_api/services/academicaProxyService/ingresos_concepto/",
     TITAN_SERVICE: "https://tuleap.udistrital.edu.co/go_api/titan_api_crud/v1/",
     SICAPITAL_SERVICE: "http://10.20.0.127/sicws/ws/sicapitalAPI.php/?/",
-    CONTRATO_SERVICE: "https://autenticacion.udistrital.edu.co:8244/administrativa_jbpm/v1/",
-    NUXEO_SERVICE:"https://documental.portaoas.udistrital.edu.co/nuxeo/",
-    HOMOLOGACION_SERVICE:"https://autenticacion.udistrital.edu.co:8244/dependencias_api/v1/",
+    CONTRATO_SERVICE: "https://autenticacion.portaloas.udistrital.edu.co/apioas/administrativa_jbpm/v1/",
+    NUXEO_SERVICE:"https://documental.portaloas.udistrital.edu.co/nuxeo/",
+    HOMOLOGACION_SERVICE:"https://autenticacion.portaloas.udistrital.edu.co/apioas/dependencias_api/v1/",
     TOKEN: {
         AUTORIZATION_URL: "https://autenticacion.udistrital.edu.co/oauth2/authorize",
         URL_USER_INFO: "https://autenticacion.udistrital.edu.co/oauth2/userinfo",

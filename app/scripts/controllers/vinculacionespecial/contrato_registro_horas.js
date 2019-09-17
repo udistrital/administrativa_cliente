@@ -265,6 +265,7 @@ angular.module('contractualClienteApp')
          * Genera el documento de la resolución en formato blob y lo carga en nuexeo, posteriormente lo guarda en la tabla documento del core
          */
         self.guardarResolucionNuxeo = function () {
+            resolucion.NivelAcademico_nombre = resolucion.NivelAcademico;
             var documento = pdfMakerService.getDocumento(self.contenidoResolucion, resolucion, self.contratadosPdf, self.proyectos);
             pdfMake.createPdf(documento).getBlob(function (blobDoc) {
                 var aux = nuxeoClient.createDocument("ResolucionDVE" + self.idResolucion, "Resolución DVE expedida", blobDoc, function(url) {

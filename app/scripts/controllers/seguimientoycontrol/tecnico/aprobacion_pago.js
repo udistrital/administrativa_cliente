@@ -320,7 +320,9 @@ angular.module('contractualClienteApp')
         var contenido = [];
         contenido.push( {text:'EL SUSCRITO DECANO DE LA '+ self.facultad.Nombre +' DE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
         contenido.push({text:'CERTIFICA QUE: ', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
+
         contenido.push({text:'De acuerdo con la información suministrada por los proyectos curriculares de la '+ self.facultad.Nombre +', los profesores de Vinculación Especial contratados para el período académico '+self.periodo+', cumplieron a cabalidad con las funciones docentes en el mes de '+ self.mes.Nombre +' del presente año. (De acuerdo a calendario académico).', style:'general_font'}, '\n\n')
+
         if(self.docentes_pago_rechazado){
           contenido.push({text:'A excepción de las siguientes novedades: ', style:'general_font'}, '\n')
           angular.forEach(self.docentes_pago_rechazado, function(value) {

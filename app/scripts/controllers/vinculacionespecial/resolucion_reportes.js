@@ -31,7 +31,9 @@ angular.module('contractualClienteApp')
       if (self.facultad && self.numeroResolucion && self.vigencia) {
         administrativaRequest.get("resolucion", $.param({
           query: "IdDependencia:" + self.facultad + ",Vigencia:" + self.vigencia + ",NumeroResolucion:" + self.numeroResolucion,
-          limit: 1
+          limit: 1,
+          sortby: "id_resolucion",
+          order: "desc"
         }, true)).then(function (resolucion) {
           if (resolucion.data !== null ){
             if (resolucion.data[0].IdTipoResolucion.Id === 1){
