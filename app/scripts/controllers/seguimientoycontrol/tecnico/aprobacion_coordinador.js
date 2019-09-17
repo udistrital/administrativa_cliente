@@ -120,7 +120,7 @@ angular.module('contractualClienteApp')
             direction: uiGridConstants.ASC,
             priority: 1
           },
-        },
+        },<<<<<<< dev
 
         {
           field: 'PagoMensual.NumeroContrato',
@@ -424,10 +424,10 @@ angular.module('contractualClienteApp')
                 var mes = moment(date).format('M');
                 var anio = moment(date).format('YYYY');
                 var contenido = [];
-                contenido.push( {text:'EL SUSCRITO COORDINADOR DEL PROYECTO CURRICULAR DE ' + self.coordinador.nombre_proyecto_curricular + ' DE LA ' + self.facultad.Padre.Nombre + ' DE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
+                contenido.push( {text:'EL SUSCRITO COORDINADOR DEL PROYECTO CURRICULAR DE ' + self.coordinador.nombre_proyecto_condor + ' DE LA ' + self.facultad.Padre.Nombre + ' DE LA UNIVERSIDAD DISTRITAL FRANCISCO JOSÉ DE CALDAS', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
                 contenido.push({text:'CERTIFICA QUE: ', bold: true,  alignment: 'center', style:'top_space'}, '\n\n\n\n');
+                contenido.push({text:'Los Docentes de Vinculación Especial contratados para el periodo Académico '+self.periodo+', del Proyecto Curricular de ' + self.coordinador.nombre_proyecto_condor + ' cumplieron a cabalidad con las funciones docentes durante el mes de ' +self.mes.Nombre+ ' de ' +self.anio+ ' (según calendario académico).', style:'general_font'}, '\n\n')
 
-                contenido.push({text:'Los Docentes de Vinculación Especial contratados para el periodo Académico '+self.periodo+', del Proyecto Curricular de ' + self.coordinador.nombre_proyecto_curricular + ' cumplieron a cabalidad con las funciones docentes durante el mes de ' +self.mes.Nombre+ ' de ' +self.anio+ ' (según calendario académico).', style:'general_font'}, '\n\n')
 
                 if(self.docentes_incumplidos){
                   contenido.push({text:'A excepción de las siguientes novedades: ', style:'general_font'}, '\n')
@@ -438,7 +438,7 @@ angular.module('contractualClienteApp')
                 contenido.push('\n',{text:'La presente certificación se expide el día ' + dia + ' del mes de ' + self.meses[mes-1].Nombre + ' de ' + anio +'.',  style:'general_font'}, '\n\n\n\n\n\n');
                 contenido.push({text:'' + self.coordinador.nombre_coordinador, style:'bottom_space'});
                 contenido.push({text:'Coordinador', style:'bottom_space'});
-                contenido.push({text:'Proyecto Curricular ' + self.coordinador.nombre_proyecto_curricular, style:'bottom_space'});
+                contenido.push({text:'Proyecto Curricular ' + self.coordinador.nombre_proyecto_condor, style:'bottom_space'});
 
 
                 //Generación documento

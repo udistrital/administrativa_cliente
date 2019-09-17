@@ -367,7 +367,8 @@ angular.module('contractualClienteApp')
                         [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Edilberto Fernández Santos', style: 'tabla_revision' }, { text: 'Auxiliar administrativo DRH', style: 'tabla_revision' }, ''],
                         [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Diana Mireya Parra Cardona', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
                         [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
-                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],
+                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],        
+
                     ]
                 }
             };
