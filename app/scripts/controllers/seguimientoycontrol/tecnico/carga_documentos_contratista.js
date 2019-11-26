@@ -444,7 +444,7 @@ angular.module('contractualClienteApp')
     self.obtener_doc(solicitud);
         if(self.documentos){
           solicitud.EstadoPagoMensual = {"Id":11};
-          solicitud.Responsable = self.responsable;
+          solicitud.Responsable = self.contrato.NumDocumentoSupervisor;
           solicitud.CargoResponsable = "SUPERVISOR " + self.contrato.NombreDependencia;
           //console.log(self.contrato.NombreDependencia);
           solicitud.CargoResponsable = solicitud.CargoResponsable.substring(0,69);
@@ -748,7 +748,7 @@ if(self.fileModel === undefined){
     text: 'Se ha removido el archivo',
     type: 'success',
     target: document.getElementById('modal_ver_soportes')
-  })  
+  })
 
 }
 };
