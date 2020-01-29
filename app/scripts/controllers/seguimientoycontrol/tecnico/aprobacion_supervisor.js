@@ -71,7 +71,7 @@ angular.module('contractualClienteApp')
     ];
 
     self.d = new Date();
-    self.anios = [(self.d.getFullYear()), (self.d.getFullYear() + 1)];
+    self.anios = [(self.d.getFullYear()), (self.d.getFullYear() + 1), (self.d.getFullYear() - 1)];
 
         /*
       Función para obtener la imagen del escudo de la universidad
