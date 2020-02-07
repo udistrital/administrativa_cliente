@@ -681,6 +681,7 @@ var text_es = {
     PROYECTO: "Proyecto",
     REVISO: "Revisó",
     APROBO: "Aprobó",
+    REVISO2: "REVISÓ",
     REVISO_APROBO: "REVISÓ Y APROBÓ",
     OF_DOCENCIA: "OFICINA DE DOCENCIA",
     TIPO_DOC: "Tipo de documento",
