@@ -216,7 +216,7 @@ angular.module('contractualClienteApp')
                 text: '-- ' + contenidoResolucion.OrdenadorGasto.Cargo + ' --',
                 style: 'nombre_cargo'
             });
-            contenido.push(self.getTablaRevision());
+            contenido.push(self.getTablaRevision(resolucion.Dedicacion));
             return contenido;
         };
 
@@ -356,22 +356,40 @@ angular.module('contractualClienteApp')
         };
 
         //Obtener tabla del final
-        self.getTablaRevision = function () {
-            return {
-                style: 'tabla_revision',
-                table: {
-                    headerRows: 1,
-                    widths: [80, 150, 150, 80],
-                    body: [
-                        ['', { text: $translate.instant('NOMBRE_COMPLETO'), style: 'tabla_revision' }, { text: $translate.instant('CARGO_PDF'), style: 'tabla_revision' }, { text: $translate.instant('FIRMA'), style: 'tabla_revision' }],
-                        [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Edilberto Fernández Santos', style: 'tabla_revision' }, { text: 'Auxiliar administrativo DRH', style: 'tabla_revision' }, ''],
-                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Diana Mireya Parra Cardona', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
-                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
-                        [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],        
-
-                    ]
-                }
-            };
+        self.getTablaRevision = function (resolucionDedicacion) {
+            if(resolucionDedicacion === "TCO-MTO"){
+                return {
+                    style: 'tabla_revision',
+                    table: {
+                        headerRows: 1,
+                        widths: [80, 150, 150, 80],
+                        body: [
+                            ['', { text: $translate.instant('NOMBRE_COMPLETO'), style: 'tabla_revision' }, { text: $translate.instant('CARGO_PDF'), style: 'tabla_revision' }, { text: $translate.instant('FIRMA'), style: 'tabla_revision' }],
+                            [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Edilberto Fernández Santos', style: 'tabla_revision' }, { text: 'Auxiliar Administrativo DRH', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Fernando Antonio Torres Gómez', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],
+                        ]
+                    }
+                };
+            }else{
+                return {
+                    style: 'tabla_revision',
+                    table: {
+                        headerRows: 1,
+                        widths: [80, 150, 150, 80],
+                        body: [
+                            ['', { text: $translate.instant('NOMBRE_COMPLETO'), style: 'tabla_revision' }, { text: $translate.instant('CARGO_PDF'), style: 'tabla_revision' }, { text: $translate.instant('FIRMA'), style: 'tabla_revision' }],
+                            [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Edilberto Fernández Santos', style: 'tabla_revision' }, { text: 'Auxiliar Administrativo DRH', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO2'), style: 'tabla_revision' }, { text: 'Carlos David Padilla Leal', style: 'tabla_revision' }, { text: 'Asesor CPS OAJ', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Fernando Antonio Torres Gómez', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],
+                        ]
+                    }
+                };
+            }
+            
         };
 
         //Función para obtener el texto del preámbulo dentro de una estructura
