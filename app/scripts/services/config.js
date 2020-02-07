@@ -32,18 +32,18 @@ var conf_cloud = {
     NUXEO_SERVICE:"https://documental.portaloas.udistrital.edu.co/nuxeo/",
     HOMOLOGACION_SERVICE:"https://autenticacion.portaloas.udistrital.edu.co/apioas/dependencias_api/v1/",
     TOKEN: {
-        AUTORIZATION_URL: "https://autenticacion.udistrital.edu.co/oauth2/authorize",
-        URL_USER_INFO: "https://autenticacion.udistrital.edu.co/oauth2/userinfo",
+        AUTORIZATION_URL: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/authorize",
+        URL_USER_INFO: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/userinfo",
         CLIENTE_ID: "XdBq4QOfEZYT0cl_8qDh3fmF5_Qa",
         REDIRECT_URL: "http://administrativa.portaloas.udistrital.edu.co/",
         RESPONSE_TYPE: "code",
         SCOPE: "openid email",
         BUTTON_CLASS: "btn btn-warning btn-sm",
-        SIGN_OUT_URL: "https://autenticacion.udistrital.edu.co/oidc/logout",
+        SIGN_OUT_URL: "https://autenticacion.portaloas.udistrital.edu.co/oidc/logout",
         SIGN_OUT_REDIRECT_URL: "http://administrativa.portaloas.udistrital.edu.co/",
         SIGN_OUT_APPEND_TOKEN: "true",
-        REFRESH_TOKEN: "https://autenticacion.udistrital.edu.co/oauth2/token",
-        CLIENT_SECRET: "lrVuDATX1o8TfXxz_jrEzBA2iIoa"
+        REFRESH_TOKEN: "https://autenticacion.portaloas.udistrital.edu.co/oauth2/token",
+        CLIENT_SECRET: "UkwfXdBbWorsh0vZfq_96hY4jVca"
     },
 };
 var conf_presentacion = {
@@ -168,6 +168,6 @@ var conf_local = {
 
 angular.module('contractualClienteApp')
     .constant('CONF', {
-        GENERAL: conf_pruebas
+        GENERAL: conf_cloud
     });
 
