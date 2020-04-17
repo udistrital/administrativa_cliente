@@ -424,7 +424,7 @@ var text_es = {
     DEDICACION: "Dedicación",
     HORAS_SEMANALES: "Horas semanales",
     VINCULACION: "Vinculación",
-    VALOR_CONTRATO: "Valor del contrato",
+    VALOR_CONTRATO: "Valor hora objeto de reconocimiento",
     DOCENTES_CONTRATADOS_ACTUAL: "DOCENTES CONTRATADOS - PERIODO ACTUAL",
     BTN: {
         VER: "Ver",
