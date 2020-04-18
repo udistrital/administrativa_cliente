@@ -687,6 +687,9 @@ var text_es = {
     TIPO_DOC: "Tipo de documento",
     PERIODO_VINCULACION: "Periodo de vinculación",
     DISPONIBILIDAD_PDF: "Dispo-\nnibilidad",
+    PERIODO_RECONOCIMIENTO: "Periodo de reconocimiento",
+    VALOR_RECONOCIMIENTO: "Valor total del reconocimiento",
+
 
     //RESOLUCION_REPORTES - NECESIDAD_REPORTES
     REPORTE: "Reporte",
