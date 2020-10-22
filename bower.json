@@ -38,8 +38,8 @@
     "excel-builder-js": "excelbuilder#^2.0.2"
   },
   "resolutions": {
-    "angular": "1.8.0",
-    "angular-route": "1.8.0"
+    "angular": "1.8.2",
+    "angular-route": "1.8.2"
   },
   "devDependencies": {
     "angular-mocks": "^1.7.9"
