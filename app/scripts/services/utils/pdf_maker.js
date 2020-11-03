@@ -64,7 +64,7 @@ angular.module('contractualClienteApp')
                     break;
                 case "Cancelación":
                     columnas.push('ValorContratoInicialFormato', 'ValorModificacionFormato', 'NumeroRp');
-                    segundaFila.push('NumeroHorasSemanales', 'NumeroMesesNuevos', 'ValorContratoFormato');
+                    segundaFila.push('NumeroMesesNuevos', 'ValorContratoFormato');
                     encabezado.push({ text: $translate.instant('VALOR_CONTRATO_REV'), style: 'encabezado' }, { text: $translate.instant('NUMERO_REGISTRO_PRESUPUESTAL'), style: 'encabezado' });
                     break;
                 default: break;
@@ -130,10 +130,10 @@ angular.module('contractualClienteApp')
             var cantidadColumnas = columnas.length;
 
             for (var i = 0, j = 0; i < cantidadColumnas; i++){
-                if (i < 6 || i > 8) {
+                if (i < 7 || i > 8) {
                     datoFila.push({ text: fila[columnas[i]].toString(), rowSpan:2 });
                 }
-                if (i > 5 && i < 9) {
+                if (i > 6 && i < 9) {
                     datoFila.push({ text: fila[columnas[i]].toString() });
                     segunda[i] = 'Pasa a '+fila[segundaFila[j]].toString();
                     j++;
