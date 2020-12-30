@@ -425,7 +425,7 @@ var text_es = {
     HORAS_SEMANALES: "Horas semanales",
     VINCULACION: "Vinculación",
     VALOR_CONTRATO: "Valor objeto de reconocimiento (Salarios y Prestaciones)",
-    VALOR_CONTRATO_POSGRADOS: "Valor objeto de reconocimiento",
+    VALOR_CONTRATO_POSGRADOS: "Valor total del reconocimiento",
     DOCENTES_CONTRATADOS_ACTUAL: "DOCENTES CONTRATADOS - PERIODO ACTUAL",
     BTN: {
         VER: "Ver",
@@ -683,6 +683,7 @@ var text_es = {
     REVISO: "Revisó",
     APROBO: "Aprobó",
     REVISO2: "REVISÓ",
+    REVISO_AJUSTO: "REVISÓ Y AJUSTÓ",
     REVISO_APROBO: "REVISÓ Y APROBÓ",
     OF_DOCENCIA: "OFICINA DE DOCENCIA",
     TIPO_DOC: "Tipo de documento",
@@ -690,6 +691,9 @@ var text_es = {
     DISPONIBILIDAD_PDF: "Dispo-\nnibilidad",
     PERIODO_RECONOCIMIENTO: "Periodo de reconocimiento",
     VALOR_RECONOCIMIENTO: "Valor total del reconocimiento",
+    VALOR_RECONOCIMIENTOSP: "Valor total del reconocimiento (Salarios y Prestaciones)",
+    VALOR_VINCULACIONSP: "Valor total de la vinculación (Salarios y Prestaciones sociales)",
+
 
 
     //RESOLUCION_REPORTES - NECESIDAD_REPORTES
