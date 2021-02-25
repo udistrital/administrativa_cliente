@@ -422,7 +422,7 @@ angular.module('contractualClienteApp')
                             [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Grupo de trabajo de contratación docente e ILUD', style: 'tabla_revision' }, { text: 'Funcionarios y Contratistas', style: 'tabla_revision' }, ''],
                             [{ text: $translate.instant('REVISO_AJUSTO'), style: 'tabla_revision' }, { text: 'Carlos David Padilla Leal', style: 'tabla_revision' }, { text: 'Asesor CPS OAJ', style: 'tabla_revision' }, ''],
                             [{ text: $translate.instant('REVISO2'), style: 'tabla_revision' }, { text: 'Fernando Antonio Torres Gómez', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
-                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Camilo Andrés Bustos Parra', style: 'tabla_revision' }, { text: 'Secretario general', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Fernando Antonio Torres Gómez', style: 'tabla_revision' }, { text: 'Secretario General (E)', style: 'tabla_revision' }, ''],
                             [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],
                         ]
                     }
