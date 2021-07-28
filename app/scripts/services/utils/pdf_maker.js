@@ -419,8 +419,9 @@ angular.module('contractualClienteApp')
                         widths: [80, 150, 150, 80],
                         body: [
                             ['', { text: $translate.instant('NOMBRE_COMPLETO'), style: 'tabla_revision' }, { text: $translate.instant('CARGO_PDF'), style: 'tabla_revision' }, { text: $translate.instant('FIRMA'), style: 'tabla_revision' }],
-                            [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Grupo de trabajo de contratación docente e ILUD', style: 'tabla_revision' }, { text: 'Funcionarios y Contratistas', style: 'tabla_revision' }, ''],
-                            [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Fernando Antonio Torres Gómez', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('ELABORO'), style: 'tabla_revision' }, { text: 'Grupo de trabajo contratación docente facultades e ILUD', style: 'tabla_revision' }, { text: 'Funcionarios y Contratistas', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO_AJUSTO'), style: 'tabla_revision' }, { text: 'Diana Ximena Pirachicán Martinez', style: 'tabla_revision' }, { text: 'Asesor CPS OAJ', style: 'tabla_revision' }, ''],
+                            [{ text: $translate.instant('REVISO2'), style: 'tabla_revision' }, { text: 'Milena Isabel Rubiano Rojas', style: 'tabla_revision' }, { text: 'Jefe Oficina Asesora Jurídica(E)', style: 'tabla_revision' }, ''],
                             [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'Adriana Marcela Sandoval Castiblanco', style: 'tabla_revision' }, { text: 'Secretaria General', style: 'tabla_revision' }, ''],
                             [{ text: $translate.instant('REVISO_APROBO'), style: 'tabla_revision' }, { text: 'William Fernando Castrillón Cardona', style: 'tabla_revision' }, { text: 'Vicerrector Académico', style: 'tabla_revision' }, ''],
                         ]
