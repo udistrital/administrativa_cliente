@@ -219,16 +219,6 @@ angular
                 controller: 'ResolucionDetalleCtrl',
                 controllerAs: 'resolucionDetalle'
             })
-            .when('/vinculacionespecial/cuadro_responsabilidades', {
-                templateUrl: 'views/vinculacionespecial/cuadro_responsabilidades_edit.html',
-                controller: 'ResolucionDetalleCtrl',
-                controllerAs: 'resolucionDetalle'
-            })
-            .when('/vinculacionespecial/cuadro_responsabilidades', {
-                templateUrl: 'views/vinculacionespecial/cuadro_responsabilidades_view.html',
-                controller: 'ResolucionDetalleCtrl',
-                controllerAs: 'resolucionDetalle'
-            })
             .when('/vinculacionespecial/resolucion_vista', {
                 templateUrl: 'views/vinculacionespecial/resolucion_vista.html',
                 controller: 'ResolucionVistaCtrl',
