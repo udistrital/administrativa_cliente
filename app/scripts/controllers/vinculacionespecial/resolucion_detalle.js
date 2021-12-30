@@ -34,18 +34,11 @@ angular.module('contractualClienteApp')
     adminMidRequest.get("gestion_documento_resolucion/get_contenido_resolucion", "id_resolucion=" + self.resolucion.Id + "&id_facultad=" + self.resolucion.IdDependenciaFirma).then(function (response) {
       self.contenidoResolucion = response.data;
       if (self.contenidoResolucion ? self.contenidoResolucion.CuadroResponsabilidades: false){
-        
-        console.log("Request");
-        console.log(self.contenidoResolucion);
         if (self.contenidoResolucion.CuadroResponsabilidades == ""){
           self.table = buildTable();
           self.contenidoResolucion.CuadroResponsabilidades =  JSON.stringify(self.table);
-          console.log("Tabla original");
-          console.log(self.table);
         }else{
-          console.log("Tabla request");
           self.table = JSON.parse(self.contenidoResolucion.CuadroResponsabilidades);
-          console.log(self.table);
         }
       }else{
         self.table = buildTable();
@@ -53,9 +46,6 @@ angular.module('contractualClienteApp')
           ...self.contenidoResolucion,
           CuadroResponsabilidades: JSON.stringify(self.table)
         };
-        console.log("Tabla fail request");
-        console.log(self.contenidoResolucion);
-        console.log(self.table);
       }
       adminMidRequest.get("gestion_previnculacion/docentes_previnculados_all", "id_resolucion=" + self.resolucion.Id).then(function (response) {
         self.contratados = response.data;
@@ -288,10 +278,13 @@ angular.module('contractualClienteApp')
     self.isEdit = false;
 
     
-
+    self.guardarCuadro = function () {
+      self.isEdit = !self.isEdit; 
+      localStorage.setItem("cuadroResponsabilidades", JSON.stringify(self.table));
+    };
 
     self.cancel = function () {
-      self.table = JSON.parse(self.contenidoResolucion.CuadroResponsabilidades);
+      self.table = JSON.parse(localStorage.getItem("cuadroResponsabilidades"));
       self.isEdit = false;
     };
 

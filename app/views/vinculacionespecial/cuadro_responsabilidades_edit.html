@@ -3,19 +3,20 @@
         <thead>
             <tr>
                 <th><span class="nowrap">
-                        <button type="button" class="btn btn-xs btn-success" ng-click="resolucionDetalle.addCol()">add col</button>
-                        <button type="button" class="btn btn-xs btn-success" ng-click="resolucionDetalle.addRow()">add row</button>
+                        <button type="button" class="btn btn-xs btn-success" ng-click="resolucionDetalle.addCol() " style="width:75px; margin-bottom: 3px;">+ columna</button>
+                        <br>
+                        <button type="button" class="btn btn-xs btn-success" ng-click="resolucionDetalle.addRow()" style="width:75px">+ fila</button>
                     </span></th>
                 <th ng-repeat="col in resolucionDetalle.table.columns">
-                    <span class="nowrap"><input type="text" ng-model="col.value" />
-                        <button type="button" class="close" ng-click="resolucionDetalle.removeCol($index)">&times;</button></span>
+                    <span class="nowrap"><input type="text" ng-model="col.value" style="width:183px;"/>
+                        <button type="button" class="close" ng-click="resolucionDetalle.removeCol($index)" style="color:red; float: none;">&times;</button></span>
                 </th>
             </tr>
         </thead>
         <tbody>
             <tr ng-repeat="r in resolucionDetalle.table.rows">
                 <td>
-                    <button type="button" class="btn btn-xs btn-danger" ng-click="resolucionDetalle.removeRow($index)">remove row</button>
+                    <button type="button" class="btn btn-xs btn-danger" ng-click="resolucionDetalle.removeRow($index)">remover fila</button>
                 </td>
                 <td ng-repeat="cell in r.cells">
                     <input type="text" ng-model="cell.value" />

@@ -459,7 +459,6 @@ angular.module('contractualClienteApp')
                     }
             }
         }
-
             /*
             if(resolucionNivelAcad === 'PREGRADO'){
                 return {

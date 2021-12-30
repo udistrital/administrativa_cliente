@@ -135,17 +135,19 @@
                         </div>
                     </div>
                     <div class="panel-body">
+                        <legend class="text-primary">CUADRO DE RESPONSABILIDADES</legend>
+
                         <div ng-include src="resolucionDetalle.isEdit ? 'views/vinculacionespecial/cuadro_responsabilidades_edit.html' : 'views/vinculacionespecial/cuadro_responsabilidades_view.html'"></div>
                         <button type="button" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[resolucionDetalle.isEdit]"
-                            ng-click="resolucionDetalle.isEdit = !resolucionDetalle.isEdit">{{ resolucionDetalle.isEdit ? 'Guardar' : 'Editar' }}</button>
+                            ng-click="resolucionDetalle.guardarCuadro()">{{ resolucionDetalle.isEdit ? 'Guardar' : 'Editar' }}</button>
                         <button type="button" class="btn btn-danger" ng-show="resolucionDetalle.isEdit"
-                            ng-click="resolucionDetalle.cancel()">Cancel</button>
+                            ng-click="resolucionDetalle.cancel()">Cancelar</button>
                     </div>
                     <div class="panel-body">
                         <div class="col-lg-6 col-lg-offset-3">
                             <input type="submit" class="form-control btn-success"
                                 ng-click="resolucionDetalle.guardarCambios()"
-                                value="Guardar cambios realizados en la resolución">
+                                value="Guardar cambios realizados en la resolución"  ng-disabled="resolucionDetalle.isEdit" style="pointer-events: {{resolucionDetalle.isEdit ? 'none' : ''}} ">
                         </div>
                     </div>
                     <div class="col-lg-6 col-lg-offset-3">
