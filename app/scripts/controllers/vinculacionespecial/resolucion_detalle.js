@@ -147,7 +147,7 @@ angular.module('contractualClienteApp')
 
     self.guardarCambios = function () {
       if (self.resolucionValida(self.contenidoResolucion)) {
-       self.contenidoResolucion.CuadroResponsabilidades =  JSON.stringify(self.table);
+
         var ResolucionVinculacionDocente = {
           Id: self.resolucion.Id,
           IdFacultad: self.resolucion.IdFacultad,
