@@ -136,7 +136,7 @@
                         <div class="col-lg-6 col-lg-offset-3">
                             <input type="submit" class="form-control btn-success"
                                 ng-click="resolucionDetalle.guardarCambios()"
-                                value="Guardar cambios realizados en la resolución"  ng-disabled="resolucionDetalle.isEdit" style="pointer-events: {{resolucionDetalle.isEdit ? 'none' : ''}} ">
+                                value="Guardar cambios realizados en la resolución"  ng-disabled="resolucionDetalle.isEdit" ng-style="{'pointer-events': (resolucionDetalle.isEdit) ? 'none' : ''} ">
                         </div>
                     </div>
                     <div class="col-lg-6 col-lg-offset-3">
