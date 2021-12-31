@@ -6,16 +6,16 @@ workspace:
       event: [push, pull_request]
 
 pipeline:
-  grunt-sonar-runner:
-    image: timbru31/java-node
-    commands:
-     - npm install -g grunt-cli bower
-     - npm install grunt --save-dev
-     - npm install grunt-sonar-runner --save-dev
-     - grunt sonarRunner:analysis
-    when:
-      branch: [dev]
-      event: push
+  # grunt-sonar-runner:
+  #   image: timbru31/java-node
+  #   commands:
+  #    - npm install -g grunt-cli bower
+  #    - npm install grunt --save-dev
+  #    - npm install grunt-sonar-runner --save-dev
+  #    - grunt sonarRunner:analysis
+  #   when:
+  #     branch: [dev]
+  #     event: push
 
   # build and test the go program
   nodejs:
