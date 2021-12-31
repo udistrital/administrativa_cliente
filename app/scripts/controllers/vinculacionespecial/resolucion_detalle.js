@@ -42,10 +42,7 @@ angular.module('contractualClienteApp')
         }
       }else{
         self.table = buildTable();
-        self.contenidoResolucion = {
-          ...self.contenidoResolucion,
-          CuadroResponsabilidades: JSON.stringify(self.table)
-        };
+        self.contenidoResolucion['CuadroResponsabilidades']= JSON.stringify(self.table);
       }
       adminMidRequest.get("gestion_previnculacion/docentes_previnculados_all", "id_resolucion=" + self.resolucion.Id).then(function (response) {
         self.contratados = response.data;

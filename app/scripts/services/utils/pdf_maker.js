@@ -422,21 +422,23 @@ angular.module('contractualClienteApp')
             });
 
             var rows = [];
-
-            for (var fila of cuadroResponsabilidades.rows) {
+            cuadroResponsabilidades['rows'].forEach(function(fila) {
                 var celdas = fila.cells.map(function (celda) {
                     return { text: celda.value, style: "tabla_revision" };
                 });
                 rows.push(celdas);
-            }
+            });
 
-            var tabla = [
-                ...[columns],
-                ...rows,
-            ];
+            var tabla = [];
+            
+            tabla = tabla.concat([columns], rows);
+            console.log(tabla);
             var anchos = [];
             if (columns.length !=4){
-                columns.forEach(column=> anchos.push(460/columns.length -1));
+                columns.forEach(function(column) {
+                    anchos.push(460/columns.length -1)
+                });
+            
             }else{
                 anchos= [80, 150, 150, 80];
             }
