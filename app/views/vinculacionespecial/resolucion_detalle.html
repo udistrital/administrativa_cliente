@@ -72,56 +72,81 @@
                     </div>
                 </div>
             </div>
-                      <div class="col-lg-12">
-                        <label>{{ 'RESUELVE' | translate }}</label>
-                          <div class="panel panel-default">
-                              <div class="panel-body">
-                                  <div class="col-lg-12" ng-repeat="i in resolucionDetalle.getNumeros(resolucionDetalle.contenidoResolucion.Articulos)">
-                                    <legend class="text-primary" ng-click="info_articulo=!info_articulo">{{ 'ARTICULO' | translate }} {{i+1}}<span class="fa fa-plus pull-right" ng-show="!info_articulo"></span> <span class="fa fa-minus pull-right" ng-show="info_articulo"></span></legend>
-                                      <div class="panel panel-default" ng-show="info_articulo">
-                                          <div class="panel-body">
-                                              <form role="form">
-                                                  <div class="row">
-                                                      <div class="form-group col-lg-6">
-                                                          <label>{{ 'TEXTO' | translate }}</label>
-                                                          <textarea rows="12" class="form-control" ng-model="resolucionDetalle.contenidoResolucion.Articulos[i].Texto"></textarea>
-                                                      </div>
-                                                      <div class="form-group col-lg-6">
-                                                        <div class="form-group col-lg-12" ng-repeat="j in resolucionDetalle.getNumeros(resolucionDetalle.contenidoResolucion.Articulos[i].Paragrafos)">
-                                                            <label>{{ 'PARAGRAFO' | translate }} {{j+1}}</label>
-                                                            <textarea rows="3" class="form-control" ng-model="resolucionDetalle.contenidoResolucion.Articulos[i].Paragrafos[j].Texto"></textarea>
-                                                            <div class="col-lg-12">
-                                                              <input type="submit" class="form-control btn-danger " ng-click="resolucionDetalle.eliminarParagrafo(i,j)" value="Eliminar paragrafo">
-                                                            </div>
-                                                        </div>
-                                                      </div>
-                                                      <div class="col-lg-12">
-                                                          <input type="submit" class="form-control btn-success" ng-click="resolucionDetalle.agregarParagrafo(i)" value="Agregar paragrafo">
-                                                      </div>
-                                                      <div class="col-lg-12">
-                                                          <input type="submit" class="form-control btn-danger" ng-click="resolucionDetalle.eliminarArticulo(i)" value="Eliminar artículo">
-                                                      </div>
-                                                  </div>
-                                              </form>
-                                          </div>
-                                      </div>
-                                  </div>
-                                  <div class="col-lg-6 col-lg-offset-3">
-                                      <input type="submit" class="form-control btn-primary" ng-click="resolucionDetalle.agregarArticulo()" value="Nuevo artículo">
-                                  </div>
-                              </div>
-                              <div class="panel-body">
-                                    <div class="col-lg-6 col-lg-offset-3">
-                                            <input type="submit" class="form-control btn-success" ng-click="resolucionDetalle.guardarCambios()" value="Guardar cambios realizados en la resolución">
-                                    </div>
-                              </div>
-                              <div class="col-lg-6 col-lg-offset-3">
-                                    <input type="submit" class="form-control btn-danger" ng-click="resolucionDetalle.volver()" value="{{'VOLVER' | translate }}">
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-      </div>
-  </div>
+            <div class="col-lg-12">
+                <label>{{ 'RESUELVE' | translate }}</label>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-lg-12"
+                            ng-repeat="i in resolucionDetalle.getNumeros(resolucionDetalle.contenidoResolucion.Articulos)">
+                            <legend class="text-primary" ng-click="info_articulo=!info_articulo">{{ 'ARTICULO' |
+                                translate }} {{i+1}}<span class="fa fa-plus pull-right" ng-show="!info_articulo"></span>
+                                <span class="fa fa-minus pull-right" ng-show="info_articulo"></span></legend>
+                            <div class="panel panel-default" ng-show="info_articulo">
+                                <div class="panel-body">
+                                    <form role="form">
+                                        <div class="row">
+                                            <div class="form-group col-lg-6">
+                                                <label>{{ 'TEXTO' | translate }}</label>
+                                                <textarea rows="12" class="form-control"
+                                                    ng-model="resolucionDetalle.contenidoResolucion.Articulos[i].Texto"></textarea>
+                                            </div>
+                                            <div class="form-group col-lg-6">
+                                                <div class="form-group col-lg-12"
+                                                    ng-repeat="j in resolucionDetalle.getNumeros(resolucionDetalle.contenidoResolucion.Articulos[i].Paragrafos)">
+                                                    <label>{{ 'PARAGRAFO' | translate }} {{j+1}}</label>
+                                                    <textarea rows="3" class="form-control"
+                                                        ng-model="resolucionDetalle.contenidoResolucion.Articulos[i].Paragrafos[j].Texto"></textarea>
+                                                    <div class="col-lg-12">
+                                                        <input type="submit" class="form-control btn-danger "
+                                                            ng-click="resolucionDetalle.eliminarParagrafo(i,j)"
+                                                            value="Eliminar paragrafo">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <input type="submit" class="form-control btn-success"
+                                                    ng-click="resolucionDetalle.agregarParagrafo(i)"
+                                                    value="Agregar paragrafo">
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <input type="submit" class="form-control btn-danger"
+                                                    ng-click="resolucionDetalle.eliminarArticulo(i)"
+                                                    value="Eliminar artículo">
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 col-lg-offset-3">
+                            <input type="submit" class="form-control btn-primary"
+                                ng-click="resolucionDetalle.agregarArticulo()" value="Nuevo artículo">
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <legend class="text-primary">CUADRO DE RESPONSABILIDADES</legend>
+
+                        <div ng-include src="resolucionDetalle.isEdit ? 'views/vinculacionespecial/cuadro_responsabilidades_edit.html' : 'views/vinculacionespecial/cuadro_responsabilidades_view.html'"></div>
+                        <button type="button" class="btn" ng-class="{true:'btn-primary',false:'btn-default'}[resolucionDetalle.isEdit]"
+                            ng-click="resolucionDetalle.guardarCuadro()">{{ resolucionDetalle.isEdit ? 'Guardar' : 'Editar' }}</button>
+                        <button type="button" class="btn btn-danger" ng-show="resolucionDetalle.isEdit"
+                            ng-click="resolucionDetalle.cancel()">Cancelar</button>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-lg-6 col-lg-offset-3">
+                            <input type="submit" class="form-control btn-success"
+                                ng-click="resolucionDetalle.guardarCambios()"
+                                value="Guardar cambios realizados en la resolución"  ng-disabled="resolucionDetalle.isEdit" ng-style="{'pointer-events': (resolucionDetalle.isEdit) ? 'none' : ''} ">
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-lg-offset-3">
+                        <input type="submit" class="form-control btn-danger" ng-click="resolucionDetalle.volver()"
+                            value="{{'VOLVER' | translate }}">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 </div>
