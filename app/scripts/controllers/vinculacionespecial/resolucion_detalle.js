@@ -335,9 +335,19 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'PROYECTÓ'
           }, {
-            value: ''
+            value: 'Grupo de Trabajo Contratación Docente Facultades e ILUD	Funcionarios y Contratistas'
+          }, {
+            value: 'Funcionarios y Contratistas'
           }, {
             value: ''
+          }]
+        }, {
+          cells: [{
+            value: 'REVISÓ'
+          }, {
+            value: 'Diana Ximena Pirachicán Martínez'
+          }, {
+            value: 'Contratista OAJ'
           }, {
             value: ''
           }]
@@ -345,9 +355,9 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'REVISÓ Y APROBÓ'
           }, {
-            value: ''
+            value: 'Javier Bolaños Zambrano'
           }, {
-            value: ''
+            value: 'Jefe Oficina Asesora Jurídica'
           }, {
             value: ''
           }]
@@ -355,9 +365,19 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'REVISÓ Y APROBÓ'
           }, {
-            value: ''
+            value: 'Adriana Marcela Sandoval Castiblanco'
+          }, {
+            value: 'Secretaria General'
           }, {
             value: ''
+          }]
+        },{
+          cells: [{
+            value: 'REVISÓ Y APROBÓ'
+          }, {
+            value: 'William Fernando Castrillón Cardona'
+          }, {
+            value: 'Vicerrector Académico'
           }, {
             value: ''
           }]
