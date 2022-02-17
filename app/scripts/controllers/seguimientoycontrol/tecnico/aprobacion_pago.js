@@ -25,7 +25,7 @@ angular.module('contractualClienteApp')
 
       self.periodo = '';
 
-    self.periodos= ['2021-3','2021-1','2020-3'];
+    self.periodos= ['2022-1','2021-3','2021-1'];
 
 
       self.meses = [{
