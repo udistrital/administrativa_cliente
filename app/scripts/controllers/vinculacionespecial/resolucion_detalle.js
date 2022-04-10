@@ -335,19 +335,19 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'PROYECTÓ'
           }, {
-            value: 'Grupo de Trabajo Contratación Docente Facultades e ILUD	Funcionarios y Contratistas'
+            value: 'EDILBERTO FERNANDEZ SANTOS'
           }, {
-            value: 'Funcionarios y Contratistas'
+            value: 'AUXILIAR ADMINISTRATIVO DRH'
           }, {
             value: ''
           }]
         }, {
           cells: [{
-            value: 'REVISÓ'
+            value: 'REVISÓ Y APROBÓ'
           }, {
-            value: 'Diana Ximena Pirachicán Martínez'
+            value: 'JAVIER BOLAÑOS ZAMBRANO'
           }, {
-            value: 'Contratista OAJ'
+            value: 'JEFE OFICINA ASESORA JURÍDICA'
           }, {
             value: ''
           }]
@@ -365,9 +365,9 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'REVISÓ Y APROBÓ'
           }, {
-            value: 'Adriana Marcela Sandoval Castiblanco'
+            value: 'ADRIANA MARCELA SANDOVAL CASTIBLANCO'
           }, {
-            value: 'Secretaria General'
+            value: 'SECRETARIA GENERAL'
           }, {
             value: ''
           }]
@@ -375,9 +375,9 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'REVISÓ Y APROBÓ'
           }, {
-            value: 'William Fernando Castrillón Cardona'
+            value: 'MIRNA JIRÓN POPOVA'
           }, {
-            value: 'Vicerrector Académico'
+            value: 'VICERRECTORA ACADÉMICA'
           }, {
             value: ''
           }]
