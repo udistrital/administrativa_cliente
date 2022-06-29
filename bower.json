@@ -4,23 +4,23 @@
   "dependencies": {
     "angular": "latest",
     "bootstrap": "^3.2.0",
-    "angular-animate": "^1.8.2",
-    "angular-cookies": "^1.8.2",
-    "angular-resource": "^1.8.2",
-    "angular-route": "^1.8.2",
-    "angular-touch": "^1.8.2",
-    "angular-ui-grid": "4.10.3",
+    "angular-animate": "^1.8.3",
+    "angular-cookies": "^1.8.3",
+    "angular-resource": "^1.8.3",
+    "angular-route": "^1.8.3",
+    "angular-touch": "^1.8.3",
+    "angular-ui-grid": "4.11.1",
     "AngularJS-OAuth2": "angularjs-oauth2#^1.2.3",
-    "angular-material": "^1.2.3",
+    "angular-material": "^1.2.5",
     "angular-tree-control": "0.2.28",
     "pdfmakeoas": "0.0.2",
-    "ngstorage": "^0.3.2",
+    "ngstorage": "^0.3.11",
     "angular-websocket": "latest",
     "angular-input-masks": "latest",
     "angular-moment": "latest",
     "angular-translate": "latest",
     "sweetalert2": "^6.4.4",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "vis": "^4.21.0",
     "font-awesome": "^4.7.0",
     "font-awesome-animation": "^0.1.0",
@@ -36,11 +36,11 @@
     "excel-builder-js": "excelbuilder#^2.0.2"
   },
   "resolutions": {
-    "angular": "1.8.2",
-    "angular-route": "1.8.2"
+    "angular": "1.8.3",
+    "angular-route": "1.8.3"
   },
   "devDependencies": {
-    "angular-mocks": "^1.8.2"
+    "angular-mocks": "^1.8.3"
   },
   "appPath": "app",
   "moduleName": "contractualClienteApp",

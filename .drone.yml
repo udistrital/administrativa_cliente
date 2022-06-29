@@ -19,7 +19,7 @@ pipeline:
 
   # build and test the go program
   nodejs:
-    image: node:14.19.3
+    image: node:16.15.1
     commands:
      - npm install -g grunt-cli bower
      - npm install natives
