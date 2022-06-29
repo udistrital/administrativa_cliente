@@ -20,14 +20,13 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       // bower:js
-      'bower_components/jquery/dist/jquery.js',
       'bower_components/angular/angular.js',
+      'bower_components/jquery/dist/jquery.js',
       'bower_components/bootstrap/dist/js/bootstrap.js',
       'bower_components/angular-animate/angular-animate.js',
       'bower_components/angular-cookies/angular-cookies.js',
       'bower_components/angular-resource/angular-resource.js',
       'bower_components/angular-route/angular-route.js',
-      'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-ui-grid/ui-grid.js',
       'bower_components/angular-md5/angular-md5.js',
@@ -39,7 +38,6 @@ module.exports = function(config) {
       'bower_components/pdfmakeoas/build/pdfmake.js',
       'bower_components/pdfmakeoas/build/vfs_fonts.js',
       'bower_components/ngstorage/ngStorage.js',
-      'bower_components/kjur-jsrsasign/jsrsasign-all-min.js',
       'bower_components/angular-websocket/dist/angular-websocket.js',
       'bower_components/angular-input-masks/angular-input-masks-standalone.js',
       'bower_components/moment/moment.js',
