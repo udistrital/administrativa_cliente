@@ -25,7 +25,14 @@ angular.module('contractualClienteApp')
 
       self.periodo = '';
 
-    self.periodos= ['2022-1','2021-3','2021-1'];
+      var actualMonth = new Date().getMonth();
+      var actualYear = new Date().getFullYear();
+
+      if(actualMonth <6){
+        self.periodos = [actualYear+'-1',(actualYear-1)+'-3',(actualYear-1)+'-1'];
+      }else{
+        self.periodos = [actualYear+'-3',actualYear+'-1',(actualYear-1)+'-3'];
+      }
 
 
       self.meses = [{

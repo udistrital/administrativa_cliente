@@ -333,47 +333,27 @@ angular.module('contractualClienteApp')
         }],
         rows: [{
           cells: [{
-            value: 'PROYECTÓ'
+            value: 'REVISÓ Y AJUSTÓ'
           }, {
-            value: 'EDILBERTO FERNANDEZ SANTOS'
+            value: 'DIANA CIMENA PIRACHICAN M.'
           }, {
-            value: 'AUXILIAR ADMINISTRATIVO DRH'
+            value: 'Asesor CPS OAJ'
           }, {
             value: ''
           }]
         }, {
           cells: [{
-            value: 'REVISÓ Y APROBÓ'
+            value: 'REVISÓ'
           }, {
             value: 'JAVIER BOLAÑOS ZAMBRANO'
           }, {
-            value: 'JEFE OFICINA ASESORA JURÍDICA'
+            value: 'JEFE OFICINA ASESORA JURÍDICA (E)'
           }, {
             value: ''
           }]
         }, {
           cells: [{
-            value: 'REVISÓ Y APROBÓ'
-          }, {
-            value: 'Javier Bolaños Zambrano'
-          }, {
-            value: 'Jefe Oficina Asesora Jurídica'
-          }, {
-            value: ''
-          }]
-        }, {
-          cells: [{
-            value: 'REVISÓ Y APROBÓ'
-          }, {
-            value: 'ADRIANA MARCELA SANDOVAL CASTIBLANCO'
-          }, {
-            value: 'SECRETARIA GENERAL'
-          }, {
-            value: ''
-          }]
-        },{
-          cells: [{
-            value: 'REVISÓ Y APROBÓ'
+            value: 'APROBÓ'
           }, {
             value: 'MIRNA JIRÓN POPOVA'
           }, {
