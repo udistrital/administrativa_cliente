@@ -333,11 +333,11 @@ angular.module('contractualClienteApp')
         }],
         rows: [{
           cells: [{
-            value: 'PROYECTÓ'
+            value: 'REVISÓ Y AJUSTÓ'
           }, {
-            value: 'Grupo de Trabajo Contratación Docente Facultades e ILUD	Funcionarios y Contratistas'
+            value: 'DIANA CIMENA PIRACHICAN M.'
           }, {
-            value: 'Funcionarios y Contratistas'
+            value: 'Asesor CPS OAJ'
           }, {
             value: ''
           }]
@@ -345,39 +345,19 @@ angular.module('contractualClienteApp')
           cells: [{
             value: 'REVISÓ'
           }, {
-            value: 'Diana Ximena Pirachicán Martínez'
+            value: 'JAVIER BOLAÑOS ZAMBRANO'
           }, {
-            value: 'Contratista OAJ'
-          }, {
-            value: ''
-          }]
-        }, {
-          cells: [{
-            value: 'REVISÓ Y APROBÓ'
-          }, {
-            value: 'Javier Bolaños Zambrano'
-          }, {
-            value: 'Jefe Oficina Asesora Jurídica'
+            value: 'JEFE OFICINA ASESORA JURÍDICA (E)'
           }, {
             value: ''
           }]
         }, {
           cells: [{
-            value: 'REVISÓ Y APROBÓ'
+            value: 'APROBÓ'
           }, {
-            value: 'Adriana Marcela Sandoval Castiblanco'
+            value: 'MIRNA JIRÓN POPOVA'
           }, {
-            value: 'Secretaria General'
-          }, {
-            value: ''
-          }]
-        },{
-          cells: [{
-            value: 'REVISÓ Y APROBÓ'
-          }, {
-            value: 'William Fernando Castrillón Cardona'
-          }, {
-            value: 'Vicerrector Académico'
+            value: 'VICERRECTORA ACADÉMICA'
           }, {
             value: ''
           }]
