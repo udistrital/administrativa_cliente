@@ -9,6 +9,10 @@
 
 module.exports = function(grunt) {
 
+    // Test wich SonarQube
+    grunt.loadNpmTasks('grunt-sonar-runner');
+    grunt.loadNpmTasks('@lodder/grunt-postcss');
+
     // Time how long tasks take. Can help when optimizing build times
     require('time-grunt')(grunt);
 
@@ -16,7 +20,8 @@ module.exports = function(grunt) {
     require('jit-grunt')(grunt, {
         useminPrepare: 'grunt-usemin',
         ngtemplates: 'grunt-angular-templates',
-        cdnify: 'grunt-google-cdn'
+        ngAnnotate: 'grunt-ng-annotate-patched',
+        // cdnify: 'grunt-google-cdn'
     });
 
     // Configurable paths for the application
@@ -24,6 +29,9 @@ module.exports = function(grunt) {
         app: require('./bower.json').appPath || 'app',
         dist: 'dist'
     };
+
+    // Import new static server for grunt
+    var serveStatic = require('serve-static');
 
     // Define the configuration for all the tasks
     grunt.initConfig({
@@ -39,14 +47,14 @@ module.exports = function(grunt) {
             },
             js: {
                 files: ['<%= yeoman.app %>/scripts/**/*.js'],
-                tasks: ['newer:jshint:all', 'newer:jscs:all'],
+                tasks: ['newer:jshint:all',],
                 options: {
                     livereload: '<%= connect.options.livereload %>'
                 }
             },
             jsTest: {
                 files: ['test/spec/**/*.js'],
-                tasks: ['newer:jshint:test', 'newer:jscs:test', 'karma']
+                tasks: ['newer:jshint:test', 'karma']
             },
             styles: {
                 files: ['<%= yeoman.app %>/styles/**/*.css'],
@@ -80,16 +88,16 @@ module.exports = function(grunt) {
                     open: true,
                     middleware: function(connect) {
                         return [
-                            connect.static('.tmp'),
+                            serveStatic('.tmp'),
                             connect().use(
                                 '/bower_components',
-                                connect.static('./bower_components')
+                                serveStatic('./bower_components')
                             ),
                             connect().use(
                                 '/app/styles',
-                                connect.static('./app/styles')
+                                serveStatic('./app/styles')
                             ),
-                            connect.static(appConfig.app)
+                            serveStatic(appConfig.app)
                         ];
                     }
                 }
@@ -99,13 +107,13 @@ module.exports = function(grunt) {
                     port: 9001,
                     middleware: function(connect) {
                         return [
-                            connect.static('.tmp'),
-                            connect.static('test'),
+                            serveStatic('.tmp'),
+                            serveStatic('test'),
                             connect().use(
                                 '/bower_components',
                                 connect.static('./bower_components')
                             ),
-                            connect.static(appConfig.app)
+                            serveStatic(appConfig.app)
                         ];
                     }
                 }
@@ -138,23 +146,6 @@ module.exports = function(grunt) {
             }
         },
 
-        // Make sure code styles are up to par
-        jscs: {
-            options: {
-                config: '.jscsrc',
-                verbose: true
-            },
-            all: {
-                src: [
-                    'Gruntfile.js',
-                    '<%= yeoman.app %>/scripts/**/*.js'
-                ]
-            },
-            test: {
-                src: ['test/spec/**/*.js']
-            }
-        },
-
         // Empties folders to start fresh
         clean: {
             dist: {
@@ -174,7 +165,7 @@ module.exports = function(grunt) {
         postcss: {
             options: {
                 processors: [
-                    require('autoprefixer-core')({ browsers: ['last 1 version'] })
+                    require('autoprefixer')()
                 ]
             },
             server: {
@@ -363,13 +354,6 @@ module.exports = function(grunt) {
             }
         },
 
-        // Replace Google CDN references
-        cdnify: {
-            dist: {
-                html: ['<%= yeoman.dist %>/*.html']
-            }
-        },
-
         // Copies remaining files to places other tasks can use
         copy: {
             dist: {
@@ -483,7 +467,6 @@ module.exports = function(grunt) {
         'concat',
         'ngAnnotate',
         'copy:dist',
-        'cdnify',
         'cssmin',
         'uglify',
         'filerev',
@@ -493,7 +476,6 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', [
         'newer:jshint',
-        'newer:jscs',
         'test',
         'build'
     ]);
