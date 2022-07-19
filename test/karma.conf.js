@@ -38,6 +38,7 @@ module.exports = function(config) {
       'bower_components/pdfmakeoas/build/pdfmake.js',
       'bower_components/pdfmakeoas/build/vfs_fonts.js',
       'bower_components/ngstorage/ngStorage.js',
+      'bower_components/kjur-jsrsasign/jsrsasign-all-min.js',
       'bower_components/angular-websocket/dist/angular-websocket.js',
       'bower_components/angular-input-masks/angular-input-masks-standalone.js',
       'bower_components/moment/moment.js',
