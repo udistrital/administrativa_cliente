@@ -15,6 +15,7 @@
     "angular-tree-control": "0.2.28",
     "pdfmakeoas": "0.0.2",
     "ngstorage": "^0.3.11",
+    "kjur-jsrsasign": "jsrsasign#^7.0.0",
     "angular-websocket": "latest",
     "angular-input-masks": "latest",
     "angular-moment": "latest",
