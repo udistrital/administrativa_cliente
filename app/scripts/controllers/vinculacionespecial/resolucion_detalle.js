@@ -333,31 +333,51 @@ angular.module('contractualClienteApp')
         }],
         rows: [{
           cells: [{
-            value: 'REVISÓ Y AJUSTÓ'
-          }, {
-            value: 'DIANA CIMENA PIRACHICAN M.'
-          }, {
-            value: 'Asesor CPS OAJ'
-          }, {
-            value: ''
-          }]
-        }, {
-          cells: [{
             value: 'REVISÓ'
           }, {
-            value: 'JAVIER BOLAÑOS ZAMBRANO'
+            value: 'Diana Ximena Pirachicán Martinez'
           }, {
-            value: 'JEFE OFICINA ASESORA JURÍDICA (E)'
+            value: 'Contratista OAJ'
           }, {
             value: ''
           }]
         }, {
           cells: [{
-            value: 'APROBÓ'
+            value: 'REVISÓ Y APROBÓ'
           }, {
-            value: 'MIRNA JIRÓN POPOVA'
+            value: 'Javier Bolaños Zambrano'
           }, {
-            value: 'VICERRECTORA ACADÉMICA'
+            value: 'Jefe Oficina Asesora Jurídica'
+          }, {
+            value: ''
+          }]
+        }, {
+          cells: [{
+            value: 'REVISÓ Y APROBÓ'
+          }, {
+            value: 'Mirna Jirón Popova'
+          }, {
+            value: 'Vicerrectora Académica'
+          }, {
+            value: ''
+          }]
+        }, {
+          cells: [{
+            value: 'REVISÓ Y APROBÓ'
+          }, {
+            value: ''
+          }, {
+            value: 'Decano(a) ' + self.facultad
+          }, {
+            value: ''
+          }]
+        }, {
+          cells: [{
+            value: 'ELABORÓ'
+          }, {
+            value: ''
+          }, {
+            value: 'Asistente Decanatura ' + self.facultad
           }, {
             value: ''
           }]
