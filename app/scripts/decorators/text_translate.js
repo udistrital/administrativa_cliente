@@ -598,7 +598,7 @@ var text_es = {
     ARTICULO: "ARTÍCULO",
     TEXTO: "Texto",
     PARAGRAFO: "PARÁGRAFO",
-    DADO_A_LOS: "Dado en Bogotá D.C., a los ",
+    DADO_A_LOS: "",
     /*---Script---*/
     ESCRIBA_TEXTO: "Escriba el texto del artículo",
     DEBE_INSERTAR: "Debe insertar texto.",
