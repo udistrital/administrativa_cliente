@@ -26,7 +26,7 @@ angular.module('contractualClienteApp')
     if(actualMonth <6){
       self.periodos = [actualYear+'-1',(actualYear-1)+'-3',(actualYear-1)+'-1'];
     }else{
-      self.periodos = [actualYear+'-3',actualYear+'-1',(actualYear-1)+'-3'];
+      self.periodos = [actualYear+'-3',actualYear+'-2',(actualYear-1)+'-1'];
     }
 
     self.meses = [{
